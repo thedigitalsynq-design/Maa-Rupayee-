@@ -1,0 +1,6 @@
+{
+  "name": "Smart GST India - All-in-One GST, CGST, SGST Calculator",
+  "description": "All-in-one GST, CGST, SGST, and IGST calculator for everyone—consumers, shopkeepers, freelancers, and accountants. Instant tax breakdown, reverse GST calculation, HSN/SAC discovery, and tax invoices.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

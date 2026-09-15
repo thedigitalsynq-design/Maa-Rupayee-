@@ -1,0 +1,43 @@
+import { IndianState } from '../types';
+
+export const INDIAN_STATES: IndianState[] = [
+  { code: 'AN', name: 'Andaman and Nicobar Islands', tin: '35', isUT: true, hasLegislature: false },
+  { code: 'AP', name: 'Andhra Pradesh', tin: '37', isUT: false, hasLegislature: true },
+  { code: 'AR', name: 'Arunachal Pradesh', tin: '12', isUT: false, hasLegislature: true },
+  { code: 'AS', name: 'Assam', tin: '18', isUT: false, hasLegislature: true },
+  { code: 'BR', name: 'Bihar', tin: '10', isUT: false, hasLegislature: true },
+  { code: 'CH', name: 'Chandigarh', tin: '04', isUT: true, hasLegislature: false },
+  { code: 'CT', name: 'Chhattisgarh', tin: '22', isUT: false, hasLegislature: true },
+  { code: 'DN', name: 'Dadra and Nagar Haveli and Daman and Diu', tin: '26', isUT: true, hasLegislature: false },
+  { code: 'DL', name: 'Delhi (NCT)', tin: '07', isUT: true, hasLegislature: true },
+  { code: 'GA', name: 'Goa', tin: '30', isUT: false, hasLegislature: true },
+  { code: 'GJ', name: 'Gujarat', tin: '24', isUT: false, hasLegislature: true },
+  { code: 'HR', name: 'Haryana', tin: '06', isUT: false, hasLegislature: true },
+  { code: 'HP', name: 'Himachal Pradesh', tin: '02', isUT: false, hasLegislature: true },
+  { code: 'JK', name: 'Jammu and Kashmir', tin: '01', isUT: true, hasLegislature: true },
+  { code: 'JH', name: 'Jharkhand', tin: '20', isUT: false, hasLegislature: true },
+  { code: 'KA', name: 'Karnataka', tin: '29', isUT: false, hasLegislature: true },
+  { code: 'KL', name: 'Kerala', tin: '32', isUT: false, hasLegislature: true },
+  { code: 'LA', name: 'Ladakh', tin: '38', isUT: true, hasLegislature: false },
+  { code: 'LD', name: 'Lakshadweep', tin: '31', isUT: true, hasLegislature: false },
+  { code: 'MP', name: 'Madhya Pradesh', tin: '23', isUT: false, hasLegislature: true },
+  { code: 'MH', name: 'Maharashtra', tin: '27', isUT: false, hasLegislature: true },
+  { code: 'MN', name: 'Manipur', tin: '14', isUT: false, hasLegislature: true },
+  { code: 'ML', name: 'Meghalaya', tin: '17', isUT: false, hasLegislature: true },
+  { code: 'MZ', name: 'Mizoram', tin: '15', isUT: false, hasLegislature: true },
+  { code: 'NL', name: 'Nagaland', tin: '13', isUT: false, hasLegislature: true },
+  { code: 'OD', name: 'Odisha', tin: '21', isUT: false, hasLegislature: true },
+  { code: 'PY', name: 'Puducherry', tin: '34', isUT: true, hasLegislature: true },
+  { code: 'PB', name: 'Punjab', tin: '03', isUT: false, hasLegislature: true },
+  { code: 'RJ', name: 'Rajasthan', tin: '08', isUT: false, hasLegislature: true },
+  { code: 'SK', name: 'Sikkim', tin: '11', isUT: false, hasLegislature: true },
+  { code: 'TN', name: 'Tamil Nadu', tin: '33', isUT: false, hasLegislature: true },
+  { code: 'TS', name: 'Telangana', tin: '36', isUT: false, hasLegislature: true },
+  { code: 'TR', name: 'Tripura', tin: '16', isUT: false, hasLegislature: true },
+  { code: 'UP', name: 'Uttar Pradesh', tin: '09', isUT: false, hasLegislature: true },
+  { code: 'UK', name: 'Uttarakhand', tin: '05', isUT: false, hasLegislature: true },
+  { code: 'WB', name: 'West Bengal', tin: '19', isUT: false, hasLegislature: true },
+];
+
+export const DEFAULT_SUPPLIER_STATE = INDIAN_STATES.find(s => s.code === 'KA') || INDIAN_STATES[15]; // Karnataka
+export const DEFAULT_CUSTOMER_STATE = INDIAN_STATES.find(s => s.code === 'KA') || INDIAN_STATES[15]; // Karnataka
