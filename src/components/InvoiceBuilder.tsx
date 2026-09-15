@@ -552,11 +552,11 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
             )}
           </button>
 
-          {/* Print Invoice Button (Triggers PDF generation & direct print) */}
+          {/* Print Invoice Button (Triggers clean native invoice printing) */}
           <button
-            onClick={handleGeneratePdf}
-            disabled={isGeneratingPdf}
-            className="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-lg flex items-center gap-1.5 shadow-xs transition-all disabled:opacity-50"
+            onClick={() => window.print()}
+            className="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-lg flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
+            title="Print only this invoice sheet"
           >
             <Printer className="h-4 w-4" />
             <span>Print Invoice</span>
@@ -566,8 +566,9 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
 
       {/* The Printable / PDF Rendered Invoice Container */}
       <div 
+        id="printable-tax-invoice"
         ref={invoiceRef}
-        className="bg-white rounded-xl shadow-md border border-slate-300 overflow-hidden print:shadow-none print:border-none print:m-0 print:p-0"
+        className="bg-white rounded-xl shadow-md border border-slate-300 overflow-hidden print:shadow-none print:border print:border-slate-400 print:m-0 print:p-0"
       >
         {/* Invoice Top Header Banner */}
         <div className="p-6 border-b border-slate-300">
