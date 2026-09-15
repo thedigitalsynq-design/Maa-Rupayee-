@@ -6,8 +6,6 @@
 
 This contains everything you need to run your app locally.
 
-View your app in AI Studio: https://ai.studio/apps/3a950750-1cdd-4730-8257-7860a5744efa
-
 ## Run Locally
 
 **Prerequisites:**  Node.js
