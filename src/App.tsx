@@ -245,26 +245,35 @@ export default function App() {
   const isIntraState = supplierState.code === customerState.code;
 
   return (
-    <div className={`min-h-screen relative py-3 sm:py-6 px-2 sm:px-5 lg:px-8 font-sans selection:bg-[#2f66ee] selection:text-white overflow-x-hidden transition-colors duration-300 ${
-      glassTheme === 'crystal' ? 'theme-crystal bg-[#edf1f7] text-slate-800' : 'bg-[#090b0e] text-slate-100'
+    <div className={`min-h-screen relative py-3 sm:py-6 px-2 sm:px-5 lg:px-8 font-sans selection:bg-[#38bdf8] selection:text-slate-950 overflow-x-hidden transition-colors duration-300 ${
+      glassTheme === 'crystal' 
+        ? 'theme-crystal bg-[#edf1f7] text-slate-800' 
+        : 'bg-radial from-[#1342a1] via-[#092257] to-[#040e28] text-white'
     }`}>
       
-      {/* Background Ambient Frosted Glass Capsule Layers (Inspired by Artwork) */}
+      {/* Diagonal Light Rays & Ambient Frosted Glass Layers (Matching Artwork) */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
+        {/* Subtle Diagonal Caustic Light Streaks */}
+        {glassTheme === 'obsidian' && (
+          <div className="absolute inset-0 bg-light-rays opacity-70" />
+        )}
+
         {/* Top-Right Frosted Glass Capsule */}
         <div className={`absolute -top-32 -right-24 w-[320px] sm:w-[460px] h-[700px] glass-capsule-bg rotate-[-38deg] ${
-          glassTheme === 'crystal' ? 'opacity-35' : 'opacity-60'
+          glassTheme === 'crystal' ? 'opacity-35' : 'opacity-70'
         }`} />
+        
         {/* Center-Left Overlapping Frosted Glass Capsule */}
         <div className={`absolute top-1/3 -left-36 w-[280px] sm:w-[420px] h-[620px] glass-capsule-bg rotate-[36deg] ${
-          glassTheme === 'crystal' ? 'opacity-25' : 'opacity-40'
+          glassTheme === 'crystal' ? 'opacity-25' : 'opacity-50'
         }`} />
-        {/* Bottom Radial Blue Caustic Glow */}
-        <div className="absolute -bottom-36 right-1/4 w-[450px] h-[450px] rounded-full bg-cyan-500/10 blur-3xl" />
+
+        {/* Bottom Radial Cyan Caustic Flare */}
+        <div className="absolute -bottom-36 right-1/4 w-[500px] h-[500px] rounded-full bg-cyan-400/15 blur-3xl" />
       </div>
 
       {/* Master Glass Container */}
-      <div className="glass-container relative z-10 max-w-[1440px] mx-auto rounded-[26px] sm:rounded-[34px] overflow-hidden flex flex-col md:flex-row">
+      <div className="glass-container relative z-10 max-w-[1440px] mx-auto rounded-[26px] sm:rounded-[34px] overflow-hidden flex flex-col md:flex-row shadow-[0_30px_70px_rgba(2,8,28,0.65)]">
         
         {/* ========================================================= */}
         {/* SIDEBAR NAVIGATION (Focused, Clean, Structured)           */}
