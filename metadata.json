@@ -1,6 +1,6 @@
 {
-  "name": "PaisaCalc - Free GST Calculator & Money Tools India",
-  "description": "PaisaCalc — every rupee, calculated free. GST/CGST/SGST calculator per CBIC schedules, invoice builder, HSN explorer, ITR, SIP, PPF & loan tools. Free, no login.",
+  "name": "Maa Rupayee - Simple Tools for GST, Tax & Personal Finance",
+  "description": "Maa Rupayee — simple tools for GST, Tax & Personal Finance. GST/CGST/SGST calculator per CBIC schedules, invoice builder, HSN explorer, ITR, SIP, PPF & loan tools. Free, no login.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

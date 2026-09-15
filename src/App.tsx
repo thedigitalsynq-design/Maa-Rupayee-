@@ -128,7 +128,7 @@ export default function App() {
       knowledge: 'Compliance Handbook',
       academy: 'GST Academy',
     };
-    document.title = `${titles[activeTab]} — PaisaCalc`;
+    document.title = `${titles[activeTab]} — Maa Rupayee`;
   }, [activeTab]);
   
   // State Route Configuration
@@ -426,10 +426,10 @@ export default function App() {
               </div>
               <div>
                 <div className={`font-black text-sm sm:text-base tracking-tight flex items-center gap-1.5 ${isDark ? 'text-white' : 'text-zinc-950'}`}>
-                  <span>PaisaCalc</span>
+                  <span>Maa Rupayee</span>
                 </div>
                 <div className={`text-[10px] font-medium leading-tight max-w-[170px] ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
-                  Every rupee, calculated free
+                  Simple tools for GST, Tax & Personal Finance
                 </div>
               </div>
             </div>

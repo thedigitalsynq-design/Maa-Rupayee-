@@ -125,6 +125,6 @@ export const GST_COUNCIL_UPDATES: GSTCouncilUpdate[] = [
     impactSummary: 'GoM discussion on structural consolidation. Has NOT been notified or approved by full GST Council.',
     appliedToCalculator: false,
     officialSource: 'Empowered Committee of State Finance Ministers Report',
-    details: 'Purely deliberative. Not legally actionable. PaisaCalc strictly applies current GST 2.0 statutory slabs (0%, 5%, 18%, 40%) w.e.f. 22-09-2025.'
+    details: 'Purely deliberative. Not legally actionable. Maa Rupayee strictly applies current GST 2.0 statutory slabs (0%, 5%, 18%, 40%) w.e.f. 22-09-2025.'
   }
 ];

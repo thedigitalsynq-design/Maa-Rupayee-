@@ -264,7 +264,7 @@ ${breakdown.cessAmount > 0 ? `Compensation Cess: ${formatIndianCurrency(breakdow
 Total Payable Amount: ${formatIndianCurrency(breakdown.totalAmount)}
 In Words: ${amountInIndianWords(breakdown.totalAmount)}
 --------------------------------------------------
-Computed with PaisaCalc`;
+Computed with Maa Rupayee`;
 
     navigator.clipboard.writeText(text);
     setCopied(true);

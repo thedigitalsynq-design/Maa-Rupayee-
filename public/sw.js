@@ -1,6 +1,6 @@
-/* PaisaCalc offline shell — cache-first assets, network-first pages.
+/* Maa Rupayee offline shell — cache-first assets, network-first pages.
    API calls are never cached. Bump CACHE to ship a fresh shell. */
-const CACHE = 'smart-tax-v1';
+const CACHE = 'maa-rupayee-v1';
 const CORE = ['./', './index.html', './manifest.webmanifest'];
 
 self.addEventListener('install', (event) => {

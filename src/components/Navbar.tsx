@@ -65,7 +65,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             ₹
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="font-bold text-base tracking-tight text-white">PaisaCalc</span>
+            <span className="font-bold text-base tracking-tight text-white">Maa Rupayee</span>
             <span className="text-[10px] text-slate-400 font-medium hidden sm:inline">Real-time Tax Engine</span>
           </div>
         </div>

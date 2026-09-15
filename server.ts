@@ -43,7 +43,7 @@ Return valid JSON adhering to the provided schema.`;
 
 // API Routes
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', service: 'PaisaCalc Engine' });
+  res.json({ status: 'ok', service: 'Maa Rupayee Engine' });
 });
 
 app.post('/api/gst/classify', async (req, res) => {
@@ -155,13 +155,13 @@ Identify:
         }
       } catch (modelErr: unknown) {
         const msg = modelErr instanceof Error ? modelErr.message : String(modelErr);
-        console.warn(`[PaisaCalc Engine] Model ${model} unavailable (${msg}), attempting fallback...`);
+        console.warn(`[Maa Rupayee Engine] Model ${model} unavailable (${msg}), attempting fallback...`);
       }
     }
 
     if (!responseText) {
       // Both models were busy or unavailable (e.g. 503), engage rich local database fallback
-      console.info('[PaisaCalc Engine] High AI demand detected. Seamlessly using verified offline Indian GST rules database.');
+      console.info('[Maa Rupayee Engine] High AI demand detected. Seamlessly using verified offline Indian GST rules database.');
       res.json({ fallback: true, message: 'Gemini busy, using verified offline database' });
       return;
     }
@@ -170,7 +170,7 @@ Identify:
     res.json({ success: true, data: parsed });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'GST classification service error';
-    console.warn('[PaisaCalc Engine] Classification fallback engaged:', message);
+    console.warn('[Maa Rupayee Engine] Classification fallback engaged:', message);
     res.json({ fallback: true, error: message });
   }
 });
@@ -378,7 +378,7 @@ async function startServer() {
   }
 
   app.listen(PORT, '0.0.0.0', () => {
-    console.log(`PaisaCalc Server running on http://localhost:${PORT}`);
+    console.log(`Maa Rupayee Server running on http://localhost:${PORT}`);
   });
 }
 

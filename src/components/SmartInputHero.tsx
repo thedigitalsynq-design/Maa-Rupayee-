@@ -44,7 +44,7 @@ export const SmartInputHero: React.FC<SmartInputHeroProps> = ({
     { label: 'Restaurant Dining ₹2,500', query: 'Restaurant dining bill ₹2,500' },
   ];
 
-  // Disjointed tools replaced by PaisaCalc
+  // Disjointed tools replaced by Maa Rupayee
   const replacedTools = [
     { name: 'CBIC PDFs', icon: FileText, label: 'Rate Schedules' },
     { name: 'HSN Books', icon: BookOpen, label: 'Code Directory' },
@@ -87,7 +87,7 @@ export const SmartInputHero: React.FC<SmartInputHeroProps> = ({
           </h1>
           
           <p className="text-xs sm:text-sm text-zinc-500 mt-3 sm:mt-4 leading-relaxed max-w-xl mx-auto">
-            No more juggling separate GST portals, confusing spreadsheets, offline rate PDF gazettes, or outdated calculators. PaisaCalc combines official CBIC schedules, invoice generation, HSN/SAC explorer, and financial tools in one unified, 100% free platform.
+            No more juggling separate GST portals, confusing spreadsheets, offline rate PDF gazettes, or outdated calculators. Maa Rupayee combines official CBIC schedules, invoice generation, HSN/SAC explorer, and financial tools in one unified, 100% free platform.
           </p>
         </div>
 
@@ -105,7 +105,7 @@ export const SmartInputHero: React.FC<SmartInputHeroProps> = ({
                 <div 
                   key={idx}
                   className="group relative flex flex-col items-center shrink-0"
-                  title={`${tool.name}: Consolidated into PaisaCalc`}
+                  title={`${tool.name}: Consolidated into Maa Rupayee`}
                 >
                   <div className="h-14 w-14 sm:h-16 sm:w-16 rounded-2xl glass-card flex flex-col items-center justify-center shadow-xs border border-zinc-200/90 transition-all group-hover:-translate-y-1 group-hover:shadow-md">
                     <Icon className="h-5 w-5 sm:h-6 sm:w-6 opacity-80 group-hover:opacity-100 transition-opacity" />
