@@ -4,6 +4,7 @@ import { getHistoricalRateForDate } from '../data/historicalRates';
 import { GST_COUNCIL_UPDATES } from '../data/gstCouncilUpdates';
 import { parseIndianAmount } from '../utils/indianCurrency';
 import { calculateGST } from '../utils/gstCalculator';
+import { readGovSyncSnapshot } from './govUpdatesService';
 
 export async function classifyProductOrService(
   rawInput: string,
@@ -31,8 +32,17 @@ export async function classifyProductOrService(
       const resData = await response.json();
       if (resData.success && resData.data) {
         const aiData = resData.data;
-        const priceToUse = detectedPrice ?? aiData.extractedPrice ?? 50000;
-        let finalRate = aiData.gstRate;
+        const aiPrice = typeof aiData.extractedPrice === 'number' && Number.isFinite(aiData.extractedPrice)
+          ? aiData.extractedPrice
+          : undefined;
+        const priceToUse = detectedPrice ?? aiPrice ?? 50000;
+        const aiRate = typeof aiData.gstRate === 'number' && Number.isFinite(aiData.gstRate)
+          ? aiData.gstRate
+          : 18;
+        const aiCess = typeof aiData.cessRate === 'number' && Number.isFinite(aiData.cessRate)
+          ? aiData.cessRate
+          : 0;
+        let finalRate = aiRate;
 
         // Check if there is a historical rate override for this date
         const histCheck = getHistoricalRateForDate(aiData.product || trimmed, transactionDate, finalRate);
@@ -47,7 +57,7 @@ export async function classifyProductOrService(
           amount: priceToUse,
           isInclusive: isInclusive || aiData.isInclusivePrice || false,
           gstRate: finalRate,
-          cessRate: aiData.cessRate || 0,
+          cessRate: aiCess,
           supplierState,
           customerState,
         });
@@ -59,7 +69,7 @@ export async function classifyProductOrService(
           hsnSac: aiData.hsnSac || '9999',
           type: aiData.type || 'GOODS',
           gstRate: finalRate,
-          cessRate: aiData.cessRate || 0,
+          cessRate: aiCess,
           confidence: aiData.confidence || 'High',
           dataStatus: aiData.dataStatus || 'Officially Verified',
           extractedPrice: priceToUse,
@@ -158,11 +168,17 @@ export function classifyOffline(
 
 function checkCouncilUpdates(hsnCode: string, keyword: string): string | undefined {
   const kwLower = keyword.toLowerCase();
-  const update = GST_COUNCIL_UPDATES.find(u => 
-    u.hsnSac.includes(hsnCode) || 
-    kwLower.includes(u.productName.toLowerCase()) || 
-    u.productName.toLowerCase().includes(kwLower)
-  );
+  // Synced government overlay first (fresh Council/CBIC changes win over the
+  // bundled static database), then the static fallback.
+  const pool = [...readGovSyncSnapshot().updates, ...GST_COUNCIL_UPDATES];
+  const seen = new Set<string>();
+  const update = pool.find(u => {
+    if (seen.has(u.id)) return false;
+    seen.add(u.id);
+    return u.hsnSac.includes(hsnCode) ||
+      kwLower.includes(u.productName.toLowerCase()) ||
+      u.productName.toLowerCase().includes(kwLower);
+  });
 
   if (update && update.status === 'Recommended') {
     return `GST Council Announcement: ${update.meeting} recommended rate change to ${update.newRate} (${update.title}). Status: ${update.status} - Not legally effective yet. Calculations currently apply statutory ${update.oldRate} rate.`;

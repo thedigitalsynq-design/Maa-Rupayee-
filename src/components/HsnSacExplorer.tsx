@@ -41,17 +41,21 @@ export const HsnSacExplorer: React.FC<HsnSacExplorerProps> = ({ onSelectForCalcu
   });
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
+    <div className="max-w-6xl mx-auto space-y-6 animate-in fade-in">
       {/* Title */}
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold text-slate-900">Official Indian HSN & SAC Tariff Explorer</h2>
-        <p className="text-xs text-slate-500 mt-1">
+      <div className="p-6 sm:p-7 rounded-3xl glass-card shadow-sm">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-pill text-xs font-semibold mb-3">
+          <BookOpen className="h-3.5 w-3.5" />
+          <span>CBIC Tariff Schedule • HSN Chapters 01–98 & SAC 99</span>
+        </div>
+        <h2 className="text-2xl sm:text-3xl font-black tracking-tight">Official Indian HSN & SAC Tariff Explorer</h2>
+        <p className="text-xs sm:text-sm text-zinc-500 mt-1.5 max-w-2xl leading-relaxed">
           Explore Goods (HSN Chapters 01–98) and Services (SAC Section 99) with official CBIC classifications and rates.
         </p>
       </div>
 
       {/* Filter Toolbar */}
-      <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 mb-6 space-y-3">
+      <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 space-y-3">
         <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
           {/* Search input */}
           <div className="sm:col-span-6 relative">
@@ -89,10 +93,9 @@ export const HsnSacExplorer: React.FC<HsnSacExplorerProps> = ({ onSelectForCalcu
             >
               <option value="ALL">All Rates</option>
               <option value="0">0% (Nil/Exempt)</option>
-              <option value="5">5% Concessional</option>
-              <option value="12">12% Standard</option>
+              <option value="5">5% Merit</option>
               <option value="18">18% Standard</option>
-              <option value="28">28% Peak Luxury</option>
+              <option value="40">40% Sin & Luxury</option>
             </select>
           </div>
 
@@ -119,7 +122,7 @@ export const HsnSacExplorer: React.FC<HsnSacExplorerProps> = ({ onSelectForCalcu
           <span>
             Showing <strong>{filteredItems.length}</strong> official tariff classifications
           </span>
-          <span className="text-[11px] text-amber-700 font-medium">
+          <span className="text-[11px] text-zinc-600 font-medium">
             Source: Central Board of Indirect Taxes and Customs (CBIC)
           </span>
         </div>
@@ -136,7 +139,7 @@ export const HsnSacExplorer: React.FC<HsnSacExplorerProps> = ({ onSelectForCalcu
               {/* Top Row: Code & Slab */}
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
-                  <span className="font-mono font-extrabold text-sm px-2 py-0.5 rounded bg-slate-900 text-amber-300">
+                  <span className="font-mono font-extrabold text-sm px-2 py-0.5 rounded bg-zinc-900 text-white">
                     {item.code}
                   </span>
                   <span className="text-[10px] uppercase font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">
@@ -145,11 +148,11 @@ export const HsnSacExplorer: React.FC<HsnSacExplorerProps> = ({ onSelectForCalcu
                 </div>
 
                 <div className="text-right">
-                  <span className="text-base font-extrabold text-amber-700 font-mono">
+                  <span className="text-base font-extrabold text-zinc-950 font-mono">
                     {item.gstRate}%
                   </span>
                   {item.cessRate && (
-                    <span className="text-xs text-rose-600 font-bold ml-1">
+                    <span className="text-xs text-zinc-600 font-bold ml-1">
                       +{item.cessRate}% Cess
                     </span>
                   )}
@@ -184,7 +187,7 @@ export const HsnSacExplorer: React.FC<HsnSacExplorerProps> = ({ onSelectForCalcu
 
               <button
                 onClick={() => onSelectForCalculation(item)}
-                className="px-3 py-1 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 rounded-lg font-bold text-xs transition-colors"
+                className="px-3 py-1 bg-zinc-900 hover:bg-black text-white rounded-lg font-bold text-xs transition-colors cursor-pointer"
               >
                 Calculate GST &rarr;
               </button>

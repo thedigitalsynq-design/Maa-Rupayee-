@@ -9,22 +9,13 @@ export const GST_DATABASE: GSTItem[] = [
     subCategory: 'Television & Monitors',
     description: 'Monitors and projectors, television reception apparatus (LED, OLED, Smart TV)',
     keywords: ['tv', 'television', 'samsung tv', 'lg tv', 'sony tv', 'smart tv', 'oled', 'led tv', 'monitor', 'screen', '55 inch', '65 inch', '43 inch', '32 inch'],
-    gstRate: 18, // For TVs up to 32 inch 18%, above 32 inch historically 28% then reduced or specific conditions
-    applicableConditions: 'Televisions of screen size up to 32 inches are at 18%; TVs above 32 inches attract 28% GST under Schedule IV (Notification No. 01/2017-CT(Rate) as amended).',
-    source: 'CBIC Schedule IV - Sl. No. 386 / 387, Notification No. 24/2018-CT(Rate)',
-    lastVerified: 'September 2024 (54th GST Council)',
-    ambiguityQuestions: [
-      {
-        id: 'tv_screen_size',
-        question: 'What is the screen size of the television?',
-        options: [
-          { label: 'Above 32 inches (e.g. 43", 50", 55", 65")', rate: 28, hsn: '8528 72', conditionNote: 'Screen size > 32 inches attracts 28% GST' },
-          { label: 'Up to 32 inches (<= 32")', rate: 18, hsn: '8528 72', conditionNote: 'Screen size <= 32 inches attracts reduced rate of 18%' }
-        ]
-      }
-    ],
+    gstRate: 18, // GST 2.0: ALL televisions unified at 18% w.e.f. 22-09-2025 (large-screen 28% abolished)
+    applicableConditions: 'All televisions (LED, OLED, QLED, Smart TV) attract a uniform 18% GST since 22-09-2025. Screen-size distinction abolished under the 56th GST Council reforms (Notification No. 09/2025-CT(Rate)).',
+    source: 'CBIC Notification No. 09/2025-CT(Rate) - 56th GST Council (GST 2.0), w.e.f. 22-09-2025',
+    lastVerified: 'September 2025 (56th GST Council)',
     historicalRates: [
-      { effectiveDate: '2019-01-01', rate: 18, notificationNo: '24/2018-CT(Rate)', notes: 'Rate on TVs up to 32 inches reduced from 28% to 18%' },
+      { effectiveDate: '2025-09-22', rate: 18, notificationNo: '09/2025-CT(Rate)', notes: 'GST 2.0: all TVs unified at 18%; above-32-inch 28% slab abolished' },
+      { effectiveDate: '2019-01-01', rate: 18, notificationNo: '24/2018-CT(Rate)', notes: 'Rate on TVs up to 32 inches reduced from 28% to 18% (above 32 inches stayed at 28%)' },
       { effectiveDate: '2017-07-01', rate: 28, notificationNo: '01/2017-CT(Rate)', notes: 'Initial GST rate for all televisions was 28%' }
     ]
   },
@@ -63,10 +54,14 @@ export const GST_DATABASE: GSTItem[] = [
     subCategory: 'Air Conditioners',
     description: 'Air conditioning machines comprising a motor-driven fan and elements for changing temperature and humidity',
     keywords: ['ac', 'air conditioner', 'split ac', 'window ac', 'inverter ac', 'daikin', 'voltas', 'bluestar'],
-    gstRate: 28,
-    applicableConditions: 'Air conditioners are treated as luxury consumer appliances and taxed at peak 28% GST rate.',
-    source: 'CBIC Schedule IV - Sl. No. 119',
-    lastVerified: 'September 2024'
+    gstRate: 18,
+    applicableConditions: 'Air conditioners attract 18% GST since 22-09-2025 (reduced from the 28% luxury slab under GST 2.0).',
+    source: 'CBIC Notification No. 09/2025-CT(Rate) - 56th GST Council (GST 2.0), w.e.f. 22-09-2025',
+    lastVerified: 'September 2025 (56th GST Council)',
+    historicalRates: [
+      { effectiveDate: '2025-09-22', rate: 18, notificationNo: '09/2025-CT(Rate)', notes: 'GST 2.0: ACs moved from 28% luxury slab to 18%' },
+      { effectiveDate: '2017-07-01', rate: 28, notificationNo: '01/2017-CT(Rate)', notes: 'ACs taxed at peak 28% as luxury consumer appliances' }
+    ]
   },
   {
     code: '8418',
@@ -87,10 +82,14 @@ export const GST_DATABASE: GSTItem[] = [
     subCategory: 'LED Lights',
     description: 'Lamps and lighting fittings; LED lights, fixtures, and LED bulbs',
     keywords: ['led', 'led bulb', 'lighting', 'tube light', 'philips led', 'lamp', 'ceiling light'],
-    gstRate: 12,
-    applicableConditions: 'LED lamps, lights and fixtures attract 12% GST under HSN 9405.',
-    source: 'CBIC Notification No. 41/2017-CT(Rate)',
-    lastVerified: 'August 2024'
+    gstRate: 5,
+    applicableConditions: 'LED lamps, lights and fixtures attract 5% GST since 22-09-2025 (12% slab merged under GST 2.0).',
+    source: 'CBIC Notification No. 09/2025-CT(Rate) - 56th GST Council (GST 2.0), w.e.f. 22-09-2025',
+    lastVerified: 'September 2025 (56th GST Council)',
+    historicalRates: [
+      { effectiveDate: '2025-09-22', rate: 5, notificationNo: '09/2025-CT(Rate)', notes: 'GST 2.0: 12% slab abolished, LED lights moved to 5%' },
+      { effectiveDate: '2017-07-01', rate: 12, notificationNo: '41/2017-CT(Rate)', notes: 'LED lamps taxed at 12% under HSN 9405' }
+    ]
   },
 
   // ==================== TEXTILES, SAREES & APPAREL ====================
@@ -102,22 +101,23 @@ export const GST_DATABASE: GSTItem[] = [
     description: 'Woven fabrics of cotton, cotton sarees, dhotis and traditional unstitched garments',
     keywords: ['saree', 'sari', 'cotton saree', 'silk saree', 'kanjivaram', 'banarasi', 'chiffon saree', 'georgette', 'pattu saree', 'sarees'],
     gstRate: 5,
-    applicableConditions: 'Sarees treated as unstitched fabric attract 5% GST regardless of value. Stitched garments attract 5% if sale value <= ₹1,000 and 12% if > ₹1,000.',
-    source: 'CBIC Schedule I / Circular No. 13/13/2017-GST & 45th GST Council Clarification',
-    lastVerified: 'September 2024',
+    applicableConditions: 'Sarees treated as unstitched fabric attract 5% GST regardless of value. Stitched garments attract 5% if sale value <= ₹2,500 and 18% if > ₹2,500 (threshold raised from ₹1,000 under GST 2.0 w.e.f. 22-09-2025).',
+    source: 'CBIC Notification No. 09/2025-CT(Rate) - 56th GST Council (GST 2.0), w.e.f. 22-09-2025',
+    lastVerified: 'September 2025 (56th GST Council)',
     ambiguityQuestions: [
       {
         id: 'saree_fabric_type',
         question: 'What is the material composition or form of the Saree?',
         options: [
           { label: 'Unstitched Saree / Traditional Fabric (Cotton/Silk/Synthetic)', rate: 5, hsn: '5208 / 5007', conditionNote: 'All unstitched sarees attract 5% GST irrespective of value' },
-          { label: 'Ready-to-wear / Designer stitched saree (> ₹1,000 value)', rate: 12, hsn: '6211', conditionNote: 'Ready-made / stitched garments exceeding ₹1,000 attract 12% GST' },
-          { label: 'Ready-to-wear stitched saree (<= ₹1,000 value)', rate: 5, hsn: '6211', conditionNote: 'Ready-made garments up to ₹1,000 attract 5% GST' },
+          { label: 'Ready-to-wear / Designer stitched saree (> ₹2,500 value)', rate: 18, hsn: '6211', conditionNote: 'Ready-made / stitched garments exceeding ₹2,500 attract 18% GST (GST 2.0)' },
+          { label: 'Ready-to-wear stitched saree (<= ₹2,500 value)', rate: 5, hsn: '6211', conditionNote: 'Ready-made garments up to ₹2,500 attract 5% GST (GST 2.0)' },
           { label: 'Embroidery / Job work on saree', rate: 5, hsn: '9988', conditionNote: 'Job work on textile products attracts 5% SAC 9988' }
         ]
       }
     ],
     historicalRates: [
+      { effectiveDate: '2025-09-22', rate: 5, notificationNo: '09/2025-CT(Rate)', notes: 'GST 2.0: apparel value threshold raised from ₹1,000 to ₹2,500; above-threshold rate is now 18% (12% slab abolished)' },
       { effectiveDate: '2022-01-01', rate: 5, notificationNo: '46th GST Council Deferred', notes: 'Proposed hike to 12% on all textiles was deferred/rolled back by GST Council' }
     ]
   },
@@ -128,19 +128,23 @@ export const GST_DATABASE: GSTItem[] = [
     subCategory: 'Ready-made Garments & Clothing',
     description: 'Articles of apparel and clothing accessories (Shirts, trousers, suits, dresses, kurtas, t-shirts)',
     keywords: ['clothing', 'shirt', 't-shirt', 'jeans', 'trousers', 'kurta', 'dress', 'apparel', 'garment', 'suit', 'jacket'],
-    gstRate: 12,
-    applicableConditions: 'Articles of apparel with sale value exceeding ₹1,000 per piece attract 12% GST; if value is up to ₹1,000, rate is 5%.',
-    source: 'CBIC Schedule II - Sl. No. 168 / Schedule I - Sl. No. 223',
-    lastVerified: 'September 2024',
+    gstRate: 5,
+    applicableConditions: 'Articles of apparel with sale value up to ₹2,500 per piece attract 5% GST; above ₹2,500 attract 18% (threshold raised from ₹1,000 and 12% slab abolished under GST 2.0 w.e.f. 22-09-2025).',
+    source: 'CBIC Notification No. 09/2025-CT(Rate) - 56th GST Council (GST 2.0), w.e.f. 22-09-2025',
+    lastVerified: 'September 2025 (56th GST Council)',
     ambiguityQuestions: [
       {
         id: 'apparel_value_tier',
         question: 'What is the sale price per piece?',
         options: [
-          { label: 'Value exceeding ₹1,000 per piece', rate: 12, hsn: '6203', conditionNote: 'Apparel > ₹1,000 attracts 12% GST' },
-          { label: 'Value up to ₹1,000 per piece', rate: 5, hsn: '6203', conditionNote: 'Apparel <= ₹1,000 attracts concessionary 5% GST' }
+          { label: 'Value exceeding ₹2,500 per piece', rate: 18, hsn: '6203', conditionNote: 'Apparel > ₹2,500 attracts 18% GST (GST 2.0)' },
+          { label: 'Value up to ₹2,500 per piece', rate: 5, hsn: '6203', conditionNote: 'Apparel <= ₹2,500 attracts concessionary 5% GST (GST 2.0)' }
         ]
       }
+    ],
+    historicalRates: [
+      { effectiveDate: '2025-09-22', rate: 5, notificationNo: '09/2025-CT(Rate)', notes: 'GST 2.0: threshold raised to ₹2,500; above-threshold rate is 18% (12% slab abolished)' },
+      { effectiveDate: '2017-07-01', rate: 12, notificationNo: '01/2017-CT(Rate)', notes: 'Apparel above ₹1,000 was taxed at 12% (up to ₹1,000 at 5%)' }
     ]
   },
   {
@@ -150,11 +154,22 @@ export const GST_DATABASE: GSTItem[] = [
     subCategory: 'Shoes, Sandals & Chappals',
     description: 'Footwear with outer soles of rubber, plastics, leather or composition leather',
     keywords: ['footwear', 'shoes', 'sandals', 'chappal', 'slippers', 'sneakers', 'leather shoes', 'boots', 'heels'],
-    gstRate: 12,
-    applicableConditions: 'Footwear having retail sale price exceeding ₹1,000 attracts 12% GST; footwear having retail sale price up to ₹1,000 attracts 12% as per Notification No. 14/2021-CT(Rate) (previously 5%).',
-    source: 'CBIC Notification No. 14/2021-Central Tax (Rate) w.e.f. 01-01-2022',
-    lastVerified: 'September 2024',
+    gstRate: 5,
+    applicableConditions: 'Footwear with retail sale price up to ₹2,500 attracts 5% GST; above ₹2,500 attracts 18% (GST 2.0 threshold revision w.e.f. 22-09-2025).',
+    source: 'CBIC Notification No. 09/2025-CT(Rate) - 56th GST Council (GST 2.0), w.e.f. 22-09-2025',
+    lastVerified: 'September 2025 (56th GST Council)',
+    ambiguityQuestions: [
+      {
+        id: 'footwear_value_tier',
+        question: 'What is the retail sale price per pair?',
+        options: [
+          { label: 'Up to ₹2,500 per pair', rate: 5, hsn: '6403', conditionNote: 'Footwear <= ₹2,500 attracts 5% GST (GST 2.0)' },
+          { label: 'Above ₹2,500 per pair', rate: 18, hsn: '6403', conditionNote: 'Footwear > ₹2,500 attracts 18% GST (GST 2.0)' }
+        ]
+      }
+    ],
     historicalRates: [
+      { effectiveDate: '2025-09-22', rate: 5, notificationNo: '09/2025-CT(Rate)', notes: 'GST 2.0: footwear up to ₹2,500 moved to 5% (12% slab abolished)' },
       { effectiveDate: '2022-01-01', rate: 12, notificationNo: '14/2021-CT(Rate)', notes: 'GST rate on all footwear (including <= ₹1,000) unified to 12%' },
       { effectiveDate: '2017-07-01', rate: 5, notificationNo: '01/2017-CT(Rate)', notes: 'Initial rate for footwear <= ₹1,000 was 5%, and > ₹1,000 was 18%' }
     ]
@@ -218,10 +233,14 @@ export const GST_DATABASE: GSTItem[] = [
     subCategory: 'Butter & Ghee',
     description: 'Butter and other fats and oils derived from milk; dairy spreads and pure desi ghee',
     keywords: ['ghee', 'desi ghee', 'butter', 'amul butter', 'amul ghee', 'dairy', 'makhan'],
-    gstRate: 12,
-    applicableConditions: 'Butter, ghee and cheese attract 12% GST under HSN 0405/0406.',
-    source: 'CBIC Schedule II - Sl. No. 11',
-    lastVerified: 'September 2024'
+    gstRate: 5,
+    applicableConditions: 'Butter, ghee, butter oil, dairy spreads and cheese attract 5% GST since 22-09-2025 (reduced from 12% under GST 2.0).',
+    source: 'CBIC Notification No. 09/2025-CT(Rate) - 56th GST Council (GST 2.0), w.e.f. 22-09-2025',
+    lastVerified: 'September 2025 (56th GST Council)',
+    historicalRates: [
+      { effectiveDate: '2025-09-22', rate: 5, notificationNo: '09/2025-CT(Rate)', notes: 'GST 2.0: butter, ghee and cheese moved from 12% to 5%' },
+      { effectiveDate: '2017-07-01', rate: 12, notificationNo: '01/2017-CT(Rate)', notes: 'Butter, ghee and cheese taxed at 12% under HSN 0405/0406' }
+    ]
   },
   {
     code: '0401',
@@ -243,10 +262,14 @@ export const GST_DATABASE: GSTItem[] = [
     subCategory: 'Biscuits & Bakery',
     description: 'Bread, pastry, cakes, biscuits and other bakers wares (Parle-G, Britannia, cookies)',
     keywords: ['biscuit', 'biscuits', 'cookies', 'parle g', 'good day', 'rusk', 'cake', 'bakery'],
-    gstRate: 18,
-    applicableConditions: 'All biscuits (including sweet biscuits, cookies and waffles) attract 18% GST.',
-    source: 'CBIC Schedule III - Sl. No. 16',
-    lastVerified: 'September 2024'
+    gstRate: 5,
+    applicableConditions: 'Biscuits, cookies, cakes, pastries, namkeens and bakery wares attract 5% GST since 22-09-2025 (reduced from 18%/12% under GST 2.0).',
+    source: 'CBIC Notification No. 09/2025-CT(Rate) - 56th GST Council (GST 2.0), w.e.f. 22-09-2025',
+    lastVerified: 'September 2025 (56th GST Council)',
+    historicalRates: [
+      { effectiveDate: '2025-09-22', rate: 5, notificationNo: '09/2025-CT(Rate)', notes: 'GST 2.0: biscuits and bakery wares moved from 18% to 5%' },
+      { effectiveDate: '2017-07-01', rate: 18, notificationNo: '01/2017-CT(Rate)', notes: 'All biscuits and bakery wares taxed at 18%' }
+    ]
   },
   {
     code: '0904',
@@ -269,22 +292,23 @@ export const GST_DATABASE: GSTItem[] = [
     subCategory: 'Medicines & Formulations',
     description: 'Medicaments consisting of mixed or unmixed products for therapeutic or prophylactic uses',
     keywords: ['medicine', 'medicines', 'tablets', 'syrup', 'paracetamol', 'antibiotic', 'insulin', 'pharma', 'drugs', 'cancer drug'],
-    gstRate: 12,
-    applicableConditions: 'Most general formulations attract 12% GST; Life-saving cancer drugs (Trastuzumab, Osimertinib, Durvalumab) reduced from 12% to 5% in 54th GST Council (Sept 2024). Special formulations or insulin attract 5%.',
-    source: 'CBIC Notification No. 05/2024-CT(Rate) (54th GST Council recommendation notified)',
-    lastVerified: 'October 2024',
+    gstRate: 5,
+    applicableConditions: 'Most formulations attract 5% GST since 22-09-2025 under GST 2.0. 33 specified life-saving drugs are fully exempt (0%). Earlier: general 12%, with specified cancer drugs (Trastuzumab, Osimertinib, Durvalumab) at 5% from Oct 2024.',
+    source: 'CBIC Notification No. 09/2025-CT(Rate) - 56th GST Council (GST 2.0), w.e.f. 22-09-2025',
+    lastVerified: 'September 2025 (56th GST Council)',
     ambiguityQuestions: [
       {
         id: 'medicine_type',
         question: 'What category of medicament is this?',
         options: [
-          { label: 'General allopathic formulations & antibiotics (e.g. Paracetamol, Cough syrup)', rate: 12, hsn: '3004', conditionNote: 'Standard pharmaceutical formulations attract 12% GST' },
-          { label: 'Specified Cancer Drugs (Trastuzumab, Osimertinib, Durvalumab) & Life-saving drugs', rate: 5, hsn: '3004', conditionNote: 'Reduced to 5% w.e.f. Oct 2024 as per 54th GST Council' },
-          { label: 'Ayurvedic / Unani / Siddha branded medicaments', rate: 12, hsn: '3004', conditionNote: 'Branded traditional medicines attract 12% GST' }
+          { label: 'General allopathic formulations & antibiotics (e.g. Paracetamol, Cough syrup)', rate: 5, hsn: '3004', conditionNote: 'Standard formulations attract 5% GST since 22-09-2025 (GST 2.0)' },
+          { label: '33 specified life-saving drugs (nil list, e.g. Agalsidase Alfa, Onasemnogene)', rate: 0, hsn: '3004', conditionNote: 'Exempt (0%) w.e.f. 22-09-2025 as per 56th GST Council' },
+          { label: 'Ayurvedic / Unani / Siddha branded medicaments', rate: 5, hsn: '3004', conditionNote: 'Branded traditional medicines attract 5% GST since 22-09-2025 (GST 2.0)' }
         ]
       }
     ],
     historicalRates: [
+      { effectiveDate: '2025-09-22', rate: 5, notificationNo: '09/2025-CT(Rate)', notes: 'GST 2.0: most medicines moved from 12% to 5%; 33 life-saving drugs exempted' },
       { effectiveDate: '2024-10-10', rate: 5, notificationNo: '05/2024-CT(Rate)', notes: 'GST rate on three major cancer drugs reduced from 12% to 5%' }
     ]
   },
@@ -297,22 +321,26 @@ export const GST_DATABASE: GSTItem[] = [
     subCategory: 'Motor Cars & Passenger Vehicles',
     description: 'Motor cars and other motor vehicles principally designed for the transport of persons',
     keywords: ['car', 'motor car', 'automobile', 'petrol car', 'diesel car', 'suv', 'sedan', 'creta', 'maruti', 'hyundai', 'tata car'],
-    gstRate: 28,
-    cessRate: 17, // Compensation cess between 1% to 22% based on length and engine
-    applicableConditions: 'Base GST is 28% plus Compensation Cess ranging from 1% (small petrol) up to 22% (SUVs with engine > 1500cc and ground clearance >= 170mm). Total tax can reach 50%.',
-    source: 'CBIC Schedule IV - Sl. No. 528 & GST (Compensation to States) Cess Act',
-    lastVerified: 'September 2024',
+    gstRate: 18,
+    cessRate: 0, // Compensation cess subsumed under GST 2.0; 40% demerit slab is all-inclusive
+    applicableConditions: 'Small cars (petrol <= 1200cc / diesel <= 1500cc, length < 4m) attract 18% GST since 22-09-2025. Larger cars, SUVs and luxury vehicles attract a 40% demerit rate (all-inclusive, no separate cess). Electric Vehicles stay at 5%.',
+    source: 'CBIC Notification No. 09/2025-CT(Rate) - 56th GST Council (GST 2.0), w.e.f. 22-09-2025',
+    lastVerified: 'September 2025 (56th GST Council)',
     ambiguityQuestions: [
       {
         id: 'car_powertrain',
         question: 'What type of vehicle engine / propulsion?',
         options: [
-          { label: 'Electric Vehicle (EV / Battery operated)', rate: 5, hsn: '8703', conditionNote: 'Electric Vehicles attract special concessionary 5% GST and 0% Cess' },
-          { label: 'Small Petrol / CNG Car (< 1200cc, length < 4m)', rate: 28, hsn: '8703', conditionNote: '28% GST + 1% Compensation Cess' },
-          { label: 'Small Diesel Car (< 1500cc, length < 4m)', rate: 28, hsn: '8703', conditionNote: '28% GST + 3% Compensation Cess' },
-          { label: 'Mid-size / Large SUV (> 1500cc, ground clearance >= 170mm)', rate: 28, hsn: '8703', conditionNote: '28% GST + 22% Compensation Cess (Total Effective Tax: 50%)' }
+          { label: 'Electric Vehicle (EV / Battery operated)', rate: 5, hsn: '8703', conditionNote: 'Electric Vehicles attract special concessionary 5% GST' },
+          { label: 'Small Petrol / CNG Car (<= 1200cc, length < 4m)', rate: 18, hsn: '8703', conditionNote: '18% GST, no compensation cess (GST 2.0)' },
+          { label: 'Small Diesel Car (<= 1500cc, length < 4m)', rate: 18, hsn: '8703', conditionNote: '18% GST, no compensation cess (GST 2.0)' },
+          { label: 'Large car / SUV (bigger engine or length >= 4m)', rate: 40, hsn: '8703', conditionNote: '40% demerit rate, all-inclusive (GST 2.0)' }
         ]
       }
+    ],
+    historicalRates: [
+      { effectiveDate: '2025-09-22', rate: 18, notificationNo: '09/2025-CT(Rate)', notes: 'GST 2.0: small cars 28%+cess to 18%; large cars/SUVs to all-inclusive 40%; cess subsumed' },
+      { effectiveDate: '2017-07-01', rate: 28, notificationNo: '01/2017-CT(Rate)', notes: 'Base 28% GST plus 1%-22% compensation cess depending on size and engine' }
     ]
   },
   {
@@ -322,10 +350,25 @@ export const GST_DATABASE: GSTItem[] = [
     subCategory: 'Motorcycles & Two-Wheelers',
     description: 'Motorcycles (including mopeds) and cycles fitted with an auxiliary motor',
     keywords: ['bike', 'motorcycle', 'scooter', 'activa', 'splendor', 'royal enfield', 'pulsar', 'two wheeler'],
-    gstRate: 28,
-    applicableConditions: 'Standard petrol two-wheelers attract 28% GST (plus 3% cess if engine > 350cc). Electric two-wheelers (Ather, Ola) attract only 5% GST.',
-    source: 'CBIC Schedule IV - Sl. No. 529 / EV Notification 12/2019',
-    lastVerified: 'September 2024'
+    gstRate: 18,
+    applicableConditions: 'Two-wheelers up to 350cc attract 18% GST since 22-09-2025 (GST 2.0). Motorcycles above 350cc attract a 40% demerit rate. Electric two-wheelers stay at 5%.',
+    source: 'CBIC Notification No. 09/2025-CT(Rate) - 56th GST Council (GST 2.0), w.e.f. 22-09-2025',
+    lastVerified: 'September 2025 (56th GST Council)',
+    ambiguityQuestions: [
+      {
+        id: 'bike_engine',
+        question: 'What is the engine capacity?',
+        options: [
+          { label: 'Up to 350cc (commuter bikes, scooters)', rate: 18, hsn: '8711', conditionNote: '18% GST since 22-09-2025 (GST 2.0)' },
+          { label: 'Above 350cc (premium / superbikes)', rate: 40, hsn: '8711', conditionNote: '40% demerit rate since 22-09-2025 (GST 2.0)' },
+          { label: 'Electric two-wheeler (Ather, Ola, etc.)', rate: 5, hsn: '8711', conditionNote: 'Concessionary 5% GST for EVs' }
+        ]
+      }
+    ],
+    historicalRates: [
+      { effectiveDate: '2025-09-22', rate: 18, notificationNo: '09/2025-CT(Rate)', notes: 'GST 2.0: bikes up to 350cc moved from 28% to 18%; above 350cc to 40%' },
+      { effectiveDate: '2017-07-01', rate: 28, notificationNo: '01/2017-CT(Rate)', notes: 'Standard petrol two-wheelers taxed at 28%' }
+    ]
   },
   {
     code: '8708',
@@ -334,10 +377,14 @@ export const GST_DATABASE: GSTItem[] = [
     subCategory: 'Automobile Spare Parts',
     description: 'Parts and accessories of motor vehicles, brakes, gear boxes, drive-axles, radiators',
     keywords: ['spare parts', 'auto parts', 'car spare', 'brake pad', 'clutch plate', 'oil filter', 'engine parts'],
-    gstRate: 28,
-    applicableConditions: 'Automobile components and spare parts attract 28% GST under Chapter 8708.',
-    source: 'CBIC Schedule IV - Sl. No. 530',
-    lastVerified: 'September 2024'
+    gstRate: 18,
+    applicableConditions: 'Automobile components and spare parts attract a uniform 18% GST since 22-09-2025 (GST 2.0).',
+    source: 'CBIC Notification No. 09/2025-CT(Rate) - 56th GST Council (GST 2.0), w.e.f. 22-09-2025',
+    lastVerified: 'September 2025 (56th GST Council)',
+    historicalRates: [
+      { effectiveDate: '2025-09-22', rate: 18, notificationNo: '09/2025-CT(Rate)', notes: 'GST 2.0: auto parts moved from 28% to uniform 18%' },
+      { effectiveDate: '2017-07-01', rate: 28, notificationNo: '01/2017-CT(Rate)', notes: 'Auto components taxed at 28% under Chapter 8708' }
+    ]
   },
 
   // ==================== CONSTRUCTION MATERIALS & FURNITURE ====================
@@ -348,10 +395,14 @@ export const GST_DATABASE: GSTItem[] = [
     subCategory: 'Cement',
     description: 'Portland cement, aluminous cement, slag cement and similar hydraulic cements',
     keywords: ['cement', 'ultratech', 'ambuja', 'acc cement', 'portland cement', 'grey cement'],
-    gstRate: 28,
-    applicableConditions: 'All varieties of cement attract peak 28% GST rate.',
-    source: 'CBIC Schedule IV - Sl. No. 34',
-    lastVerified: 'September 2024'
+    gstRate: 18,
+    applicableConditions: 'All varieties of cement attract 18% GST since 22-09-2025 (reduced from 28% under GST 2.0).',
+    source: 'CBIC Notification No. 09/2025-CT(Rate) - 56th GST Council (GST 2.0), w.e.f. 22-09-2025',
+    lastVerified: 'September 2025 (56th GST Council)',
+    historicalRates: [
+      { effectiveDate: '2025-09-22', rate: 18, notificationNo: '09/2025-CT(Rate)', notes: 'GST 2.0: cement moved from peak 28% to 18%' },
+      { effectiveDate: '2017-07-01', rate: 28, notificationNo: '01/2017-CT(Rate)', notes: 'Cement taxed at peak 28% rate' }
+    ]
   },
   {
     code: '7214',
@@ -388,6 +439,23 @@ export const GST_DATABASE: GSTItem[] = [
     applicableConditions: 'Furniture of all types (wood, metal, plastic) attracts 18% GST under HSN 9403.',
     source: 'CBIC Notification No. 41/2017-CT(Rate)',
     lastVerified: 'September 2024'
+  },
+
+  // ==================== JEWELLERY & PRECIOUS METALS ====================
+  {
+    code: '7113',
+    type: 'GOODS',
+    category: 'Jewellery & Gems',
+    subCategory: 'Gold & Silver Jewellery',
+    description: 'Articles of jewellery and parts thereof, of precious metal (gold chains, bangles, rings, silverware)',
+    keywords: ['gold', 'silver', 'jewellery', 'jewelry', 'chain', 'bangle', 'ring', 'necklace', 'ornament', 'bullion'],
+    gstRate: 3,
+    applicableConditions: 'Gold, silver and studded jewellery attract 3% GST on metal value; making charges billed separately attract 5%. Rough diamonds at 0.25%.',
+    source: 'CBIC Schedule IV(3%) / Notification No. 11/2017-CT(Rate) for making charges',
+    lastVerified: 'September 2025 (56th GST Council)',
+    historicalRates: [
+      { effectiveDate: '2017-07-01', rate: 3, notificationNo: '01/2017-CT(Rate)', notes: 'Jewellery taxed at special 3% slab since GST rollout' }
+    ]
   },
 
   // ==================== BOOKS & STATIONERY ====================
@@ -513,19 +581,23 @@ export const GST_DATABASE: GSTItem[] = [
     subCategory: 'Hotel Accommodation',
     description: 'Room or unit accommodation services provided by hotels, inns, guest houses, clubs or campsites',
     keywords: ['hotel', 'hotel room', 'resort', 'stay', 'room booking', 'guest house', 'oyo', 'taj hotel', 'room rent'],
-    gstRate: 12,
-    applicableConditions: 'Hotel accommodation with declared room tariff up to ₹7,500 per day attracts 12% GST. Tariff exceeding ₹7,500 per day attracts 18% GST.',
-    source: 'CBIC Notification No. 11/2017-CT(Rate) as amended by 20/2019-CT(Rate)',
-    lastVerified: 'September 2024',
+    gstRate: 5,
+    applicableConditions: 'Hotel accommodation with declared room tariff up to ₹7,500 per day attracts 5% GST since 22-09-2025 (GST 2.0). Tariff exceeding ₹7,500 per day attracts 18% GST.',
+    source: 'CBIC Notification No. 09/2025-CT(Rate) - 56th GST Council (GST 2.0), w.e.f. 22-09-2025',
+    lastVerified: 'September 2025 (56th GST Council)',
     ambiguityQuestions: [
       {
         id: 'hotel_room_tariff',
         question: 'What is the declared daily room tariff per unit?',
         options: [
-          { label: 'Up to ₹7,500 per unit per day (<= ₹7,500)', rate: 12, hsn: '9963', conditionNote: '12% GST applies' },
+          { label: 'Up to ₹7,500 per unit per day (<= ₹7,500)', rate: 5, hsn: '9963', conditionNote: '5% GST applies since 22-09-2025 (GST 2.0)' },
           { label: 'Above ₹7,500 per unit per day (> ₹7,500)', rate: 18, hsn: '9963', conditionNote: '18% GST applies to luxury accommodation' }
         ]
       }
+    ],
+    historicalRates: [
+      { effectiveDate: '2025-09-22', rate: 5, notificationNo: '09/2025-CT(Rate)', notes: 'GST 2.0: hotel rooms up to ₹7,500 moved from 12% to 5%' },
+      { effectiveDate: '2019-09-01', rate: 12, notificationNo: '20/2019-CT(Rate)', notes: 'Rooms up to ₹7,500 taxed at 12% (above at 18%)' }
     ]
   },
 

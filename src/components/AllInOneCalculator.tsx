@@ -4,7 +4,7 @@ import {
   RotateCcw, 
   Copy, 
   Check, 
-  FileText, 
+  ReceiptText, 
   Bookmark, 
   ArrowRightLeft, 
   SlidersHorizontal, 
@@ -147,19 +147,19 @@ const PERSONA_PRESETS: PersonaPreset[] = [
     id: 'automobile',
     icon: Car,
     name: 'Automobile / Vehicle',
-    role: 'Motor Vehicle + Cess',
+    role: 'Motor Vehicle (GST 2.0)',
     amount: 750000,
-    rate: 28,
+    rate: 18,
     isInclusive: false,
-    cess: 1,
+    cess: 0,
     isInterState: false,
-    desc: '28% GST + 1% Compensation Cess on small petrol motor cars',
+    desc: '18% GST on small petrol motor cars since 22-09-2025 (cess subsumed; large cars at 40%)',
     hsn: '8703',
     type: 'GOODS',
   },
 ];
 
-const STANDARD_RATES = [0, 3, 5, 12, 18, 28];
+const STANDARD_RATES = [0, 3, 5, 18, 40];
 
 export const AllInOneCalculator: React.FC<AllInOneCalculatorProps> = ({
   supplierState,
@@ -264,7 +264,7 @@ ${breakdown.cessAmount > 0 ? `Compensation Cess: ${formatIndianCurrency(breakdow
 Total Payable Amount: ${formatIndianCurrency(breakdown.totalAmount)}
 In Words: ${amountInIndianWords(breakdown.totalAmount)}
 --------------------------------------------------
-Computed with Smart GST India`;
+Computed with PaisaCalc`;
 
     navigator.clipboard.writeText(text);
     setCopied(true);
@@ -349,23 +349,24 @@ Computed with Smart GST India`;
   const cessWidth = breakdown.cessAmount > 0 ? Math.max(0, (breakdown.cessAmount / totalBar) * 100) : 0;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 text-white">
+      <h2 className="sr-only">GST Calculator — forward and reverse tax computation</h2>
       {/* Quick Persona Scenarios Bar */}
-      <div className="bg-white rounded-xl shadow-xs border border-slate-200 p-4">
+      <div className="bg-[#0e1014] rounded-2xl border border-white/10 p-5 shadow-sm">
         <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
           <div className="flex items-center gap-2">
-            <span className="h-6 w-6 rounded-md bg-amber-100 text-amber-900 flex items-center justify-center text-xs font-bold">
+            <span className="h-6 w-6 rounded-md bg-white/10 text-white flex items-center justify-center text-xs font-bold border border-white/15">
               ⚡
             </span>
             <div>
-              <h3 className="text-sm font-bold text-slate-900">Who is calculating? Instant Presets for Everyone</h3>
-              <p className="text-[11px] text-slate-500">Pick your persona or scenario to load realistic GST values with one click</p>
+              <h3 className="text-sm font-bold text-white">Who is calculating? Instant Presets for Everyone</h3>
+              <p className="text-[11px] text-zinc-400">Pick your persona or scenario to load realistic GST values with one click</p>
             </div>
           </div>
           {selectedPersona && (
             <button
               onClick={() => setSelectedPersona(null)}
-              className="text-[11px] text-slate-400 hover:text-slate-600 font-medium"
+              className="text-[11px] text-zinc-400 hover:text-white font-medium"
             >
               Clear Preset
             </button>
@@ -380,23 +381,23 @@ Computed with Smart GST India`;
               <button
                 key={p.id}
                 onClick={() => handleApplyPersona(p)}
-                className={`p-2.5 rounded-lg text-left transition-all border flex flex-col justify-between ${
+                className={`p-2.5 rounded-xl text-left transition-all border flex flex-col justify-between ${
                   isSelected
-                    ? 'bg-amber-50 border-amber-400 ring-1 ring-amber-400 shadow-xs'
-                    : 'bg-slate-50/70 hover:bg-white hover:border-slate-300 border-slate-200'
+                    ? 'bg-white text-black border-white shadow-xs font-bold'
+                    : 'bg-zinc-900/60 hover:bg-zinc-800 text-zinc-300 border-zinc-800'
                 }`}
               >
                 <div className="flex items-center justify-between mb-1">
-                  <IconComponent className={`h-4 w-4 ${isSelected ? 'text-amber-700' : 'text-slate-600'}`} />
+                  <IconComponent className={`h-4 w-4 ${isSelected ? 'text-black' : 'text-zinc-400'}`} />
                   <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
-                    isSelected ? 'bg-amber-200/70 text-amber-900' : 'bg-slate-200 text-slate-700'
+                    isSelected ? 'bg-black text-white font-mono' : 'bg-zinc-800 text-zinc-300 font-mono'
                   }`}>
                     {p.rate}%
                   </span>
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-slate-900 leading-tight line-clamp-1">{p.name}</div>
-                  <div className="text-[10px] text-slate-500 line-clamp-1 mt-0.5">{p.role}</div>
+                  <div className={`text-xs font-bold leading-tight line-clamp-1 ${isSelected ? 'text-black' : 'text-white'}`}>{p.name}</div>
+                  <div className={`text-[10px] line-clamp-1 mt-0.5 ${isSelected ? 'text-zinc-700' : 'text-zinc-400'}`}>{p.role}</div>
                 </div>
               </button>
             );
@@ -407,26 +408,26 @@ Computed with Smart GST India`;
       {/* Primary Calculator Form & Result Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column: Input Form (7 cols) */}
-        <div className="lg:col-span-7 bg-white rounded-xl shadow-xs border border-slate-200 p-5 space-y-5">
+        <div className="lg:col-span-7 bg-[#0e1014] rounded-2xl border border-white/10 p-6 space-y-5 shadow-sm">
           {/* Header & Mode Switcher */}
-          <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-100">
+          <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-zinc-800">
             <div>
-              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                <Calculator className="h-4 w-4 text-amber-600" />
+              <h3 className="text-base font-bold text-white flex items-center gap-2">
+                <Calculator className="h-4 w-4 text-white" />
                 <span>GST, CGST & SGST Parameters</span>
               </h3>
-              <span className="text-xs text-slate-500">Configure amount, tax slab, and route</span>
+              <span className="text-xs text-zinc-400">Configure amount, tax slab, and route</span>
             </div>
 
             {/* Exclusive vs Inclusive Segmented Toggle */}
-            <div className="bg-slate-100 p-1 rounded-lg flex items-center text-xs font-semibold">
+            <div className="bg-zinc-900 border border-zinc-800 p-1 rounded-xl flex items-center text-xs font-semibold">
               <button
                 type="button"
                 onClick={() => setIsInclusive(false)}
-                className={`px-3 py-1.5 rounded-md transition-all ${
+                className={`px-3 py-1.5 rounded-lg transition-all ${
                   !isInclusive
-                    ? 'bg-white text-slate-950 shadow-xs font-bold'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-white text-black font-bold shadow-xs'
+                    : 'text-zinc-400 hover:text-white'
                 }`}
               >
                 + GST (Exclusive)
@@ -434,10 +435,10 @@ Computed with Smart GST India`;
               <button
                 type="button"
                 onClick={() => setIsInclusive(true)}
-                className={`px-3 py-1.5 rounded-md transition-all ${
+                className={`px-3 py-1.5 rounded-lg transition-all ${
                   isInclusive
-                    ? 'bg-white text-slate-950 shadow-xs font-bold'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-white text-black font-bold shadow-xs'
+                    : 'text-zinc-400 hover:text-white'
                 }`}
               >
                 Remove GST (Inclusive / MRP)
@@ -448,16 +449,16 @@ Computed with Smart GST India`;
           {/* Amount Input */}
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label htmlFor={amountInputId} className="text-xs font-bold text-slate-700 uppercase tracking-wide">
+              <label htmlFor={amountInputId} className="text-xs font-bold text-zinc-300 uppercase tracking-wide">
                 {isInclusive ? 'Total Amount (MRP / Incl. Tax)' : 'Taxable Base Amount (Excl. Tax)'}
               </label>
-              <span className="text-xs font-mono font-semibold text-amber-700">
+              <span className="text-xs font-mono font-semibold text-white">
                 ₹ {amount ? amount.toLocaleString('en-IN') : 0}
               </span>
             </div>
 
             <div className="relative">
-              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-lg font-bold text-slate-400">
+              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-lg font-bold text-zinc-500">
                 ₹
               </span>
               <input
@@ -468,19 +469,19 @@ Computed with Smart GST India`;
                 value={amount === 0 ? '' : amount}
                 onChange={(e) => setAmount(parseFloat(e.target.value) || 0)}
                 placeholder="Enter amount (e.g. 10000)"
-                className="w-full pl-9 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-lg font-mono font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:bg-white transition-all"
+                className="w-full pl-9 pr-4 py-3 bg-zinc-900 border border-zinc-700 rounded-xl text-lg font-mono font-bold text-white focus:outline-none focus:border-white transition-all"
               />
             </div>
 
             {/* Quick Add Amount Buttons */}
             <div className="flex flex-wrap items-center gap-1.5 mt-2.5">
-              <span className="text-[11px] text-slate-400 font-medium mr-1">Quick Add:</span>
+              <span className="text-[11px] text-zinc-500 font-medium mr-1">Quick Add:</span>
               {[500, 1000, 5000, 10000, 50000, 100000].map((addVal) => (
                 <button
                   key={addVal}
                   type="button"
                   onClick={() => handleAddAmount(addVal)}
-                  className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded text-xs font-mono font-semibold transition-colors"
+                  className="px-2 py-1 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-800 rounded text-xs font-mono font-semibold transition-colors"
                 >
                   +{addVal >= 100000 ? `${addVal / 100000}L` : addVal >= 1000 ? `${addVal / 1000}k` : addVal}
                 </button>
@@ -488,7 +489,7 @@ Computed with Smart GST India`;
               <button
                 type="button"
                 onClick={handleClearAmount}
-                className="px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded text-xs font-semibold transition-colors ml-auto"
+                className="px-2 py-1 bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-zinc-800 rounded text-xs font-semibold transition-colors ml-auto"
               >
                 Clear
               </button>
@@ -498,10 +499,10 @@ Computed with Smart GST India`;
           {/* GST Rate Slabs Selector */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-slate-700 uppercase tracking-wide">
+              <span className="text-xs font-bold text-zinc-300 uppercase tracking-wide">
                 GST Rate Slab (Statutory Indian Schedules)
               </span>
-              <span className="text-xs font-bold text-amber-800">
+              <span className="text-xs font-bold text-white font-mono">
                 {isCustomRate ? `Custom ${gstRate}%` : `${gstRate}% Slab`}
               </span>
             </div>
@@ -517,10 +518,10 @@ Computed with Smart GST India`;
                       setGstRate(rate);
                       setIsCustomRate(false);
                     }}
-                    className={`py-2 px-1 rounded-lg text-center font-mono font-bold transition-all border ${
+                    className={`py-2 px-1 rounded-xl text-center font-mono font-bold transition-all border ${
                       isSelected
-                        ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
-                        : 'bg-slate-50 hover:bg-white text-slate-800 border-slate-200'
+                        ? 'bg-white text-black border-white shadow-xs'
+                        : 'bg-zinc-900/60 hover:bg-zinc-800 text-zinc-300 border-zinc-800'
                     }`}
                   >
                     <div className="text-sm">{rate}%</div>
@@ -528,9 +529,8 @@ Computed with Smart GST India`;
                       {rate === 0 && 'Nil/Exempt'}
                       {rate === 3 && 'Gold/Gems'}
                       {rate === 5 && 'Essentials'}
-                      {rate === 12 && 'Standard I'}
-                      {rate === 18 && 'Standard II'}
-                      {rate === 28 && 'Luxury/Sin'}
+                      {rate === 18 && 'Standard'}
+                      {rate === 40 && 'Sin/Luxury'}
                     </div>
                   </button>
                 );
@@ -540,10 +540,10 @@ Computed with Smart GST India`;
               <button
                 type="button"
                 onClick={() => setIsCustomRate(true)}
-                className={`py-2 px-1 rounded-lg text-center font-mono font-bold transition-all border ${
+                className={`py-2 px-1 rounded-xl text-center font-mono font-bold transition-all border ${
                   isCustomRate
-                    ? 'bg-amber-500 text-slate-950 border-amber-600 shadow-xs'
-                    : 'bg-slate-50 hover:bg-white text-slate-800 border-slate-200'
+                    ? 'bg-white text-black border-white shadow-xs'
+                    : 'bg-zinc-900/60 hover:bg-zinc-800 text-zinc-300 border-zinc-800'
                 }`}
               >
                 <div className="text-sm">Custom</div>
@@ -553,8 +553,8 @@ Computed with Smart GST India`;
 
             {/* Custom Rate Input if active */}
             {isCustomRate && (
-              <div className="mt-2.5 flex items-center gap-2 p-2 bg-amber-50 rounded-lg border border-amber-200 text-xs">
-                <span className="text-amber-900 font-semibold">Enter Custom Rate:</span>
+              <div className="mt-2.5 flex items-center gap-2 p-3 bg-zinc-900 rounded-xl border border-zinc-700 text-xs">
+                <span className="text-zinc-300 font-semibold">Enter Custom Rate:</span>
                 <input
                   id={customRateId}
                   type="number"
@@ -563,18 +563,18 @@ Computed with Smart GST India`;
                   step="0.1"
                   value={gstRate}
                   onChange={(e) => setGstRate(parseFloat(e.target.value) || 0)}
-                  className="w-20 px-2 py-1 bg-white border border-amber-300 rounded font-mono font-bold text-slate-900 focus:outline-none"
+                  className="w-20 px-2 py-1 bg-zinc-950 border border-zinc-700 rounded font-mono font-bold text-white focus:outline-none focus:border-white"
                   aria-label="Custom GST Rate Percentage"
                 />
-                <span className="text-amber-900 font-bold">%</span>
+                <span className="text-white font-bold">%</span>
               </div>
             )}
           </div>
 
           {/* Supply Route & State Selectors */}
-          <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-2.5">
+          <div className="p-4 bg-zinc-900/60 rounded-xl border border-zinc-800 space-y-3">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <span className="text-xs font-bold text-slate-700 uppercase tracking-wide">
+              <span className="text-xs font-bold text-zinc-300 uppercase tracking-wide">
                 Supply Route (Tax Apportionment)
               </span>
 
@@ -582,10 +582,10 @@ Computed with Smart GST India`;
               <button
                 type="button"
                 onClick={handleToggleRoute}
-                className={`px-2.5 py-1 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all border ${
+                className={`px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all border ${
                   isIntraState
-                    ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
-                    : 'bg-sky-50 text-sky-800 border-sky-300'
+                    ? 'bg-white/10 text-white border-white/20'
+                    : 'bg-zinc-800 text-zinc-300 border-zinc-700'
                 }`}
               >
                 <ArrowRightLeft className="h-3 w-3" />
@@ -597,7 +597,7 @@ Computed with Smart GST India`;
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               <div>
-                <label htmlFor={supplierSelectId} className="block text-slate-500 font-medium mb-1">
+                <label htmlFor={supplierSelectId} className="block text-zinc-400 font-medium mb-1">
                   Supplier / Origin State:
                 </label>
                 <select
@@ -607,7 +607,7 @@ Computed with Smart GST India`;
                     const found = INDIAN_STATES.find(s => s.code === e.target.value);
                     if (found) setSupplierState(found);
                   }}
-                  className="w-full p-2 bg-white border border-slate-300 rounded-lg text-slate-900 font-semibold focus:outline-none"
+                  className="w-full p-2 bg-zinc-950 border border-zinc-700 rounded-lg text-white font-semibold focus:outline-none"
                 >
                   {INDIAN_STATES.map((s) => (
                     <option key={`src-${s.code}`} value={s.code}>
@@ -618,7 +618,7 @@ Computed with Smart GST India`;
               </div>
 
               <div>
-                <label htmlFor={customerSelectId} className="block text-slate-500 font-medium mb-1">
+                <label htmlFor={customerSelectId} className="block text-zinc-400 font-medium mb-1">
                   Customer / Place of Supply:
                 </label>
                 <select
@@ -628,7 +628,7 @@ Computed with Smart GST India`;
                     const found = INDIAN_STATES.find(s => s.code === e.target.value);
                     if (found) setCustomerState(found);
                   }}
-                  className="w-full p-2 bg-white border border-slate-300 rounded-lg text-slate-900 font-semibold focus:outline-none"
+                  className="w-full p-2 bg-zinc-950 border border-zinc-700 rounded-lg text-white font-semibold focus:outline-none"
                 >
                   {INDIAN_STATES.map((s) => (
                     <option key={`dst-${s.code}`} value={s.code}>
@@ -639,7 +639,7 @@ Computed with Smart GST India`;
               </div>
             </div>
 
-            <div className="text-[11px] text-slate-500 pt-1 flex items-center justify-between">
+            <div className="text-[11px] text-zinc-400 pt-1 flex items-center justify-between">
               <span>
                 {isIntraState ? (
                   isUTWithoutLeg ? (
@@ -651,7 +651,7 @@ Computed with Smart GST India`;
                   <>100% Integrated Tax &rarr; <strong>IGST ({gstRate}%)</strong> collected by Centre</>
                 )}
               </span>
-              <span className="font-mono text-slate-400">
+              <span className="font-mono text-zinc-500">
                 {supplierState.tin} &rarr; {customerState.tin}
               </span>
             </div>
@@ -659,8 +659,8 @@ Computed with Smart GST India`;
 
           {/* Optional Compensation Cess Row */}
           <div className="flex flex-wrap items-center justify-between gap-3 pt-1 text-xs">
-            <div className="flex items-center gap-1.5 text-slate-600 font-semibold">
-              <SlidersHorizontal className="h-3.5 w-3.5 text-slate-500" />
+            <div className="flex items-center gap-1.5 text-zinc-300 font-semibold">
+              <SlidersHorizontal className="h-3.5 w-3.5 text-zinc-400" />
               <span>Compensation Cess (Automobiles, Tobacco, Aerated Drinks):</span>
             </div>
 
@@ -672,8 +672,8 @@ Computed with Smart GST India`;
                   onClick={() => setCessRate(c)}
                   className={`px-2 py-0.5 rounded text-xs font-mono font-semibold transition-colors ${
                     cessRate === c
-                      ? 'bg-amber-600 text-white'
-                      : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+                      ? 'bg-white text-black font-bold'
+                      : 'bg-zinc-900 hover:bg-zinc-800 text-zinc-400 border border-zinc-800'
                   }`}
                 >
                   {c}%
@@ -687,7 +687,7 @@ Computed with Smart GST India`;
                   max="100"
                   value={cessRate}
                   onChange={(e) => setCessRate(parseFloat(e.target.value) || 0)}
-                  className="w-14 px-1 py-0.5 border border-slate-300 rounded text-center font-mono text-xs"
+                  className="w-14 px-1 py-0.5 bg-zinc-950 border border-zinc-700 rounded text-center font-mono text-xs text-white"
                   aria-label="Custom Compensation Cess Percentage"
                 />
               )}
@@ -695,15 +695,15 @@ Computed with Smart GST India`;
           </div>
         </div>
 
-        {/* Right Column: High-Impact Visual Breakdown (5 cols) */}
+        {/* Right Column: Visual Breakdown (5 cols) */}
         <div className="lg:col-span-5 space-y-4">
           {/* Main Hero Card */}
-          <div className="bg-slate-900 text-white rounded-xl shadow-md border border-slate-800 p-5 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <span className="text-xs uppercase tracking-wider text-amber-400 font-bold">
+          <div className="bg-[#0e1014] text-white rounded-2xl shadow-md border border-white/10 p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
+              <span className="text-xs uppercase tracking-wider text-zinc-400 font-bold">
                 Tax Breakdown Summary
               </span>
-              <span className="text-[11px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 font-mono">
+              <span className="text-[11px] px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-300 font-mono">
                 {breakdown.transactionType}
               </span>
             </div>
@@ -711,10 +711,10 @@ Computed with Smart GST India`;
             {/* Key Output Metrics Grid */}
             <div className="space-y-3 font-mono text-sm">
               {/* Base Taxable Value */}
-              <div className="flex items-center justify-between p-2.5 rounded-lg bg-slate-800/80 border border-slate-700/60">
+              <div className="flex items-center justify-between p-3 rounded-xl bg-zinc-900 border border-zinc-800">
                 <div>
-                  <div className="text-[11px] font-sans text-slate-400 font-semibold">Taxable (Base) Value</div>
-                  <div className="text-xs text-slate-500 font-sans">
+                  <div className="text-[11px] font-sans text-zinc-400 font-semibold">Taxable (Base) Value</div>
+                  <div className="text-xs text-zinc-500 font-sans">
                     {isInclusive ? 'Extracted from gross MRP' : 'Amount before tax'}
                   </div>
                 </div>
@@ -727,44 +727,44 @@ Computed with Smart GST India`;
               {isIntraState ? (
                 <div className="grid grid-cols-2 gap-2">
                   {/* CGST */}
-                  <div className="p-2.5 rounded-lg bg-amber-950/40 border border-amber-800/50">
-                    <div className="text-[10px] font-sans text-amber-300 font-bold uppercase">
+                  <div className="p-3 rounded-xl bg-zinc-900 border border-zinc-800">
+                    <div className="text-[10px] font-sans text-zinc-400 font-bold uppercase">
                       Central Tax (CGST)
                     </div>
-                    <div className="text-[10px] text-amber-400/80 font-sans">
+                    <div className="text-[10px] text-zinc-500 font-sans">
                       Rate: {breakdown.cgstRate}%
                     </div>
-                    <div className="text-sm font-bold text-amber-200 mt-1">
+                    <div className="text-sm font-bold text-white mt-1">
                       {formatIndianCurrency(breakdown.cgstAmount)}
                     </div>
                   </div>
 
                   {/* SGST or UTGST */}
-                  <div className="p-2.5 rounded-lg bg-emerald-950/40 border border-emerald-800/50">
-                    <div className="text-[10px] font-sans text-emerald-300 font-bold uppercase">
+                  <div className="p-3 rounded-xl bg-zinc-900 border border-zinc-800">
+                    <div className="text-[10px] font-sans text-zinc-400 font-bold uppercase">
                       {isUTWithoutLeg ? 'Union Territory Tax (UTGST)' : 'State Tax (SGST)'}
                     </div>
-                    <div className="text-[10px] text-emerald-400/80 font-sans">
+                    <div className="text-[10px] text-zinc-500 font-sans">
                       Rate: {breakdown.sgstRate || breakdown.utgstRate}%
                     </div>
-                    <div className="text-sm font-bold text-emerald-200 mt-1">
+                    <div className="text-sm font-bold text-white mt-1">
                       {formatIndianCurrency(breakdown.sgstAmount || breakdown.utgstAmount)}
                     </div>
                   </div>
                 </div>
               ) : (
                 /* IGST */
-                <div className="p-2.5 rounded-lg bg-sky-950/40 border border-sky-800/50">
+                <div className="p-3 rounded-xl bg-zinc-900 border border-zinc-800">
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="text-[10px] font-sans text-sky-300 font-bold uppercase">
+                      <div className="text-[10px] font-sans text-zinc-400 font-bold uppercase">
                         Integrated Tax (IGST)
                       </div>
-                      <div className="text-[10px] text-sky-400/80 font-sans">
+                      <div className="text-[10px] text-zinc-500 font-sans">
                         Full Rate: {breakdown.igstRate}% to Centre
                       </div>
                     </div>
-                    <div className="text-sm font-bold text-sky-200">
+                    <div className="text-sm font-bold text-white">
                       {formatIndianCurrency(breakdown.igstAmount)}
                     </div>
                   </div>
@@ -773,61 +773,62 @@ Computed with Smart GST India`;
 
               {/* Cess if exists */}
               {breakdown.cessAmount > 0 && (
-                <div className="flex items-center justify-between p-2 rounded-lg bg-rose-950/40 border border-rose-800/50">
-                  <div className="text-[11px] font-sans text-rose-300 font-semibold">
+                <div className="flex items-center justify-between p-2.5 rounded-xl bg-zinc-900 border border-zinc-800">
+                  <div className="text-[11px] font-sans text-zinc-400 font-semibold">
                     Compensation Cess ({breakdown.cessRate}%)
                   </div>
-                  <div className="text-sm font-bold text-rose-200">
+                  <div className="text-sm font-bold text-white">
                     {formatIndianCurrency(breakdown.cessAmount)}
                   </div>
                 </div>
               )}
 
               {/* Total GST Amount */}
-              <div className="flex items-center justify-between pt-1 text-slate-300">
+              <div className="flex items-center justify-between pt-1 text-zinc-300">
                 <span className="text-xs font-sans">Total GST Tax ({breakdown.gstRate}%):</span>
-                <span className="font-bold text-amber-400">
+                <span className="font-bold text-white">
                   {formatIndianCurrency(breakdown.totalGst + breakdown.cessAmount)}
                 </span>
               </div>
             </div>
 
             {/* Visual Stacked Tax Distribution Bar */}
-            <div className="pt-2 border-t border-slate-800 space-y-1.5">
-              <div className="flex items-center justify-between text-[10px] text-slate-400 font-sans">
+            <div className="pt-2 border-t border-zinc-800 space-y-1.5">
+              <div className="flex items-center justify-between text-[10px] text-zinc-400 font-sans">
                 <span>Value Breakdown:</span>
                 <span>Base ({taxableWidth.toFixed(0)}%) + Tax ({(100 - taxableWidth).toFixed(0)}%)</span>
               </div>
-              <div className="h-2.5 w-full bg-slate-800 rounded-full overflow-hidden flex">
+
+              <div className="dist-bar h-2.5 w-full bg-zinc-800 rounded-full overflow-hidden flex border border-zinc-700">
                 <div 
                   style={{ width: `${taxableWidth}%` }} 
-                  className="bg-slate-400 h-full transition-all" 
+                  className="bg-zinc-600 h-full transition-all" 
                   title={`Taxable: ${formatIndianCurrency(breakdown.taxableValue)}`}
                 />
                 {isIntraState ? (
                   <>
                     <div 
                       style={{ width: `${cgstWidth}%` }} 
-                      className="bg-amber-500 h-full transition-all" 
+                      className="bg-zinc-400 h-full transition-all" 
                       title={`CGST: ${formatIndianCurrency(breakdown.cgstAmount)}`}
                     />
                     <div 
                       style={{ width: `${sgstWidth}%` }} 
-                      className="bg-emerald-500 h-full transition-all" 
+                      className="bg-zinc-200 h-full transition-all" 
                       title={`SGST/UTGST: ${formatIndianCurrency(breakdown.sgstAmount || breakdown.utgstAmount)}`}
                     />
                   </>
                 ) : (
                   <div 
                     style={{ width: `${igstWidth}%` }} 
-                    className="bg-sky-500 h-full transition-all" 
+                    className="bg-white h-full transition-all" 
                     title={`IGST: ${formatIndianCurrency(breakdown.igstAmount)}`}
                   />
                 )}
                 {cessWidth > 0 && (
                   <div 
                     style={{ width: `${cessWidth}%` }} 
-                    className="bg-rose-500 h-full transition-all" 
+                    className="bg-zinc-500 h-full transition-all" 
                     title={`Cess: ${formatIndianCurrency(breakdown.cessAmount)}`}
                   />
                 )}
@@ -835,81 +836,81 @@ Computed with Smart GST India`;
             </div>
 
             {/* Grand Total Highlight */}
-            <div className="pt-3 border-t border-slate-800">
-              <div className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold">
+            <div className="pt-3 border-t border-zinc-800">
+              <div className="text-[11px] uppercase tracking-wider text-zinc-400 font-semibold">
                 Total Payable Amount
               </div>
               <div className="text-3xl font-extrabold font-mono text-white mt-0.5 tracking-tight">
                 {formatIndianCurrency(breakdown.totalAmount)}
               </div>
-              <div className="text-xs text-amber-300 font-medium italic mt-1 font-sans">
+              <div className="text-xs text-zinc-400 font-medium italic mt-1 font-sans">
                 {amountInIndianWords(breakdown.totalAmount)}
               </div>
             </div>
 
             {/* Action Buttons */}
-            <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-800 text-xs">
+            <div className="grid grid-cols-3 gap-2 pt-2 border-t border-zinc-800 text-xs">
               <button
                 type="button"
                 onClick={handleCopyBreakdown}
-                className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold flex items-center justify-center gap-1.5 transition-colors border border-slate-700"
+                className="p-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-200 font-semibold flex items-center justify-center gap-1.5 transition-colors border border-zinc-700"
               >
-                {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
+                {copied ? <Check className="h-3.5 w-3.5 text-white" /> : <Copy className="h-3.5 w-3.5" />}
                 <span>{copied ? 'Copied' : 'Copy'}</span>
               </button>
 
               <button
                 type="button"
                 onClick={handleSendToInvoice}
-                className="p-2 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white font-semibold flex items-center justify-center gap-1.5 transition-colors"
+                className="p-2 rounded-xl bg-white hover:bg-zinc-200 text-black font-bold flex items-center justify-center gap-1.5 transition-colors shadow-sm"
                 title="Transfer to Tax Invoice Studio"
               >
-                <FileText className="h-3.5 w-3.5" />
+                <ReceiptText className="h-3.5 w-3.5" />
                 <span>Invoice</span>
               </button>
 
               <button
                 type="button"
                 onClick={handleSaveToAudits}
-                className={`p-2 rounded-lg font-semibold flex items-center justify-center gap-1.5 border transition-all ${
+                className={`p-2 rounded-xl font-semibold flex items-center justify-center gap-1.5 border transition-all ${
                   savedSuccess
-                    ? 'bg-amber-500/30 text-amber-300 border-amber-500/50'
-                    : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700'
+                    ? 'bg-white/20 text-white border-white/40'
+                    : 'bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border-zinc-700'
                 }`}
               >
-                <Bookmark className="h-3.5 w-3.5 text-amber-400" />
+                <Bookmark className="h-3.5 w-3.5 text-white" />
                 <span>{savedSuccess ? 'Saved' : 'Save'}</span>
               </button>
             </div>
           </div>
 
           {/* Statutory Formula Explainer */}
-          <div className="bg-white rounded-xl shadow-xs border border-slate-200 p-4 text-xs space-y-2">
-            <div className="flex items-center gap-1.5 font-bold text-slate-800">
-              <Info className="h-3.5 w-3.5 text-amber-600" />
+          <div className="bg-[#0e1014] rounded-2xl border border-white/10 p-5 text-xs space-y-2">
+            <div className="flex items-center gap-1.5 font-bold text-white">
+              <Info className="h-3.5 w-3.5 text-white" />
               <span>How this is calculated (CBIC Rules):</span>
             </div>
             
-            <div className="space-y-1.5 text-slate-600 text-[11px] leading-relaxed">
+            <div className="space-y-1.5 text-zinc-300 text-[11px] leading-relaxed">
               {isInclusive ? (
                 <>
-                  <div className="font-mono bg-slate-50 p-1.5 rounded border border-slate-200 text-slate-800">
+                  <div className="font-mono bg-zinc-900 p-2 rounded-lg border border-zinc-800 text-white">
                     Taxable Base = Amount ÷ [1 + (Rate ÷ 100)]<br/>
                     = ₹{amount} ÷ [1 + {gstRate / 100}] = <strong>{formatIndianCurrency(breakdown.taxableValue)}</strong>
                   </div>
-                  <div>Total GST deducted from MRP = <strong>{formatIndianCurrency(breakdown.totalGst)}</strong></div>
+                  <div className="text-zinc-400">Total GST deducted from MRP = <strong className="text-white">{formatIndianCurrency(breakdown.totalGst)}</strong></div>
                 </>
               ) : (
                 <>
-                  <div className="font-mono bg-slate-50 p-1.5 rounded border border-slate-200 text-slate-800">
+                  <div className="font-mono bg-zinc-900 p-2 rounded-lg border border-zinc-800 text-white">
                     Total GST = Taxable Base × (Rate ÷ 100)<br/>
                     = ₹{breakdown.taxableValue} × {gstRate}% = <strong>{formatIndianCurrency(breakdown.totalGst)}</strong>
                   </div>
-                  <div>Final Bill = Base + GST = <strong>{formatIndianCurrency(breakdown.totalAmount)}</strong></div>
+                  <div className="text-zinc-400">Final Bill = Base + GST = <strong className="text-white">{formatIndianCurrency(breakdown.totalAmount)}</strong></div>
                 </>
               )}
 
-              <div className="pt-1 text-slate-500">
+              <div className="pt-1 text-zinc-400">
                 {isIntraState ? (
                   <span>
                     Dual GST split: <strong>CGST ({breakdown.cgstRate}%)</strong> = {formatIndianCurrency(breakdown.cgstAmount)}, and <strong>{isUTWithoutLeg ? 'UTGST' : 'SGST'} ({breakdown.sgstRate || breakdown.utgstRate}%)</strong> = {formatIndianCurrency(breakdown.sgstAmount || breakdown.utgstAmount)}.
@@ -926,17 +927,17 @@ Computed with Smart GST India`;
       </div>
 
       {/* "All Slabs at a Glance" Comparison Matrix */}
-      <div className="bg-white rounded-xl shadow-xs border border-slate-200 overflow-hidden">
-        <div className="p-4 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3">
+      <div className="bg-[#0e1014] rounded-2xl border border-white/10 overflow-hidden">
+        <div className="p-4 bg-zinc-900/80 border-b border-zinc-800 flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h3 className="text-sm font-bold text-slate-900">
+            <h3 className="text-sm font-bold text-white">
               All Slabs at a Glance for ₹{amount ? amount.toLocaleString('en-IN') : 0}
             </h3>
-            <p className="text-xs text-slate-500">
-              Instant comparison of tax across 0%, 3%, 5%, 12%, 18%, and 28% rates. Click any row to apply it.
+            <p className="text-xs text-zinc-400">
+              Instant comparison of tax across 0%, 3%, 5%, 18%, and 40% rates. Click any row to apply it.
             </p>
           </div>
-          <span className="text-xs font-semibold px-2.5 py-1 rounded bg-slate-200 text-slate-800">
+          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-zinc-800 text-zinc-300 border border-zinc-700">
             {isInclusive ? 'Inclusive (MRP)' : 'Exclusive (+ GST)'}
           </span>
         </div>
@@ -944,70 +945,69 @@ Computed with Smart GST India`;
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
-                <th className="py-2 px-3">GST Slab</th>
-                <th className="py-2 px-3">Taxable Base</th>
+              <tr className="bg-zinc-900 text-zinc-400 font-bold border-b border-zinc-800">
+                <th className="py-2.5 px-3">GST Slab</th>
+                <th className="py-2.5 px-3">Taxable Base</th>
                 {isIntraState ? (
                   <>
-                    <th className="py-2 px-3 text-right">CGST (Central)</th>
-                    <th className="py-2 px-3 text-right">{isUTWithoutLeg ? 'UTGST' : 'SGST (State)'}</th>
+                    <th className="py-2.5 px-3 text-right">CGST (Central)</th>
+                    <th className="py-2.5 px-3 text-right">{isUTWithoutLeg ? 'UTGST' : 'SGST (State)'}</th>
                   </>
                 ) : (
-                  <th className="py-2 px-3 text-right">IGST (Integrated)</th>
+                  <th className="py-2.5 px-3 text-right">IGST (Integrated)</th>
                 )}
-                <th className="py-2 px-3 text-right">Total Tax (₹)</th>
-                <th className="py-2 px-3 text-right font-bold">Total Bill (₹)</th>
-                <th className="py-2 px-3 text-center">Action</th>
+                <th className="py-2.5 px-3 text-right">Total Tax (₹)</th>
+                <th className="py-2.5 px-3 text-right font-bold">Total Bill (₹)</th>
+                <th className="py-2.5 px-3 text-center">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 font-mono">
+            <tbody className="divide-y divide-zinc-800 font-mono">
               {allSlabsComparison.map((slab) => {
                 const isCurrent = !isCustomRate && gstRate === slab.rate;
                 return (
                   <tr 
                     key={slab.rate}
-                    className={`hover:bg-slate-50/80 transition-colors ${
-                      isCurrent ? 'bg-amber-50/60 font-semibold' : ''
+                    className={`hover:bg-zinc-800/40 transition-colors ${
+                      isCurrent ? 'bg-white/10 font-semibold' : ''
                     }`}
                   >
                     <td className="py-2.5 px-3">
                       <div className="flex items-center gap-1.5">
                         <span className={`px-2 py-0.5 rounded text-xs font-bold ${
-                          isCurrent ? 'bg-amber-500 text-slate-950' : 'bg-slate-200 text-slate-800'
+                          isCurrent ? 'bg-white text-black' : 'bg-zinc-800 text-zinc-300'
                         }`}>
                           {slab.rate}%
                         </span>
-                        <span className="text-[11px] font-sans text-slate-500">
+                        <span className="text-[11px] font-sans text-zinc-400">
                           {slab.rate === 0 && 'Nil'}
                           {slab.rate === 3 && 'Gold'}
                           {slab.rate === 5 && 'Essentials'}
-                          {slab.rate === 12 && 'Standard I'}
-                          {slab.rate === 18 && 'Standard II'}
-                          {slab.rate === 28 && 'Luxury'}
+                          {slab.rate === 18 && 'Standard'}
+                          {slab.rate === 40 && 'Sin/Luxury'}
                         </span>
                       </div>
                     </td>
-                    <td className="py-2.5 px-3 font-sans text-slate-800">
+                    <td className="py-2.5 px-3 font-sans text-zinc-300">
                       {formatIndianCurrency(slab.taxable)}
                     </td>
                     {isIntraState ? (
                       <>
-                        <td className="py-2.5 px-3 text-right text-amber-700">
+                        <td className="py-2.5 px-3 text-right text-zinc-300">
                           {formatIndianCurrency(slab.cgst)}
                         </td>
-                        <td className="py-2.5 px-3 text-right text-emerald-700">
+                        <td className="py-2.5 px-3 text-right text-zinc-300">
                           {formatIndianCurrency(slab.sgst)}
                         </td>
                       </>
                     ) : (
-                      <td className="py-2.5 px-3 text-right text-sky-700">
+                      <td className="py-2.5 px-3 text-right text-zinc-300">
                         {formatIndianCurrency(slab.igst)}
                       </td>
                     )}
-                    <td className="py-2.5 px-3 text-right text-rose-700 font-bold">
+                    <td className="py-2.5 px-3 text-right text-white font-bold">
                       {formatIndianCurrency(slab.totalGst)}
                     </td>
-                    <td className="py-2.5 px-3 text-right font-bold text-slate-950">
+                    <td className="py-2.5 px-3 text-right font-bold text-white">
                       {formatIndianCurrency(slab.finalAmount)}
                     </td>
                     <td className="py-2.5 px-3 text-center">
@@ -1017,10 +1017,10 @@ Computed with Smart GST India`;
                           setGstRate(slab.rate);
                           setIsCustomRate(false);
                         }}
-                        className={`px-2 py-0.5 rounded text-[11px] font-sans font-semibold transition-colors ${
+                        className={`px-2.5 py-1 rounded-lg text-[11px] font-sans font-semibold transition-colors ${
                           isCurrent 
-                            ? 'bg-amber-200 text-amber-900 cursor-default' 
-                            : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+                            ? 'bg-white text-black font-bold cursor-default' 
+                            : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-300'
                         }`}
                       >
                         {isCurrent ? 'Active' : 'Apply'}
@@ -1035,53 +1035,53 @@ Computed with Smart GST India`;
       </div>
 
       {/* Educational Micro-Guide: Dual GST Structure in India */}
-      <div className="bg-white rounded-xl shadow-xs border border-slate-200 p-5 space-y-4">
+      <div className="bg-[#0e1014] rounded-2xl border border-white/10 p-5 space-y-4">
         <div className="flex items-center gap-2">
-          <Sparkles className="h-4 w-4 text-amber-600" />
-          <h3 className="text-sm font-bold text-slate-900">Understanding GST, CGST, SGST & IGST in India</h3>
+          <Sparkles className="h-4 w-4 text-white" />
+          <h3 className="text-sm font-bold text-white">Understanding GST, CGST, SGST & IGST in India</h3>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs">
-          <div className="p-3 bg-amber-50/60 rounded-lg border border-amber-200/60 space-y-1">
-            <div className="font-bold text-amber-900 flex items-center justify-between">
+          <div className="p-3.5 bg-zinc-900 rounded-xl border border-zinc-800 space-y-1">
+            <div className="font-bold text-white flex items-center justify-between">
               <span>CGST</span>
-              <span className="text-[10px] font-mono bg-amber-200 text-amber-950 px-1.5 py-0.2 rounded">Centre</span>
+              <span className="text-[10px] font-mono bg-zinc-800 text-zinc-300 px-1.5 py-0.5 rounded border border-zinc-700">Centre</span>
             </div>
-            <div className="font-semibold text-slate-800">Central Goods & Services Tax</div>
-            <p className="text-slate-600 text-[11px] leading-relaxed">
+            <div className="font-semibold text-zinc-200">Central Goods & Services Tax</div>
+            <p className="text-zinc-400 text-[11px] leading-relaxed">
               Levied under the CGST Act 2017 on intra-state supplies. 50% of the total tax revenue goes directly to the Government of India.
             </p>
           </div>
 
-          <div className="p-3 bg-emerald-50/60 rounded-lg border border-emerald-200/60 space-y-1">
-            <div className="font-bold text-emerald-900 flex items-center justify-between">
+          <div className="p-3.5 bg-zinc-900 rounded-xl border border-zinc-800 space-y-1">
+            <div className="font-bold text-white flex items-center justify-between">
               <span>SGST</span>
-              <span className="text-[10px] font-mono bg-emerald-200 text-emerald-950 px-1.5 py-0.2 rounded">State</span>
+              <span className="text-[10px] font-mono bg-zinc-800 text-zinc-300 px-1.5 py-0.5 rounded border border-zinc-700">State</span>
             </div>
-            <div className="font-semibold text-slate-800">State Goods & Services Tax</div>
-            <p className="text-slate-600 text-[11px] leading-relaxed">
+            <div className="font-semibold text-zinc-200">State Goods & Services Tax</div>
+            <p className="text-zinc-400 text-[11px] leading-relaxed">
               Levied under individual State GST Acts. The remaining 50% goes to the state government where goods or services are consumed.
             </p>
           </div>
 
-          <div className="p-3 bg-sky-50/60 rounded-lg border border-sky-200/60 space-y-1">
-            <div className="font-bold text-sky-900 flex items-center justify-between">
+          <div className="p-3.5 bg-zinc-900 rounded-xl border border-zinc-800 space-y-1">
+            <div className="font-bold text-white flex items-center justify-between">
               <span>IGST</span>
-              <span className="text-[10px] font-mono bg-sky-200 text-sky-950 px-1.5 py-0.2 rounded">Inter-State</span>
+              <span className="text-[10px] font-mono bg-zinc-800 text-zinc-300 px-1.5 py-0.5 rounded border border-zinc-700">Inter-State</span>
             </div>
-            <div className="font-semibold text-slate-800">Integrated Goods & Services Tax</div>
-            <p className="text-slate-600 text-[11px] leading-relaxed">
+            <div className="font-semibold text-zinc-200">Integrated Goods & Services Tax</div>
+            <p className="text-zinc-400 text-[11px] leading-relaxed">
               Levied on transactions between two different states or imports/exports under the IGST Act. Collected by Centre and apportioned to destination state.
             </p>
           </div>
 
-          <div className="p-3 bg-purple-50/60 rounded-lg border border-purple-200/60 space-y-1">
-            <div className="font-bold text-purple-900 flex items-center justify-between">
+          <div className="p-3.5 bg-zinc-900 rounded-xl border border-zinc-800 space-y-1">
+            <div className="font-bold text-white flex items-center justify-between">
               <span>UTGST</span>
-              <span className="text-[10px] font-mono bg-purple-200 text-purple-950 px-1.5 py-0.2 rounded">Union Terr.</span>
+              <span className="text-[10px] font-mono bg-zinc-800 text-zinc-300 px-1.5 py-0.5 rounded border border-zinc-700">Union Terr.</span>
             </div>
-            <div className="font-semibold text-slate-800">Union Territory Tax</div>
-            <p className="text-slate-600 text-[11px] leading-relaxed">
+            <div className="font-semibold text-zinc-200">Union Territory Tax</div>
+            <p className="text-zinc-400 text-[11px] leading-relaxed">
               Applies in UTs without state legislative assemblies (Chandigarh, Ladakh, Andaman & Nicobar, Lakshadweep, Daman & Diu). Replaces SGST.
             </p>
           </div>

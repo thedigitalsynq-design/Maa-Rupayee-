@@ -4,12 +4,15 @@ import {
   Calendar, 
   ArrowRight, 
   Sparkles, 
-  ChevronRight, 
+  FileSpreadsheet, 
+  BookOpen, 
   Receipt, 
-  Tv, 
-  Truck, 
-  UtensilsCrossed,
-  Layers
+  Landmark, 
+  PiggyBank, 
+  Calculator, 
+  FileText,
+  Check,
+  X
 } from 'lucide-react';
 import { IndianState } from '../types';
 
@@ -32,31 +35,24 @@ export const SmartInputHero: React.FC<SmartInputHeroProps> = ({
 }) => {
   const [inputVal, setInputVal] = useState('');
 
-  const suggestions = [
-    {
-      icon: Receipt,
-      title: 'Verify MRP Store Bill GST',
-      query: '₹2,360 including 18% GST',
-      hint: 'Extracts base amount & embedded CGST+SGST',
-    },
-    {
-      icon: Tv,
-      title: 'Commercial Electronics & Display',
-      query: 'Samsung TV 55 inch ₹65,000',
-      hint: 'HSN 8528 • 18% standard bracket',
-    },
-    {
-      icon: Truck,
-      title: 'Freight Transport GTA & Logistics',
-      query: 'Freight transport GTA ₹45,000',
-      hint: 'SAC 9965 • 5% RCM reverse charge',
-    },
-    {
-      icon: UtensilsCrossed,
-      title: 'Restaurant Dining & Food Delivery',
-      query: 'Restaurant bill ₹2,500',
-      hint: 'SAC 9963 • 5% composite food without ITC',
-    },
+  const quickExamples = [
+    { label: '₹2,360 MRP Store Bill', query: '₹2,360 including 18% GST' },
+    { label: 'Samsung 55" TV ₹65,000', query: 'Samsung TV 55 inch ₹65,000' },
+    { label: 'Cotton Saree ₹2,400', query: 'Cotton Saree ₹2,400' },
+    { label: 'Freight GTA ₹45,000', query: 'Freight transport GTA ₹45,000' },
+    { label: 'IT Consulting ₹85,000', query: 'IT Consultancy Services ₹85,000' },
+    { label: 'Restaurant Dining ₹2,500', query: 'Restaurant dining bill ₹2,500' },
+  ];
+
+  // Disjointed tools replaced by PaisaCalc
+  const replacedTools = [
+    { name: 'CBIC PDFs', icon: FileText, label: 'Rate Schedules' },
+    { name: 'HSN Books', icon: BookOpen, label: 'Code Directory' },
+    { name: 'Excel Sheets', icon: FileSpreadsheet, label: 'Tax Templates' },
+    { name: 'GST Portals', icon: Calculator, label: 'Manual Portals' },
+    { name: 'ITR Sheets', icon: Landmark, label: 'Tax Slabs' },
+    { name: 'Bank EMI Sites', icon: PiggyBank, label: 'Loan Tools' },
+    { name: 'Paper Bills', icon: Receipt, label: 'Rule 46 Invoices' },
   ];
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -66,7 +62,7 @@ export const SmartInputHero: React.FC<SmartInputHeroProps> = ({
     }
   };
 
-  const handleSuggestionClick = (query: string) => {
+  const handleChipClick = (query: string) => {
     setInputVal(query);
     onSearch(query, transactionDate);
   };
@@ -74,136 +70,132 @@ export const SmartInputHero: React.FC<SmartInputHeroProps> = ({
   const isHistorical = transactionDate && transactionDate < '2025-01-01';
 
   return (
-    <div className="max-w-2xl mx-auto my-2">
-      {/* Outer Floating Frosted Glass Card (Directly inspired by Reference Artwork) */}
-      <div className="glass-card rounded-[32px] sm:rounded-[36px] overflow-hidden p-5 sm:p-6 shadow-[0_25px_60px_-15px_rgba(0,10,35,0.4)] border border-white/20 transition-all">
+    <div className="max-w-4xl mx-auto my-3 sm:my-6 animate-in fade-in">
+      <div className="glass-card rounded-[36px] p-6 sm:p-10 shadow-xl space-y-8">
         
-        {/* 1. Iridescent Top Header: "✦ Suggest for you" */}
-        <div className="w-full rounded-2xl py-3 px-4 mb-4 flex items-center justify-between bg-gradient-to-r from-emerald-400/20 via-sky-400/25 to-indigo-400/20 border border-white/30 backdrop-blur-md shadow-xs">
-          <div className="flex items-center gap-2 text-white font-semibold text-xs tracking-wide">
-            <Sparkles className="h-4 w-4 text-emerald-300 animate-pulse" />
-            <span>Suggest for you</span>
+        {/* ========================================================= */}
+        {/* HERO TITLE & CONSOLIDATION VALUE PROPOSITION              */}
+        {/* ========================================================= */}
+        <div className="text-center max-w-2xl mx-auto">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-pill text-xs font-semibold mb-4">
+            <Sparkles className="h-3.5 w-3.5" />
+            <span>All-in-One Statutory Tax Architecture</span>
           </div>
-          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/20 text-white border border-white/30">
-            CBIC Intelligence
-          </span>
-        </div>
 
-        {/* 2. Interactive Suggestion Action Rows */}
-        <div className="divide-y divide-white/10 mb-5">
-          {suggestions.map((item, idx) => {
-            const Icon = item.icon;
-            return (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => handleSuggestionClick(item.query)}
-                className="w-full py-3.5 px-3 flex items-center justify-between text-left hover:bg-white/10 rounded-2xl transition-all group cursor-pointer"
-              >
-                <div className="flex items-center gap-3.5">
-                  {/* Embossed Neumorphic Pearl Icon Badge */}
-                  <div className="h-10 w-10 rounded-full bg-gradient-to-b from-white/30 to-white/10 border border-white/40 shadow-[inset_0_2px_3px_rgba(255,255,255,0.5),0_4px_10px_rgba(0,0,0,0.15)] flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:border-cyan-300 transition-all">
-                    <Icon className="h-4 w-4 text-white group-hover:text-cyan-300 transition-colors" />
-                  </div>
-                  <div>
-                    <div className="text-xs sm:text-sm font-semibold text-white group-hover:text-cyan-200 transition-colors">
-                      {item.title}
-                    </div>
-                    <div className="text-[11px] text-blue-200/80 font-medium">
-                      {item.hint}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-mono font-semibold text-white/70 hidden sm:inline group-hover:text-white">
-                    {item.query}
-                  </span>
-                  <ChevronRight className="h-4 w-4 text-white/50 group-hover:text-white group-hover:translate-x-0.5 transition-all" />
-                </div>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* 3. Floating Pearl Button over "Ask anything..." Input Bar */}
-        <div className="relative pt-4 border-t border-white/10">
+          <h1 className="text-2xl sm:text-4xl lg:text-[42px] font-black tracking-tight leading-[1.15]">
+            Consolidate tax tools, cut complexity, and calculate faster
+          </h1>
           
-          {/* Centered Floating Pearl Icon Button */}
-          <div className="absolute -top-5 left-1/2 -translate-x-1/2 z-20">
+          <p className="text-xs sm:text-sm text-zinc-500 mt-3 sm:mt-4 leading-relaxed max-w-xl mx-auto">
+            No more juggling separate GST portals, confusing spreadsheets, offline rate PDF gazettes, or outdated calculators. PaisaCalc combines official CBIC schedules, invoice generation, HSN/SAC explorer, and financial tools in one unified, 100% free platform.
+          </p>
+        </div>
+
+        {/* ========================================================= */}
+        {/* CONSOLIDATED TOOLS ARC (Inspired by reference design)     */}
+        {/* ========================================================= */}
+        <div className="relative py-3 sm:py-5 overflow-hidden">
+          {/* Subtle curved arc background line */}
+          <div className="hidden sm:block absolute top-1/2 left-4 right-4 h-0.5 border-t border-dashed border-zinc-300 -translate-y-1/2 pointer-events-none opacity-60 z-0"></div>
+
+          <div className="relative z-10 flex items-center justify-center gap-2.5 sm:gap-4 overflow-x-auto pb-2 scrollbar-none">
+            {replacedTools.map((tool, idx) => {
+              const Icon = tool.icon;
+              return (
+                <div 
+                  key={idx}
+                  className="group relative flex flex-col items-center shrink-0"
+                  title={`${tool.name}: Consolidated into PaisaCalc`}
+                >
+                  <div className="h-14 w-14 sm:h-16 sm:w-16 rounded-2xl glass-card flex flex-col items-center justify-center shadow-xs border border-zinc-200/90 transition-all group-hover:-translate-y-1 group-hover:shadow-md">
+                    <Icon className="h-5 w-5 sm:h-6 sm:w-6 opacity-80 group-hover:opacity-100 transition-opacity" />
+                    <span className="text-[9px] font-semibold tracking-tighter mt-1 opacity-70">
+                      {tool.name}
+                    </span>
+                  </div>
+                  
+                  {/* Subtle Replacement Indicator Pill */}
+                  <div className="mt-1.5 flex items-center gap-0.5 text-[9px] font-mono text-zinc-500">
+                    <Check className="h-2.5 w-2.5" />
+                    <span>Included</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* ========================================================= */}
+        {/* UNIFIED SMART INTELLIGENCE INPUT FORM                     */}
+        {/* ========================================================= */}
+        <form onSubmit={handleSubmit} className="space-y-4 max-w-3xl mx-auto">
+          <div className="relative flex items-center rounded-full glass-card p-1.5 pl-5 border border-zinc-300 shadow-md focus-within:ring-2 focus-within:ring-zinc-950 transition-all">
+            <div className="text-zinc-500 pr-2 shrink-0">
+              <Search className="h-5 w-5" />
+            </div>
+
+            <input
+              type="text"
+              value={inputVal}
+              onChange={(e) => setInputVal(e.target.value)}
+              placeholder="Describe any item, service or bill (e.g. ₹2,360 store bill, Samsung TV ₹65,000, IT Consulting ₹85,000)..."
+              className="w-full py-3.5 pr-28 sm:pr-32 bg-transparent text-sm sm:text-base font-semibold focus:outline-none placeholder:text-zinc-400"
+              disabled={isLoading}
+            />
+
             <button
-              type="button"
-              onClick={() => {
-                const sample = suggestions[Math.floor(Math.random() * suggestions.length)].query;
-                handleSuggestionClick(sample);
-              }}
-              className="h-10 w-10 rounded-full bg-gradient-to-b from-white to-slate-200 text-slate-800 flex items-center justify-center shadow-[0_4px_15px_rgba(0,0,0,0.25),inset_0_2px_3px_rgba(255,255,255,0.9)] border border-white hover:scale-110 active:scale-95 transition-all cursor-pointer group"
-              title="Click for surprise sample calculation"
+              type="submit"
+              disabled={isLoading || !inputVal.trim()}
+              className="compute-btn absolute right-2 px-5 sm:px-6 py-3 bg-zinc-950 hover:bg-black text-white font-bold rounded-full text-xs sm:text-sm flex items-center gap-2 shadow-md transition-all active:scale-95 disabled:cursor-not-allowed disabled:shadow-none cursor-pointer shrink-0"
             >
-              <span className="text-base font-bold text-slate-900 group-hover:rotate-12 transition-transform">
-                ✦
-              </span>
+              {isLoading ? (
+                <span>Computing...</span>
+              ) : (
+                <>
+                  <span>Compute</span>
+                  <ArrowRight className="h-4 w-4" />
+                </>
+              )}
             </button>
           </div>
 
-          {/* Frosted Input Bar */}
-          <form onSubmit={handleSubmit} className="relative mt-2">
-            <div className="relative flex items-center rounded-2xl overflow-hidden bg-white/10 hover:bg-white/15 focus-within:bg-white/20 focus-within:border-cyan-300 border border-white/25 transition-all shadow-inner backdrop-blur-xl">
-              <div className="pl-4 text-white/70">
-                <Search className="h-4 w-4 text-white/70" />
-              </div>
-
-              <input
-                type="text"
-                value={inputVal}
-                onChange={(e) => setInputVal(e.target.value)}
-                placeholder="ask anything... e.g. Samsung TV 55 inch ₹65,000, Cotton Saree"
-                className="w-full py-3.5 pl-3 pr-28 bg-transparent text-white placeholder:text-blue-100/70 text-xs sm:text-sm focus:outline-none font-medium"
-                disabled={isLoading}
-              />
-
+          {/* Quick Preset Example Chips */}
+          <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
+            <span className="text-xs text-zinc-500 font-bold mr-1">Quick Presets:</span>
+            {quickExamples.map((item, idx) => (
               <button
-                type="submit"
-                disabled={isLoading || !inputVal.trim()}
-                className="absolute right-1.5 px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 disabled:opacity-40 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-md transition-all active:scale-95"
+                key={idx}
+                type="button"
+                onClick={() => handleChipClick(item.query)}
+                className="text-xs px-3.5 py-1.5 rounded-full glass-pill font-semibold transition-all hover:border-zinc-400 active:scale-95 cursor-pointer shadow-2xs"
               >
-                {isLoading ? (
-                  <span>Computing...</span>
-                ) : (
-                  <>
-                    <span>Compute</span>
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </>
-                )}
+                {item.label}
               </button>
+            ))}
+          </div>
+
+          {/* Context Footer (Date & Route) */}
+          <div className="pt-4 border-t border-zinc-200/80 flex flex-wrap items-center justify-between gap-3 text-xs text-zinc-500 font-medium">
+            <div className="flex items-center gap-2">
+              <Calendar className="h-3.5 w-3.5" />
+              <span>Assessment Date:</span>
+              <input
+                type="date"
+                value={transactionDate}
+                onChange={(e) => setTransactionDate(e.target.value)}
+                className="bg-transparent font-bold focus:outline-none cursor-pointer"
+              />
+              {isHistorical && (
+                <span className="font-semibold underline">(Gazette Archives)</span>
+              )}
             </div>
 
-            {/* Context bar (Filing date & State Route) */}
-            <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-blue-100/80 px-1 font-medium">
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-white/10 border border-white/15">
-                <Calendar className="h-3 w-3 text-cyan-300" />
-                <span>Filing Date:</span>
-                <input
-                  type="date"
-                  value={transactionDate}
-                  onChange={(e) => setTransactionDate(e.target.value)}
-                  className="bg-transparent text-white rounded px-1 text-[11px] focus:outline-none font-mono cursor-pointer"
-                />
-                {isHistorical && (
-                  <span className="text-amber-300 font-bold ml-1">
-                    (Gazette Rates)
-                  </span>
-                )}
-              </div>
-
-              <div className="px-2.5 py-1 rounded-xl bg-white/10 border border-white/15">
-                Route: <span className="text-white font-bold">{supplierState.code === customerState.code ? `Intra-State (${supplierState.code} CGST+SGST)` : `Inter-State (${supplierState.code}→${customerState.code} IGST)`}</span>
-              </div>
+            <div>
+              Active Route: <span className="font-bold">{supplierState.code === customerState.code ? `Intra-State (${supplierState.code} CGST+SGST)` : `Inter-State (${supplierState.code} → ${customerState.code} IGST)`}</span>
             </div>
+          </div>
 
-          </form>
-
-        </div>
+        </form>
 
       </div>
     </div>

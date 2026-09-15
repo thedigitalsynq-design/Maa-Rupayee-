@@ -479,74 +479,74 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-6">
+    <div className="max-w-5xl mx-auto px-2 sm:px-4 py-6">
       {/* Top Controls & Presets Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-5 print:hidden">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-6 print:hidden">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="text-xl font-bold text-slate-900">Tax Invoice Studio</h2>
-            <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-amber-100 text-amber-900 border border-amber-300">
+            <h2 className="text-xl font-black tracking-tight text-white">Tax Invoice Studio</h2>
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-white/10 text-zinc-300 border border-white/20">
               Rule 46 CGST Act
             </span>
           </div>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-zinc-400 mt-0.5">
             Compliant Indian GST Tax Invoice with statutory HSN tax matrix and real-time PDF generation.
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2.5">
           {/* Quick Scenario Buttons */}
-          <div className="flex items-center gap-1 bg-slate-200/70 p-1 rounded-lg text-xs font-semibold text-slate-700">
-            <span className="text-[11px] text-slate-500 px-1 font-medium">Templates:</span>
+          <div className="flex items-center gap-1 bg-white/5 border border-white/10 p-1 rounded-xl text-xs font-semibold text-zinc-300">
+            <span className="text-[10px] text-zinc-400 px-1.5 font-medium">Presets:</span>
             <button
               onClick={() => loadPresetScenario('b2b-inter')}
-              className="px-2 py-1 bg-white hover:bg-slate-100 rounded text-slate-800 shadow-xs transition-colors"
+              className="px-2.5 py-1 bg-white/10 hover:bg-white hover:text-black rounded-lg text-zinc-200 text-xs font-medium transition-all cursor-pointer"
             >
               B2B IGST
             </button>
             <button
               onClick={() => loadPresetScenario('b2b-intra')}
-              className="px-2 py-1 bg-white hover:bg-slate-100 rounded text-slate-800 shadow-xs transition-colors"
+              className="px-2.5 py-1 bg-white/10 hover:bg-white hover:text-black rounded-lg text-zinc-200 text-xs font-medium transition-all cursor-pointer"
             >
               B2B CGST+SGST
             </button>
             <button
               onClick={() => loadPresetScenario('saas-services')}
-              className="px-2 py-1 bg-white hover:bg-slate-100 rounded text-slate-800 shadow-xs transition-colors"
+              className="px-2.5 py-1 bg-white/10 hover:bg-white hover:text-black rounded-lg text-zinc-200 text-xs font-medium transition-all cursor-pointer"
             >
               IT / SaaS
             </button>
             <button
               onClick={() => loadPresetScenario('b2c-retail')}
-              className="px-2 py-1 bg-white hover:bg-slate-100 rounded text-slate-800 shadow-xs transition-colors"
+              className="px-2.5 py-1 bg-white/10 hover:bg-white hover:text-black rounded-lg text-zinc-200 text-xs font-medium transition-all cursor-pointer"
             >
               B2C Retail
             </button>
           </div>
 
-          {/* Generate PDF Button */}
+          {/* Generate PDF Button (Pure Monochrome) */}
           <button
             onClick={handleGeneratePdf}
             disabled={isGeneratingPdf}
-            className={`px-4 py-2 text-xs font-bold rounded-lg flex items-center gap-1.5 shadow-sm transition-all ${
+            className={`px-4 py-2 text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-sm transition-all cursor-pointer border ${
               pdfSuccess
-                ? 'bg-emerald-600 text-white'
-                : 'bg-amber-500 hover:bg-amber-600 text-slate-950 disabled:opacity-50'
+                ? 'bg-zinc-800 text-white border-zinc-600'
+                : 'bg-white text-zinc-950 hover:bg-zinc-100 border-white disabled:opacity-50'
             }`}
           >
             {isGeneratingPdf ? (
               <>
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <Loader2 className="h-4 w-4 animate-spin text-zinc-950" />
                 <span>Generating PDF...</span>
               </>
             ) : pdfSuccess ? (
               <>
-                <Check className="h-4 w-4" />
+                <Check className="h-4 w-4 text-white" />
                 <span>PDF Downloaded!</span>
               </>
             ) : (
               <>
-                <Download className="h-4 w-4" />
+                <Download className="h-4 w-4 text-zinc-950" />
                 <span>Generate PDF</span>
               </>
             )}
@@ -555,7 +555,7 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
           {/* Print Invoice Button (Triggers clean native invoice printing) */}
           <button
             onClick={() => window.print()}
-            className="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-lg flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
+            className="px-4 py-2 bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 border border-white/15 shadow-sm transition-all cursor-pointer"
             title="Print only this invoice sheet"
           >
             <Printer className="h-4 w-4" />
@@ -568,60 +568,60 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
       <div 
         id="printable-tax-invoice"
         ref={invoiceRef}
-        className="bg-white rounded-xl shadow-md border border-slate-300 overflow-hidden print:shadow-none print:border print:border-slate-400 print:m-0 print:p-0"
+        className="bg-white rounded-2xl shadow-2xl border border-zinc-300 overflow-hidden text-zinc-950 print:shadow-none print:border print:border-zinc-400 print:m-0 print:p-0"
       >
         {/* Invoice Top Header Banner */}
-        <div className="p-6 border-b border-slate-300">
+        <div className="p-6 border-b border-zinc-300">
           <div className="flex flex-wrap items-start justify-between gap-4">
             {/* Supplier Brand & Address */}
             <div className="max-w-md">
               <div className="flex items-center gap-2 mb-1">
-                <div className="h-7 w-7 rounded bg-slate-900 text-amber-400 font-bold flex items-center justify-center text-sm font-mono">
+                <div className="h-7 w-7 rounded-lg bg-zinc-900 text-white font-bold flex items-center justify-center text-sm font-mono shadow-xs">
                   ₹
                 </div>
                 <input
                   type="text"
                   value={supplierName}
                   onChange={(e) => setSupplierName(e.target.value)}
-                  className="font-bold text-lg text-slate-950 w-full border-b border-transparent hover:border-slate-300 focus:border-amber-500 focus:outline-none"
+                  className="font-bold text-lg text-zinc-950 w-full border-b border-transparent hover:border-zinc-300 focus:border-zinc-900 focus:outline-none bg-transparent"
                 />
               </div>
               <textarea
                 value={supplierAddress}
                 onChange={(e) => setSupplierAddress(e.target.value)}
                 rows={2}
-                className="text-xs text-slate-600 w-full border-b border-transparent hover:border-slate-300 focus:border-amber-500 focus:outline-none resize-none"
+                className="text-xs text-zinc-600 w-full border-b border-transparent hover:border-zinc-300 focus:border-zinc-900 focus:outline-none resize-none bg-transparent"
               />
-              <div className="grid grid-cols-2 gap-2 mt-2 text-xs text-slate-700 font-mono">
+              <div className="grid grid-cols-2 gap-2 mt-2 text-xs text-zinc-700 font-mono">
                 <div>
-                  <span className="text-slate-400 font-sans">GSTIN:</span>{' '}
+                  <span className="text-zinc-500 font-sans font-medium">GSTIN:</span>{' '}
                   <input
                     type="text"
                     value={supplierGstin}
                     onChange={(e) => setSupplierGstin(e.target.value.toUpperCase())}
-                    className="font-bold text-slate-900 border-b border-transparent hover:border-slate-300 focus:border-amber-500 focus:outline-none w-36"
+                    className="font-bold text-zinc-950 border-b border-transparent hover:border-zinc-300 focus:border-zinc-900 focus:outline-none w-36 bg-transparent"
                   />
                 </div>
                 <div>
-                  <span className="text-slate-400 font-sans">PAN:</span>{' '}
+                  <span className="text-zinc-500 font-sans font-medium">PAN:</span>{' '}
                   <input
                     type="text"
                     value={supplierPan}
                     onChange={(e) => setSupplierPan(e.target.value.toUpperCase())}
-                    className="font-bold text-slate-900 border-b border-transparent hover:border-slate-300 focus:border-amber-500 focus:outline-none w-28"
+                    className="font-bold text-zinc-950 border-b border-transparent hover:border-zinc-300 focus:border-zinc-900 focus:outline-none w-28 bg-transparent"
                   />
                 </div>
                 <div>
-                  <span className="text-slate-400 font-sans">State:</span>{' '}
-                  <strong>{supplierState.name} (Code: {supplierState.tin})</strong>
+                  <span className="text-zinc-500 font-sans font-medium">State:</span>{' '}
+                  <strong className="text-zinc-950">{supplierState.name} (Code: {supplierState.tin})</strong>
                 </div>
                 <div>
-                  <span className="text-slate-400 font-sans">Email:</span>{' '}
+                  <span className="text-zinc-500 font-sans font-medium">Email:</span>{' '}
                   <input
                     type="text"
                     value={supplierEmail}
                     onChange={(e) => setSupplierEmail(e.target.value)}
-                    className="text-slate-700 border-b border-transparent hover:border-slate-300 focus:border-amber-500 focus:outline-none w-36"
+                    className="text-zinc-800 border-b border-transparent hover:border-zinc-300 focus:border-zinc-900 focus:outline-none w-36 bg-transparent"
                   />
                 </div>
               </div>
@@ -629,17 +629,17 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
 
             {/* Document Title & Invoice Meta */}
             <div className="text-right">
-              <div className="inline-block border border-slate-900 px-3 py-1 text-slate-950 font-extrabold text-sm tracking-wider uppercase bg-slate-50 mb-2">
+              <div className="inline-block border-2 border-zinc-900 px-3 py-1 text-zinc-950 font-black text-sm tracking-wider uppercase bg-zinc-100 mb-2">
                 TAX INVOICE
               </div>
               
               {/* Copy Selector */}
-              <div className="text-xs font-semibold text-slate-500 mb-2">
+              <div className="text-xs font-semibold text-zinc-500 mb-2">
                 <select
                   aria-label="Invoice Copy Type"
                   value={invoiceCopy}
                   onChange={(e) => setInvoiceCopy(e.target.value as any)}
-                  className="bg-transparent border border-slate-300 rounded px-1.5 py-0.5 text-xs text-slate-700 font-medium focus:outline-none cursor-pointer"
+                  className="bg-white border border-zinc-300 rounded px-2 py-0.5 text-xs text-zinc-800 font-medium focus:outline-none cursor-pointer"
                 >
                   <option value="Original for Recipient">Original for Recipient</option>
                   <option value="Duplicate for Transporter">Duplicate for Transporter</option>
@@ -647,45 +647,45 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
                 </select>
               </div>
 
-              <div className="space-y-1 text-xs text-slate-800">
+              <div className="space-y-1 text-xs text-zinc-800">
                 <div>
-                  <span className="text-slate-500">Invoice No:</span>{' '}
+                  <span className="text-zinc-500">Invoice No:</span>{' '}
                   <input
                     type="text"
                     value={invoiceNo}
                     onChange={(e) => setInvoiceNo(e.target.value)}
-                    className="font-mono font-bold text-slate-950 text-right border-b border-transparent hover:border-slate-300 focus:border-amber-500 focus:outline-none w-36"
+                    className="font-mono font-bold text-zinc-950 text-right border-b border-transparent hover:border-zinc-300 focus:border-zinc-900 focus:outline-none w-36 bg-transparent"
                   />
                 </div>
                 <div>
-                  <span className="text-slate-500">Invoice Date:</span>{' '}
+                  <span className="text-zinc-500">Invoice Date:</span>{' '}
                   <input
                     type="date"
                     value={invoiceDate}
                     onChange={(e) => setInvoiceDate(e.target.value)}
-                    className="font-mono font-bold text-slate-950 text-right border-b border-transparent hover:border-slate-300 focus:outline-none"
+                    className="font-mono font-bold text-zinc-950 text-right border-b border-transparent hover:border-zinc-300 focus:outline-none bg-transparent"
                   />
                 </div>
                 <div>
-                  <span className="text-slate-500">Due Date:</span>{' '}
+                  <span className="text-zinc-500">Due Date:</span>{' '}
                   <input
                     type="date"
                     value={dueDate}
                     onChange={(e) => setDueDate(e.target.value)}
-                    className="font-mono text-slate-700 text-right border-b border-transparent hover:border-slate-300 focus:outline-none"
+                    className="font-mono text-zinc-700 text-right border-b border-transparent hover:border-zinc-300 focus:outline-none bg-transparent"
                   />
                 </div>
                 <div>
-                  <span className="text-slate-500">Place of Supply:</span>{' '}
-                  <strong className="text-slate-950">{customerState.name} ({customerState.tin})</strong>
+                  <span className="text-zinc-500">Place of Supply:</span>{' '}
+                  <strong className="text-zinc-950">{customerState.name} ({customerState.tin})</strong>
                 </div>
                 <div>
-                  <span className="text-slate-500">Reverse Charge (RCM):</span>{' '}
+                  <span className="text-zinc-500">Reverse Charge (RCM):</span>{' '}
                   <select
                     aria-label="Reverse Charge Mechanism Applicable"
                     value={reverseCharge}
                     onChange={(e) => setReverseCharge(e.target.value as any)}
-                    className="bg-transparent font-bold text-slate-900 border-b border-transparent hover:border-slate-300 focus:outline-none"
+                    className="bg-transparent font-bold text-zinc-900 border-b border-transparent hover:border-zinc-300 focus:outline-none"
                   >
                     <option value="No">No</option>
                     <option value="Yes">Yes</option>
@@ -697,13 +697,13 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
         </div>
 
         {/* Bill To & Ship To Two-Column Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x border-b border-slate-300 text-xs bg-slate-50/50">
+        <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x border-b border-zinc-300 text-xs bg-zinc-50/70">
           {/* Details of Receiver (Billed To) */}
           <div className="p-5">
-            <div className="font-bold text-slate-700 uppercase tracking-wider text-[11px] mb-2 flex items-center justify-between">
+            <div className="font-bold text-zinc-700 uppercase tracking-wider text-[11px] mb-2 flex items-center justify-between">
               <span>Details of Recipient (Billed To)</span>
               <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                invoiceType === 'B2B' ? 'bg-slate-900 text-white' : 'bg-slate-200 text-slate-700'
+                invoiceType === 'B2B' ? 'bg-zinc-900 text-white' : 'bg-zinc-200 text-zinc-800'
               }`}>
                 {invoiceType} Supply
               </span>
@@ -713,78 +713,76 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
               type="text"
               value={customerName}
               onChange={(e) => setCustomerName(e.target.value)}
-              className="font-bold text-sm text-slate-900 w-full border-b border-transparent hover:border-slate-300 focus:border-amber-500 focus:outline-none mb-1"
+              className="font-bold text-sm text-zinc-950 w-full border-b border-transparent hover:border-zinc-300 focus:border-zinc-900 focus:outline-none mb-1 bg-transparent"
             />
             <textarea
               value={customerAddress}
               onChange={(e) => setCustomerAddress(e.target.value)}
               rows={2}
-              className="text-xs text-slate-600 w-full border-b border-transparent hover:border-slate-300 focus:border-amber-500 focus:outline-none resize-none mb-2"
+              className="text-xs text-zinc-600 w-full border-b border-transparent hover:border-zinc-300 focus:border-zinc-900 focus:outline-none resize-none mb-2 bg-transparent"
             />
 
-            <div className="space-y-1 font-mono text-slate-800">
+            <div className="space-y-1 font-mono text-zinc-800">
               <div>
-                <span className="text-slate-400 font-sans">GSTIN:</span>{' '}
+                <span className="text-zinc-500 font-sans font-medium">GSTIN:</span>{' '}
                 <input
                   type="text"
                   value={customerGstin}
                   onChange={(e) => setCustomerGstin(e.target.value.toUpperCase())}
-                  className="font-bold text-slate-900 border-b border-transparent hover:border-slate-300 focus:border-amber-500 focus:outline-none w-40"
+                  className="font-bold text-zinc-950 border-b border-transparent hover:border-zinc-300 focus:border-zinc-900 focus:outline-none w-40 bg-transparent"
                 />
               </div>
               <div>
-                <span className="text-slate-400 font-sans">PAN:</span>{' '}
+                <span className="text-zinc-500 font-sans font-medium">PAN:</span>{' '}
                 <input
                   type="text"
                   value={customerPan}
                   onChange={(e) => setCustomerPan(e.target.value.toUpperCase())}
-                  className="text-slate-700 border-b border-transparent hover:border-slate-300 focus:border-amber-500 focus:outline-none w-32"
+                  className="text-zinc-800 border-b border-transparent hover:border-zinc-300 focus:border-zinc-900 focus:outline-none w-32 bg-transparent"
                 />
               </div>
               <div>
-                <span className="text-slate-400 font-sans">State & Code:</span>{' '}
-                <strong>{customerState.name} (Code: {customerState.tin})</strong>
+                <span className="text-zinc-500 font-sans font-medium">State & Code:</span>{' '}
+                <strong className="text-zinc-950">{customerState.name} (Code: {customerState.tin})</strong>
               </div>
             </div>
           </div>
 
           {/* Consignee / Transport Logistics Details */}
           <div className="p-5">
-            <div className="font-bold text-slate-700 uppercase tracking-wider text-[11px] mb-2 flex items-center justify-between">
+            <div className="font-bold text-zinc-700 uppercase tracking-wider text-[11px] mb-2 flex items-center justify-between">
               <span>Dispatch & Transport Details</span>
-              <Truck className="h-3.5 w-3.5 text-slate-400" />
+              <Truck className="h-3.5 w-3.5 text-zinc-500" />
             </div>
 
-            <div className="space-y-2 text-slate-700">
+            <div className="space-y-2 text-zinc-800">
               <div className="flex justify-between items-center">
-                <span className="text-slate-500">E-Way Bill No:</span>
+                <span className="text-zinc-500 font-sans font-medium">E-Way Bill No:</span>
                 <input
                   type="text"
                   value={ewayBillNo}
                   onChange={(e) => setEwayBillNo(e.target.value)}
                   placeholder="e.g. 2410 8921 4452"
-                  className="font-mono font-semibold text-slate-900 text-right border-b border-transparent hover:border-slate-300 focus:outline-none"
+                  className="font-mono font-semibold text-zinc-950 text-right border-b border-transparent hover:border-zinc-300 focus:outline-none bg-transparent"
                 />
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-slate-500">Vehicle / Transport No:</span>
+                <span className="text-zinc-500 font-sans font-medium">Vehicle / Transport No:</span>
                 <input
                   type="text"
                   value={vehicleNo}
                   onChange={(e) => setVehicleNo(e.target.value.toUpperCase())}
                   placeholder="e.g. MH-02-CD-5412"
-                  className="font-mono font-semibold text-slate-900 text-right border-b border-transparent hover:border-slate-300 focus:outline-none"
+                  className="font-mono font-semibold text-zinc-950 text-right border-b border-transparent hover:border-zinc-300 focus:outline-none bg-transparent"
                 />
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-slate-500">Transaction Nature:</span>
-                <span className={`font-semibold px-2 py-0.5 rounded text-[11px] ${
-                  isIntraState ? 'bg-emerald-100 text-emerald-900' : 'bg-sky-100 text-sky-900'
-                }`}>
+                <span className="text-zinc-500 font-sans font-medium">Transaction Nature:</span>
+                <span className="font-bold px-2.5 py-0.5 rounded text-[11px] bg-zinc-100 text-zinc-900 border border-zinc-300">
                   {isIntraState ? 'Intra-State Supply (CGST + SGST)' : 'Inter-State Supply (IGST)'}
                 </span>
               </div>
-              <div className="flex justify-between items-center text-[11px] text-slate-500 pt-1">
+              <div className="flex justify-between items-center text-[11px] text-zinc-500 pt-1">
                 <span>Consignee Shipping Address:</span>
                 <span className="italic">Same as Billed To</span>
               </div>
@@ -793,49 +791,49 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
         </div>
 
         {/* Add Line Item Bar (Clean, Hidden on Print) */}
-        <div className="p-4 bg-slate-50 border-b border-slate-300 print:hidden">
+        <div className="p-4 bg-zinc-50 border-b border-zinc-300 print:hidden">
           <form onSubmit={handleAddItem} className="grid grid-cols-1 sm:grid-cols-12 gap-2.5 text-xs items-end">
             <div className="sm:col-span-4">
-              <label className="block text-slate-600 font-semibold mb-1">Item Description</label>
+              <label className="block text-zinc-700 font-bold mb-1">Item Description</label>
               <input
                 type="text"
                 value={newItemDesc}
                 onChange={(e) => setNewItemDesc(e.target.value)}
                 placeholder="Product or service description"
-                className="w-full px-2.5 py-1.5 bg-white border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-amber-500"
+                className="w-full px-2.5 py-1.5 bg-white border border-zinc-300 rounded text-zinc-950 focus:outline-none focus:ring-1 focus:ring-zinc-900"
                 required
               />
             </div>
 
             <div className="sm:col-span-2">
-              <label className="block text-slate-600 font-semibold mb-1">HSN/SAC</label>
+              <label className="block text-zinc-700 font-bold mb-1">HSN/SAC</label>
               <input
                 type="text"
                 value={newItemHsn}
                 onChange={(e) => setNewItemHsn(e.target.value)}
-                className="w-full px-2 py-1.5 bg-white border border-slate-300 rounded font-mono focus:outline-none"
+                className="w-full px-2 py-1.5 bg-white border border-zinc-300 rounded font-mono text-zinc-950 focus:outline-none"
                 required
               />
             </div>
 
             <div className="sm:col-span-1">
-              <label className="block text-slate-600 font-semibold mb-1">Qty</label>
+              <label className="block text-zinc-700 font-bold mb-1">Qty</label>
               <input
                 type="number"
                 min="1"
                 value={newItemQty}
                 onChange={(e) => setNewItemQty(Number(e.target.value))}
-                className="w-full px-2 py-1.5 bg-white border border-slate-300 rounded font-mono text-center focus:outline-none"
+                className="w-full px-2 py-1.5 bg-white border border-zinc-300 rounded font-mono text-center text-zinc-950 focus:outline-none"
               />
             </div>
 
             <div className="sm:col-span-1">
-              <label className="block text-slate-600 font-semibold mb-1">Unit</label>
+              <label className="block text-zinc-700 font-bold mb-1">Unit</label>
               <select
                 aria-label="Unit of Measurement"
                 value={newItemUnit}
                 onChange={(e) => setNewItemUnit(e.target.value)}
-                className="w-full px-1 py-1.5 bg-white border border-slate-300 rounded text-xs focus:outline-none"
+                className="w-full px-1 py-1.5 bg-white border border-zinc-300 rounded text-xs text-zinc-950 focus:outline-none cursor-pointer"
               >
                 <option value="NOS">NOS</option>
                 <option value="PCS">PCS</option>
@@ -849,23 +847,23 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
             </div>
 
             <div className="sm:col-span-2">
-              <label className="block text-slate-600 font-semibold mb-1">Rate / Unit (₹)</label>
+              <label className="block text-zinc-700 font-bold mb-1">Rate / Unit (₹)</label>
               <input
                 type="number"
                 min="0"
                 value={newItemPrice}
                 onChange={(e) => setNewItemPrice(Number(e.target.value))}
-                className="w-full px-2 py-1.5 bg-white border border-slate-300 rounded font-mono focus:outline-none"
+                className="w-full px-2 py-1.5 bg-white border border-zinc-300 rounded font-mono text-zinc-950 focus:outline-none"
               />
             </div>
 
             <div className="sm:col-span-1">
-              <label className="block text-slate-600 font-semibold mb-1">GST %</label>
+              <label className="block text-zinc-700 font-bold mb-1">GST %</label>
               <select
                 aria-label="GST Rate Slab"
                 value={newItemGstRate}
                 onChange={(e) => setNewItemGstRate(Number(e.target.value))}
-                className="w-full px-1 py-1.5 bg-white border border-slate-300 rounded font-bold text-amber-900 focus:outline-none"
+                className="w-full px-1 py-1.5 bg-white border border-zinc-300 rounded font-bold text-zinc-950 focus:outline-none cursor-pointer"
               >
                 <option value={0}>0%</option>
                 <option value={3}>3%</option>
@@ -879,7 +877,7 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
             <div className="sm:col-span-1">
               <button
                 type="submit"
-                className="w-full py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded transition-colors flex items-center justify-center gap-1"
+                className="w-full py-1.5 bg-zinc-900 hover:bg-black text-white font-bold rounded transition-colors flex items-center justify-center gap-1 cursor-pointer"
               >
                 <Plus className="h-3.5 w-3.5" />
                 <span>Add</span>
@@ -892,87 +890,87 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="bg-slate-100 text-slate-800 font-bold border-b border-slate-300">
-                <th className="py-2.5 px-3 w-8 text-center border-r border-slate-200">#</th>
-                <th className="py-2.5 px-3 border-r border-slate-200">Item Description</th>
-                <th className="py-2.5 px-3 border-r border-slate-200 font-mono">HSN/SAC</th>
-                <th className="py-2.5 px-3 text-center border-r border-slate-200">Qty</th>
-                <th className="py-2.5 px-3 text-right border-r border-slate-200">Rate (₹)</th>
-                <th className="py-2.5 px-3 text-right border-r border-slate-200">Taxable (₹)</th>
-                <th className="py-2.5 px-3 text-center border-r border-slate-200">GST %</th>
+              <tr className="bg-zinc-100 text-zinc-900 font-bold border-b border-zinc-300">
+                <th className="py-2.5 px-3 w-8 text-center border-r border-zinc-300">#</th>
+                <th className="py-2.5 px-3 border-r border-zinc-300">Item Description</th>
+                <th className="py-2.5 px-3 border-r border-zinc-300 font-mono">HSN/SAC</th>
+                <th className="py-2.5 px-3 text-center border-r border-zinc-300">Qty</th>
+                <th className="py-2.5 px-3 text-right border-r border-zinc-300">Rate (₹)</th>
+                <th className="py-2.5 px-3 text-right border-r border-zinc-300">Taxable (₹)</th>
+                <th className="py-2.5 px-3 text-center border-r border-zinc-300">GST %</th>
                 {isIntraState ? (
                   <>
-                    <th className="py-2.5 px-3 text-right border-r border-slate-200">CGST (₹)</th>
-                    <th className="py-2.5 px-3 text-right border-r border-slate-200">
+                    <th className="py-2.5 px-3 text-right border-r border-zinc-300">CGST (₹)</th>
+                    <th className="py-2.5 px-3 text-right border-r border-zinc-300">
                       {isUTWithoutLeg ? 'UTGST (₹)' : 'SGST (₹)'}
                     </th>
                   </>
                 ) : (
-                  <th className="py-2.5 px-3 text-right border-r border-slate-200">IGST (₹)</th>
+                  <th className="py-2.5 px-3 text-right border-r border-zinc-300">IGST (₹)</th>
                 )}
                 <th className="py-2.5 px-3 text-right">Total (₹)</th>
                 <th className="py-2.5 px-2 text-center print:hidden w-8"></th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-200">
+            <tbody className="divide-y divide-zinc-200">
               {items.length === 0 ? (
                 <tr>
-                  <td colSpan={11} className="py-8 text-center text-slate-400 italic">
+                  <td colSpan={isIntraState ? 11 : 10} className="py-8 text-center text-zinc-500 italic">
                     No items in invoice. Use the form above or pick a preset template.
                   </td>
                 </tr>
               ) : (
                 items.map((item, idx) => (
-                  <tr key={item.id} className="hover:bg-slate-50/70">
-                    <td className="py-2.5 px-3 text-center text-slate-400 font-mono border-r border-slate-200">
+                  <tr key={item.id} className="hover:bg-zinc-50/80">
+                    <td className="py-2.5 px-3 text-center text-zinc-500 font-mono border-r border-zinc-200">
                       {idx + 1}
                     </td>
-                    <td className="py-2.5 px-3 font-semibold text-slate-900 border-r border-slate-200">
+                    <td className="py-2.5 px-3 font-semibold text-zinc-950 border-r border-zinc-200">
                       {item.description}
                     </td>
-                    <td className="py-2.5 px-3 font-mono text-slate-700 border-r border-slate-200">
+                    <td className="py-2.5 px-3 font-mono text-zinc-700 border-r border-zinc-200">
                       {item.hsnSac}
                     </td>
-                    <td className="py-2.5 px-3 text-center font-mono border-r border-slate-200">
+                    <td className="py-2.5 px-3 text-center font-mono border-r border-zinc-200">
                       <span className="print:inline hidden">{item.quantity} {item.unit}</span>
                       <input
                         type="number"
                         min="1"
                         value={item.quantity}
                         onChange={(e) => handleUpdateItemQty(item.id, parseInt(e.target.value) || 1)}
-                        className="w-12 text-center bg-transparent border border-transparent hover:border-slate-300 focus:border-amber-500 rounded print:hidden"
+                        className="w-12 text-center bg-transparent border border-transparent hover:border-zinc-300 focus:border-zinc-900 rounded print:hidden font-mono text-zinc-950"
                       />
                     </td>
-                    <td className="py-2.5 px-3 text-right font-mono border-r border-slate-200">
+                    <td className="py-2.5 px-3 text-right font-mono border-r border-zinc-200 text-zinc-800">
                       {formatIndianCurrency(item.unitPrice, false)}
                     </td>
-                    <td className="py-2.5 px-3 text-right font-mono font-semibold border-r border-slate-200">
+                    <td className="py-2.5 px-3 text-right font-mono font-semibold border-r border-zinc-200 text-zinc-950">
                       {formatIndianCurrency(item.taxableAmount, false)}
                     </td>
-                    <td className="py-2.5 px-3 text-center font-bold text-slate-800 border-r border-slate-200">
+                    <td className="py-2.5 px-3 text-center font-bold text-zinc-900 border-r border-zinc-200">
                       {item.gstRate}%
                     </td>
                     {isIntraState ? (
                       <>
-                        <td className="py-2.5 px-3 text-right font-mono text-slate-700 border-r border-slate-200">
+                        <td className="py-2.5 px-3 text-right font-mono text-zinc-700 border-r border-zinc-200">
                           {formatIndianCurrency(item.cgstAmount, false)}
                         </td>
-                        <td className="py-2.5 px-3 text-right font-mono text-slate-700 border-r border-slate-200">
+                        <td className="py-2.5 px-3 text-right font-mono text-zinc-700 border-r border-zinc-200">
                           {formatIndianCurrency(item.sgstAmount || item.utgstAmount, false)}
                         </td>
                       </>
                     ) : (
-                      <td className="py-2.5 px-3 text-right font-mono text-slate-700 border-r border-slate-200">
+                      <td className="py-2.5 px-3 text-right font-mono text-zinc-700 border-r border-zinc-200">
                         {formatIndianCurrency(item.igstAmount, false)}
                       </td>
                     )}
-                    <td className="py-2.5 px-3 text-right font-mono font-bold text-slate-950">
+                    <td className="py-2.5 px-3 text-right font-mono font-black text-zinc-950">
                       {formatIndianCurrency(item.totalAmount, false)}
                     </td>
                     <td className="py-2.5 px-2 text-center print:hidden">
                       <button
                         onClick={() => handleRemoveItem(item.id)}
-                        className="text-slate-400 hover:text-rose-600 p-1"
+                        className="text-zinc-400 hover:text-black p-1 cursor-pointer transition-colors"
                         title="Delete Item"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
@@ -987,46 +985,46 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
 
         {/* Statutory HSN / SAC Summary Table (Mandatory for Indian GST) */}
         {Object.keys(hsnSummary).length > 0 && (
-          <div className="border-t border-slate-300 bg-slate-50/70 p-4">
-            <div className="text-[11px] font-bold text-slate-700 uppercase tracking-wide mb-2 flex items-center gap-1.5">
-              <Layers className="h-3.5 w-3.5 text-slate-500" />
+          <div className="border-t border-zinc-300 bg-zinc-50/70 p-4">
+            <div className="text-[11px] font-bold text-zinc-800 uppercase tracking-wide mb-2 flex items-center gap-1.5">
+              <Layers className="h-3.5 w-3.5 text-zinc-600" />
               <span>Tax Summary by HSN / SAC (Statutory Indian Format)</span>
             </div>
             
-            <table className="w-full text-left text-[11px] border border-slate-300 bg-white">
-              <thead className="bg-slate-100 text-slate-800 font-semibold border-b border-slate-300">
+            <table className="w-full text-left text-[11px] border border-zinc-300 bg-white">
+              <thead className="bg-zinc-100 text-zinc-900 font-bold border-b border-zinc-300">
                 <tr>
-                  <th className="py-1.5 px-2.5 border-r border-slate-200">HSN/SAC</th>
-                  <th className="py-1.5 px-2.5 text-right border-r border-slate-200">Taxable Value</th>
-                  <th className="py-1.5 px-2.5 text-center border-r border-slate-200">Rate</th>
+                  <th className="py-1.5 px-2.5 border-r border-zinc-300">HSN/SAC</th>
+                  <th className="py-1.5 px-2.5 text-right border-r border-zinc-300">Taxable Value</th>
+                  <th className="py-1.5 px-2.5 text-center border-r border-zinc-300">Rate</th>
                   {isIntraState ? (
                     <>
-                      <th className="py-1.5 px-2.5 text-right border-r border-slate-200">CGST Amount</th>
-                      <th className="py-1.5 px-2.5 text-right border-r border-slate-200">
+                      <th className="py-1.5 px-2.5 text-right border-r border-zinc-300">CGST Amount</th>
+                      <th className="py-1.5 px-2.5 text-right border-r border-zinc-300">
                         {isUTWithoutLeg ? 'UTGST Amount' : 'SGST Amount'}
                       </th>
                     </>
                   ) : (
-                    <th className="py-1.5 px-2.5 text-right border-r border-slate-200">IGST Amount</th>
+                    <th className="py-1.5 px-2.5 text-right border-r border-zinc-300">IGST Amount</th>
                   )}
                   <th className="py-1.5 px-2.5 text-right">Total Tax Amount</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200">
+              <tbody className="divide-y divide-zinc-200">
                 {(Object.values(hsnSummary) as HsnSummaryRow[]).map((sum, i) => (
                   <tr key={i}>
-                    <td className="py-1.5 px-2.5 font-mono font-semibold border-r border-slate-200">{sum.hsnSac}</td>
-                    <td className="py-1.5 px-2.5 text-right font-mono border-r border-slate-200">{formatIndianCurrency(sum.taxable)}</td>
-                    <td className="py-1.5 px-2.5 text-center font-bold border-r border-slate-200">{sum.rate}%</td>
+                    <td className="py-1.5 px-2.5 font-mono font-semibold border-r border-zinc-200 text-zinc-950">{sum.hsnSac}</td>
+                    <td className="py-1.5 px-2.5 text-right font-mono border-r border-zinc-200 text-zinc-900">{formatIndianCurrency(sum.taxable)}</td>
+                    <td className="py-1.5 px-2.5 text-center font-bold border-r border-zinc-200 text-zinc-950">{sum.rate}%</td>
                     {isIntraState ? (
                       <>
-                        <td className="py-1.5 px-2.5 text-right font-mono border-r border-slate-200">{formatIndianCurrency(sum.cgst)}</td>
-                        <td className="py-1.5 px-2.5 text-right font-mono border-r border-slate-200">{formatIndianCurrency(sum.sgst || sum.utgst)}</td>
+                        <td className="py-1.5 px-2.5 text-right font-mono border-r border-zinc-200 text-zinc-800">{formatIndianCurrency(sum.cgst)}</td>
+                        <td className="py-1.5 px-2.5 text-right font-mono border-r border-zinc-200 text-zinc-800">{formatIndianCurrency(sum.sgst || sum.utgst)}</td>
                       </>
                     ) : (
-                      <td className="py-1.5 px-2.5 text-right font-mono border-r border-slate-200">{formatIndianCurrency(sum.igst)}</td>
+                      <td className="py-1.5 px-2.5 text-right font-mono border-r border-zinc-200 text-zinc-800">{formatIndianCurrency(sum.igst)}</td>
                     )}
-                    <td className="py-1.5 px-2.5 text-right font-mono font-bold">
+                    <td className="py-1.5 px-2.5 text-right font-mono font-black text-zinc-950">
                       {formatIndianCurrency(sum.cgst + sum.sgst + sum.utgst + sum.igst)}
                     </td>
                   </tr>
@@ -1037,68 +1035,68 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
         )}
 
         {/* Invoice Summary & Bank Details Section */}
-        <div className="border-t border-slate-300 p-6">
+        <div className="border-t border-zinc-300 p-6">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
             {/* Left: Bank Details & Amount in Words */}
             <div className="md:col-span-7 space-y-4">
               <div>
-                <span className="text-[11px] text-slate-500 font-bold uppercase tracking-wider block mb-1">
+                <span className="text-[11px] text-zinc-500 font-bold uppercase tracking-wider block mb-1">
                   Invoice Value in Words:
                 </span>
-                <div className="text-xs font-bold text-slate-900 bg-slate-50 p-2.5 rounded border border-slate-200 font-sans italic">
+                <div className="text-xs font-bold text-zinc-950 bg-zinc-50 p-2.5 rounded-lg border border-zinc-200 font-sans italic">
                   {amountInIndianWords(roundedGrandTotal)}
                 </div>
               </div>
 
               {/* Bank Account for NEFT/RTGS/UPI */}
-              <div className="bg-slate-50 p-3 rounded border border-slate-200 text-xs">
-                <div className="font-bold text-slate-800 text-[11px] uppercase tracking-wide mb-1.5 flex items-center gap-1.5">
-                  <CreditCard className="h-3.5 w-3.5 text-amber-600" />
+              <div className="bg-zinc-50 p-3.5 rounded-xl border border-zinc-200 text-xs">
+                <div className="font-bold text-zinc-900 text-[11px] uppercase tracking-wide mb-1.5 flex items-center gap-1.5">
+                  <CreditCard className="h-3.5 w-3.5 text-zinc-700" />
                   <span>Bank & Remittance Details</span>
                 </div>
-                <div className="grid grid-cols-2 gap-2 text-slate-700 font-mono">
+                <div className="grid grid-cols-2 gap-2 text-zinc-700 font-mono">
                   <div>
-                    <span className="text-slate-400 font-sans">Bank:</span>{' '}
+                    <span className="text-zinc-500 font-sans">Bank:</span>{' '}
                     <input
                       type="text"
                       value={bankName}
                       onChange={(e) => setBankName(e.target.value)}
-                      className="font-bold text-slate-900 border-b border-transparent hover:border-slate-300 focus:outline-none w-32"
+                      className="font-bold text-zinc-950 border-b border-transparent hover:border-zinc-300 focus:outline-none w-32 bg-transparent"
                     />
                   </div>
                   <div>
-                    <span className="text-slate-400 font-sans">A/C No:</span>{' '}
+                    <span className="text-zinc-500 font-sans">A/C No:</span>{' '}
                     <input
                       type="text"
                       value={accountNo}
                       onChange={(e) => setAccountNo(e.target.value)}
-                      className="font-bold text-slate-900 border-b border-transparent hover:border-slate-300 focus:outline-none w-36"
+                      className="font-bold text-zinc-950 border-b border-transparent hover:border-zinc-300 focus:outline-none w-36 bg-transparent"
                     />
                   </div>
                   <div>
-                    <span className="text-slate-400 font-sans">IFSC:</span>{' '}
+                    <span className="text-zinc-500 font-sans">IFSC:</span>{' '}
                     <input
                       type="text"
                       value={ifscCode}
                       onChange={(e) => setIfscCode(e.target.value.toUpperCase())}
-                      className="font-bold text-slate-900 border-b border-transparent hover:border-slate-300 focus:outline-none w-28"
+                      className="font-bold text-zinc-950 border-b border-transparent hover:border-zinc-300 focus:outline-none w-28 bg-transparent"
                     />
                   </div>
                   <div>
-                    <span className="text-slate-400 font-sans">UPI ID:</span>{' '}
+                    <span className="text-zinc-500 font-sans">UPI ID:</span>{' '}
                     <input
                       type="text"
                       value={upiId}
                       onChange={(e) => setUpiId(e.target.value)}
-                      className="font-bold text-slate-900 border-b border-transparent hover:border-slate-300 focus:outline-none w-36"
+                      className="font-bold text-zinc-950 border-b border-transparent hover:border-zinc-300 focus:outline-none w-36 bg-transparent"
                     />
                   </div>
                 </div>
               </div>
 
               {/* Standard Terms & Conditions */}
-              <div className="text-[10px] text-slate-500 space-y-0.5 leading-relaxed">
-                <strong className="text-slate-700 block">Terms & Conditions:</strong>
+              <div className="text-[10px] text-zinc-500 space-y-0.5 leading-relaxed">
+                <strong className="text-zinc-800 block font-semibold">Terms & Conditions:</strong>
                 <div>1. Payment due within specified period. Interest @ 18% p.a. chargeable on delayed remittances.</div>
                 <div>2. Goods once sold will not be accepted back or exchanged under any circumstances.</div>
                 <div>3. All disputes subject to jurisdiction of Courts in Mumbai, Maharashtra.</div>
@@ -1106,53 +1104,53 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
             </div>
 
             {/* Right: Detailed Financial Computation Matrix */}
-            <div className="md:col-span-5 bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2 text-xs">
-              <div className="flex justify-between text-slate-700">
+            <div className="md:col-span-5 bg-zinc-50 p-4 rounded-xl border border-zinc-200 space-y-2 text-xs">
+              <div className="flex justify-between text-zinc-700">
                 <span>Total Taxable Amount:</span>
-                <span className="font-mono font-bold">{formatIndianCurrency(totalTaxable)}</span>
+                <span className="font-mono font-bold text-zinc-950">{formatIndianCurrency(totalTaxable)}</span>
               </div>
 
               {isIntraState ? (
                 <>
-                  <div className="flex justify-between text-slate-600">
+                  <div className="flex justify-between text-zinc-600">
                     <span>Central Tax (CGST):</span>
-                    <span className="font-mono">{formatIndianCurrency(totalCgst)}</span>
+                    <span className="font-mono text-zinc-800">{formatIndianCurrency(totalCgst)}</span>
                   </div>
-                  <div className="flex justify-between text-slate-600">
+                  <div className="flex justify-between text-zinc-600">
                     <span>{isUTWithoutLeg ? 'Union Territory Tax (UTGST):' : 'State Tax (SGST):'}</span>
-                    <span className="font-mono">{formatIndianCurrency(totalSgst || totalUtgst)}</span>
+                    <span className="font-mono text-zinc-800">{formatIndianCurrency(totalSgst || totalUtgst)}</span>
                   </div>
                 </>
               ) : (
-                <div className="flex justify-between text-slate-600">
+                <div className="flex justify-between text-zinc-600">
                   <span>Integrated Tax (IGST):</span>
-                  <span className="font-mono">{formatIndianCurrency(totalIgst)}</span>
+                  <span className="font-mono text-zinc-800">{formatIndianCurrency(totalIgst)}</span>
                 </div>
               )}
 
-              <div className="flex justify-between text-slate-900 font-semibold pt-1 border-t border-slate-200">
+              <div className="flex justify-between text-zinc-900 font-semibold pt-1 border-t border-zinc-200">
                 <span>Total Tax (GST):</span>
-                <span className="font-mono">{formatIndianCurrency(totalGst)}</span>
+                <span className="font-mono text-zinc-950">{formatIndianCurrency(totalGst)}</span>
               </div>
 
               {roundOff !== 0 && (
-                <div className="flex justify-between text-slate-500 text-[11px]">
+                <div className="flex justify-between text-zinc-500 text-[11px]">
                   <span>Round Off (+/-):</span>
                   <span className="font-mono">{roundOff > 0 ? `+${roundOff}` : roundOff}</span>
                 </div>
               )}
 
-              <div className="flex justify-between text-base font-extrabold text-slate-950 pt-2 border-t-2 border-slate-300">
+              <div className="flex justify-between text-base font-black text-zinc-950 pt-2 border-t-2 border-zinc-300">
                 <span>Total Invoice Value:</span>
-                <span className="font-mono text-emerald-800">{formatIndianCurrency(roundedGrandTotal)}</span>
+                <span className="font-mono text-zinc-950">{formatIndianCurrency(roundedGrandTotal)}</span>
               </div>
 
               {/* Authorized Signatory Box */}
-              <div className="pt-6 mt-4 border-t border-slate-200 text-center">
-                <div className="text-[11px] font-semibold text-slate-800 mb-8">
+              <div className="pt-6 mt-4 border-t border-zinc-200 text-center">
+                <div className="text-[11px] font-semibold text-zinc-900 mb-8">
                   For <strong>{supplierName}</strong>
                 </div>
-                <div className="border-t border-dashed border-slate-400 pt-1 text-[10px] text-slate-500 uppercase tracking-wider font-semibold">
+                <div className="border-t border-dashed border-zinc-400 pt-1 text-[10px] text-zinc-500 uppercase tracking-wider font-semibold">
                   Authorized Signatory
                 </div>
               </div>

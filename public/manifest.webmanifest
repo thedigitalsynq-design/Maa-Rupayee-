@@ -1,0 +1,20 @@
+{
+  "name": "PaisaCalc — GST Calculator & Money Tools, Free",
+  "short_name": "PaisaCalc",
+  "description": "Free GST, CGST & SGST calculator, invoice builder, HSN explorer, ITR/SIP/loan tools and GST academy. No login, works offline.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#060709",
+  "theme_color": "#060709",
+  "categories": ["finance", "business"],
+  "icons": [
+    {
+      "src": "./icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

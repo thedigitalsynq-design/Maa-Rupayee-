@@ -26,23 +26,23 @@ export const HistoricalLookupView: React.FC<HistoricalLookupViewProps> = ({ onAp
   });
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8">
+    <div className="max-w-6xl mx-auto space-y-6 animate-in fade-in">
       {/* Header */}
-      <div className="mb-6">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-800 border border-slate-300 text-xs font-bold mb-2">
-          <History className="h-3.5 w-3.5 text-amber-600" />
+      <div className="p-6 sm:p-7 rounded-3xl glass-card shadow-sm">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-pill text-xs font-semibold mb-3">
+          <History className="h-3.5 w-3.5" />
           <span>Section 10: Versioned Indian GST History Engine</span>
         </div>
-        <h2 className="text-2xl font-extrabold text-slate-900">
+        <h2 className="text-2xl sm:text-3xl font-black tracking-tight">
           Historical GST Rate & Notification Lookup
         </h2>
-        <p className="text-xs text-slate-500 mt-1 max-w-2xl">
+        <p className="text-xs sm:text-sm text-zinc-500 mt-1.5 max-w-2xl leading-relaxed">
           Query past tax rates based on transaction date. In India, GST rates evolved dramatically across footwear, electronics, food commodities, and online services.
         </p>
       </div>
 
       {/* Interactive Date & Item Simulator */}
-      <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm mb-8">
+      <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
         <h3 className="text-sm font-bold text-slate-900 mb-4">Historical Rate Simulator</h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 text-xs">
@@ -96,7 +96,7 @@ export const HistoricalLookupView: React.FC<HistoricalLookupViewProps> = ({ onAp
           <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-200">
             <div>
               <div className="text-[11px] text-slate-500 uppercase font-bold tracking-wider">Applicable Historical GST Rate</div>
-              <div className="text-3xl font-extrabold text-amber-700 font-mono mt-1">
+              <div className="text-3xl font-extrabold text-zinc-950 font-mono mt-1">
                 {historicalCheck.rate}% GST
               </div>
               <div className="text-xs text-slate-600 mt-1 font-medium">
@@ -161,7 +161,7 @@ export const HistoricalLookupView: React.FC<HistoricalLookupViewProps> = ({ onAp
                       {range.startDate} &rarr; {range.endDate}
                     </span>
                     <span className="text-slate-400">&bull;</span>
-                    <span className="font-semibold text-amber-800">{range.notificationRef}</span>
+                    <span className="font-semibold text-zinc-700">{range.notificationRef}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="font-bold text-sm text-slate-900 font-mono">{range.rate}%</span>

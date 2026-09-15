@@ -1,84 +1,140 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense, lazy } from 'react';
 import { 
   Calculator, 
-  FileText, 
+  ReceiptText, 
   Search, 
   BellRing, 
   History, 
   BookmarkCheck, 
   BookOpen, 
+  Store,
+  ClipboardCheck,
+  GraduationCap, 
   ArrowRightLeft,
-  ChevronDown,
   Sparkles,
-  Layers,
   ArrowRight,
   ShieldCheck,
   TrendingUp,
   Landmark,
-  PiggyBank,
-  CheckCircle2,
-  Calendar,
-  Clock,
+  CreditCard,
+  Wallet,
   Menu,
   X,
-  ExternalLink
+  Sun,
+  Moon
 } from 'lucide-react';
 
 import { IndianState, SavedCalculation, InvoiceLineItem, GSTItem, ClassifiedResult } from './types';
 import { INDIAN_STATES, DEFAULT_SUPPLIER_STATE, DEFAULT_CUSTOMER_STATE } from './data/indianStates';
-import { AllInOneCalculator } from './components/AllInOneCalculator';
-import { InvoiceBuilder } from './components/InvoiceBuilder';
-import { HsnSacExplorer } from './components/HsnSacExplorer';
-import { GSTCouncilFeed } from './components/GSTCouncilFeed';
-import { HistoricalLookupView } from './components/HistoricalLookupView';
-import { SavedCalculationsView } from './components/SavedCalculationsView';
-import { KnowledgeGuideView } from './components/KnowledgeGuideView';
 import { SmartInputHero } from './components/SmartInputHero';
 import { SmartResultCard } from './components/SmartResultCard';
-import { ItrSimulator } from './components/ItrSimulator';
-import { SipCalculator } from './components/SipCalculator';
-import { LoanEmiCalculator } from './components/LoanEmiCalculator';
 import { classifyProductOrService } from './services/classificationService';
+
+// Route-level code splitting: heavy tab views (notably the invoice studio with
+// jspdf/html2canvas) load on demand so first paint stays lean.
+const AllInOneCalculator = lazy(() => import('./components/AllInOneCalculator').then(m => ({ default: m.AllInOneCalculator })));
+const InvoiceBuilder = lazy(() => import('./components/InvoiceBuilder').then(m => ({ default: m.InvoiceBuilder })));
+const HsnSacExplorer = lazy(() => import('./components/HsnSacExplorer').then(m => ({ default: m.HsnSacExplorer })));
+const BusinessHub = lazy(() => import('./components/BusinessHub').then(m => ({ default: m.BusinessHub })));
+const ComplianceKit = lazy(() => import('./components/ComplianceKit').then(m => ({ default: m.ComplianceKit })));
+const GstAcademy = lazy(() => import('./components/Academy').then(m => ({ default: m.GstAcademy })));
+const GSTCouncilFeed = lazy(() => import('./components/GSTCouncilFeed').then(m => ({ default: m.GSTCouncilFeed })));
+const HistoricalLookupView = lazy(() => import('./components/HistoricalLookupView').then(m => ({ default: m.HistoricalLookupView })));
+const SavedCalculationsView = lazy(() => import('./components/SavedCalculationsView').then(m => ({ default: m.SavedCalculationsView })));
+const KnowledgeGuideView = lazy(() => import('./components/KnowledgeGuideView').then(m => ({ default: m.KnowledgeGuideView })));
+const ItrSimulator = lazy(() => import('./components/ItrSimulator').then(m => ({ default: m.ItrSimulator })));
+const SipCalculator = lazy(() => import('./components/SipCalculator').then(m => ({ default: m.SipCalculator })));
+const LoanEmiCalculator = lazy(() => import('./components/LoanEmiCalculator').then(m => ({ default: m.LoanEmiCalculator })));
+const WealthToolsHub = lazy(() => import('./components/WealthTools').then(m => ({ default: m.WealthToolsHub })));
+
+function ViewFallback() {
+  return (
+    <div className="max-w-6xl mx-auto space-y-4 animate-in fade-in" aria-label="Loading view" role="status">
+      <div className="p-6 sm:p-7 rounded-3xl glass-card shadow-sm space-y-3">
+        <div className="skeleton-bar w-1/3" />
+        <div className="skeleton-bar w-2/3" />
+        <div className="skeleton-bar w-1/2" />
+      </div>
+      <div className="p-6 sm:p-7 rounded-3xl glass-card shadow-sm space-y-3">
+        <div className="skeleton-bar w-1/2" />
+        <div className="skeleton-bar w-3/4" />
+      </div>
+    </div>
+  );
+}
 
 export type NavTab = 
   | 'overview' 
   | 'calculator' 
   | 'invoice' 
   | 'explorer' 
+  | 'business'
+  | 'compliance'
   | 'council' 
   | 'itr' 
   | 'sip' 
   | 'loan' 
+  | 'wealth'
   | 'history' 
   | 'saved' 
-  | 'knowledge';
+  | 'knowledge'
+  | 'academy';
 
 export default function App() {
+  // Theme: Obsidian (Dark Glass default) vs Crystal (Light Studio Frosted)
+  const [theme, setTheme] = useState<'crystal' | 'obsidian'>(() => {
+    try {
+      const saved = localStorage.getItem('smart_gst_theme');
+      if (saved === 'obsidian' || saved === 'crystal') return saved;
+    } catch {}
+    return 'obsidian';
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('smart_gst_theme', theme);
+    } catch {}
+    if (theme === 'obsidian') {
+      document.documentElement.classList.add('theme-obsidian');
+      document.documentElement.classList.remove('theme-crystal');
+    } else {
+      document.documentElement.classList.add('theme-crystal');
+      document.documentElement.classList.remove('theme-obsidian');
+    }
+  }, [theme]);
+
+  const isDark = theme === 'obsidian';
+
   // Navigation
   const [activeTab, setActiveTab] = useState<NavTab>('overview');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Keep the document title in sync with the visible view
+  useEffect(() => {
+    const titles: Record<NavTab, string> = {
+      overview: 'GST Intelligence',
+      calculator: 'GST Calculator',
+      invoice: 'Tax Invoice Builder',
+      explorer: 'HSN / SAC Directory',
+      business: 'Business Counter',
+      compliance: 'Compliance Kit',
+      council: 'GST Council Bulletins',
+      itr: 'ITR Filing Simulator',
+      sip: 'SIP & Mutual Fund Calculator',
+      loan: 'Loan EMI Calculator',
+      wealth: 'Savings & Tax Tools',
+      history: 'Rate Gazette History',
+      saved: 'Saved Calculations',
+      knowledge: 'Compliance Handbook',
+      academy: 'GST Academy',
+    };
+    document.title = `${titles[activeTab]} — PaisaCalc`;
+  }, [activeTab]);
   
   // State Route Configuration
   const [supplierState, setSupplierState] = useState<IndianState>(DEFAULT_SUPPLIER_STATE);
   const [customerState, setCustomerState] = useState<IndianState>(DEFAULT_CUSTOMER_STATE);
   const [topSearchTerm, setTopSearchTerm] = useState('');
-
-  // Frosted Glass Material Theme (Obsidian Glass vs Frosted Crystal Glass)
-  const [glassTheme, setGlassTheme] = useState<'obsidian' | 'crystal'>(() => {
-    try {
-      return (localStorage.getItem('smart_tax_glass_theme') as 'obsidian' | 'crystal') || 'obsidian';
-    } catch {
-      return 'obsidian';
-    }
-  });
-
-  const toggleGlassTheme = () => {
-    const next = glassTheme === 'obsidian' ? 'crystal' : 'obsidian';
-    setGlassTheme(next);
-    try {
-      localStorage.setItem('smart_tax_glass_theme', next);
-    } catch {}
-  };
 
   // Real-time AI GST Classification state
   const [activeClassifiedResult, setActiveClassifiedResult] = useState<ClassifiedResult | null>(null);
@@ -90,7 +146,6 @@ export default function App() {
     try {
       const res = await classifyProductOrService(query, supplierState, customerState, date);
       setActiveClassifiedResult(res);
-      // Ensure we are viewing overview to see the result
       if (activeTab !== 'overview') {
         setActiveTab('overview');
       }
@@ -105,8 +160,20 @@ export default function App() {
     setActiveTab('calculator');
   };
 
-  // Invoice items state
-  const [invoiceItems, setInvoiceItems] = useState<InvoiceLineItem[]>([
+  // Invoice items state (persisted — survives reloads and syncs across tabs)
+  const [invoiceItems, setInvoiceItems] = useState<InvoiceLineItem[]>(() => {
+    try {
+      const stored = localStorage.getItem('smart_gst_invoice_items');
+      if (stored) {
+        const parsed: unknown = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.every(i => i && typeof i === 'object' && typeof (i as InvoiceLineItem).id === 'string')) {
+          return parsed as InvoiceLineItem[];
+        }
+      }
+    } catch {
+      // fallback to seed items
+    }
+    return [
     {
       id: 'item-1',
       description: 'Cloud Server Infrastructure Consulting',
@@ -144,14 +211,18 @@ export default function App() {
       igstAmount: 27000,
       cessAmount: 0,
       totalAmount: 177000
-    }
-  ]);
+      }
+    ];
+  });
 
   // Saved Audits (localStorage)
   const [savedAudits, setSavedAudits] = useState<SavedCalculation[]>(() => {
     try {
       const stored = localStorage.getItem('smart_gst_audits');
-      if (stored) return JSON.parse(stored);
+      if (stored) {
+        const parsed: unknown = JSON.parse(stored);
+        if (Array.isArray(parsed)) return parsed as SavedCalculation[];
+      }
     } catch {
       // fallback
     }
@@ -194,6 +265,36 @@ export default function App() {
       // handle storage quota
     }
   }, [savedAudits]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('smart_gst_invoice_items', JSON.stringify(invoiceItems));
+    } catch {
+      // handle storage quota
+    }
+  }, [invoiceItems]);
+
+  // Cross-tab data synchronization: theme, audits, and invoice stay
+  // consistent when the app is open in multiple tabs/windows.
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      try {
+        if (e.key === 'smart_gst_theme' && (e.newValue === 'crystal' || e.newValue === 'obsidian')) {
+          setTheme(e.newValue);
+        } else if (e.key === 'smart_gst_audits' && e.newValue) {
+          const parsed: unknown = JSON.parse(e.newValue);
+          if (Array.isArray(parsed)) setSavedAudits(parsed as SavedCalculation[]);
+        } else if (e.key === 'smart_gst_invoice_items' && e.newValue) {
+          const parsed: unknown = JSON.parse(e.newValue);
+          if (Array.isArray(parsed)) setInvoiceItems(parsed as InvoiceLineItem[]);
+        }
+      } catch {
+        // ignore malformed cross-tab payloads
+      }
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
 
   const handleSwapStates = () => {
     const temp = supplierState;
@@ -244,41 +345,73 @@ export default function App() {
 
   const isIntraState = supplierState.code === customerState.code;
 
+  // Dynamic navigation class helpers for pristine contrast in both modes
+  const getNavItemClass = (tab: NavTab) => {
+    const isActive = activeTab === tab;
+    if (isDark) {
+      return isActive 
+        ? 'bg-white text-black shadow-md font-bold' 
+        : 'text-zinc-400 hover:text-white hover:bg-white/5 font-medium';
+    } else {
+      return isActive 
+        ? 'bg-zinc-950 text-white shadow-sm font-bold' 
+        : 'text-zinc-700 hover:text-zinc-950 hover:bg-black/5 font-medium';
+    }
+  };
+
+  const getNavIconClass = (tab: NavTab) => {
+    const isActive = activeTab === tab;
+    if (isDark) {
+      return isActive ? 'text-black' : 'text-zinc-400';
+    } else {
+      return isActive ? 'text-white' : 'text-zinc-700';
+    }
+  };
+
+  // Theme-aware ink & surfaces for Overview cards — guaranteed correct ink on
+  // glass in both Crystal (light) and Obsidian (dark), including hovers.
+  const inkHeading = isDark ? 'text-white' : 'text-zinc-950';
+  const inkTitle = isDark ? 'text-zinc-300' : 'text-zinc-700';
+  const inkBody = isDark ? 'text-zinc-400' : 'text-zinc-600';
+  const surfTile = isDark
+    ? 'bg-white/5 hover:bg-white/10 border-white/10 hover:border-white/25'
+    : 'bg-zinc-950/[0.045] hover:bg-zinc-950/[0.08] border-zinc-950/10 hover:border-zinc-950/20';
+  const surfBadge = isDark
+    ? 'text-white border-white/20 bg-white/5'
+    : 'text-zinc-800 border-zinc-950/15 bg-zinc-950/5';
+  const lineDivide = isDark ? 'border-white/10' : 'border-zinc-950/10';
+  const arrowTone = isDark ? 'text-zinc-400 group-hover:text-white' : 'text-zinc-500 group-hover:text-zinc-950';
+
   return (
-    <div className={`min-h-screen relative py-3 sm:py-6 px-2 sm:px-5 lg:px-8 font-sans selection:bg-[#38bdf8] selection:text-slate-950 overflow-x-hidden transition-colors duration-300 ${
-      glassTheme === 'crystal' 
-        ? 'theme-crystal bg-[#edf1f7] text-slate-800' 
-        : 'bg-radial from-[#1342a1] via-[#092257] to-[#040e28] text-white'
+    <div className={`min-h-screen relative py-3 sm:py-6 px-2 sm:px-5 lg:px-8 font-sans overflow-x-hidden ${
+      isDark 
+        ? 'bg-[#060709] text-white theme-obsidian selection:bg-white selection:text-black' 
+        : 'bg-[#eef2f7] text-zinc-950 theme-crystal selection:bg-zinc-950 selection:text-white'
     }`}>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:rounded-full focus:bg-zinc-950 focus:text-white focus:text-xs focus:font-bold"
+      >
+        Skip to main content
+      </a>
       
-      {/* Diagonal Light Rays & Ambient Frosted Glass Layers (Matching Artwork) */}
+      {/* Subtle Monochrome Ambient Depth */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
-        {/* Subtle Diagonal Caustic Light Streaks */}
-        {glassTheme === 'obsidian' && (
-          <div className="absolute inset-0 bg-light-rays opacity-70" />
-        )}
-
-        {/* Top-Right Frosted Glass Capsule */}
-        <div className={`absolute -top-32 -right-24 w-[320px] sm:w-[460px] h-[700px] glass-capsule-bg rotate-[-38deg] ${
-          glassTheme === 'crystal' ? 'opacity-35' : 'opacity-70'
-        }`} />
-        
-        {/* Center-Left Overlapping Frosted Glass Capsule */}
-        <div className={`absolute top-1/3 -left-36 w-[280px] sm:w-[420px] h-[620px] glass-capsule-bg rotate-[36deg] ${
-          glassTheme === 'crystal' ? 'opacity-25' : 'opacity-50'
-        }`} />
-
-        {/* Bottom Radial Cyan Caustic Flare */}
-        <div className="absolute -bottom-36 right-1/4 w-[500px] h-[500px] rounded-full bg-cyan-400/15 blur-3xl" />
+        <div className={`absolute top-0 right-1/4 w-[600px] h-[400px] rounded-full blur-[150px] ${isDark ? 'bg-white/[0.02]' : 'bg-black/[0.02]'}`} />
+        <div className={`absolute bottom-10 left-1/4 w-[500px] h-[350px] rounded-full blur-[130px] ${isDark ? 'bg-white/[0.015]' : 'bg-black/[0.015]'}`} />
       </div>
 
-      {/* Master Glass Container */}
-      <div className="glass-container relative z-10 max-w-[1440px] mx-auto rounded-[26px] sm:rounded-[34px] overflow-hidden flex flex-col md:flex-row shadow-[0_30px_70px_rgba(2,8,28,0.65)]">
+      {/* Master Monochrome Glass Container */}
+      <div className={`glass-container relative z-10 max-w-[1400px] mx-auto rounded-2xl sm:rounded-3xl overflow-hidden flex flex-col md:flex-row shadow-2xl ${
+        isDark ? 'border-white/12' : 'border-white/90'
+      }`}>
         
         {/* ========================================================= */}
-        {/* SIDEBAR NAVIGATION (Focused, Clean, Structured)           */}
+        {/* SIDEBAR NAVIGATION (Pure Monochrome)                      */}
         {/* ========================================================= */}
-        <aside aria-label="Site Navigation" className="glass-sidebar w-full md:w-64 lg:w-72 border-b md:border-b-0 flex flex-col justify-between shrink-0">
+        <aside aria-label="Site Navigation" className={`glass-sidebar w-full md:w-64 lg:w-72 border-b md:border-b-0 flex flex-col justify-between shrink-0 ${
+          isDark ? 'border-white/10' : 'border-zinc-200/80'
+        }`}>
           
           <div className="p-4 sm:p-5">
             {/* Brand Logo & Tagline */}
@@ -286,27 +419,29 @@ export default function App() {
               onClick={() => setActiveTab('overview')}
               className="flex items-center gap-3 cursor-pointer group mb-6 px-1"
             >
-              <div className="h-10 w-10 rounded-2xl bg-gradient-to-tr from-[#ff5b35] to-[#2f66ee] text-white flex items-center justify-center font-black text-xl shadow-md transition-transform group-hover:scale-105 active:scale-95">
-                📊
+              <div className={`h-10 w-10 rounded-2xl flex items-center justify-center font-black text-xl shadow-md transition-transform group-hover:scale-105 active:scale-95 ${
+                isDark ? 'bg-white text-black' : 'bg-zinc-950 text-white'
+              }`}>
+                ₹
               </div>
               <div>
-                <div className="font-extrabold text-sm sm:text-base tracking-tight text-white flex items-center gap-1.5">
-                  <span>Smart TAX India</span>
+                <div className={`font-black text-sm sm:text-base tracking-tight flex items-center gap-1.5 ${isDark ? 'text-white' : 'text-zinc-950'}`}>
+                  <span>PaisaCalc</span>
                 </div>
-                <div className="text-[10px] text-slate-400 font-medium leading-tight max-w-[170px]">
-                  GST, CGST & SGST based on CBIC schedules
+                <div className={`text-[10px] font-medium leading-tight max-w-[170px] ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+                  Every rupee, calculated free
                 </div>
               </div>
             </div>
 
             {/* Mobile Menu Toggle Button */}
-            <div className="md:hidden flex items-center justify-between pb-3 mb-3 border-b border-slate-800">
-              <span className="text-xs font-semibold text-slate-300">
-                Menu • <span className="text-blue-400 capitalize">{activeTab}</span>
+            <div className={`md:hidden flex items-center justify-between pb-3 mb-3 border-b ${isDark ? 'border-white/10' : 'border-zinc-200/80'}`}>
+              <span className={`text-xs font-semibold ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
+                Menu • <span className={`capitalize font-bold ${isDark ? 'text-white' : 'text-zinc-950'}`}>{activeTab}</span>
               </span>
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white"
+                className={`p-2 rounded-xl cursor-pointer ${isDark ? 'bg-white/10 text-white hover:bg-white/20' : 'bg-zinc-100 text-zinc-900 hover:bg-zinc-200'}`}
               >
                 {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
               </button>
@@ -315,61 +450,58 @@ export default function App() {
             {/* Navigation Sections */}
             <nav className={`space-y-5 ${mobileMenuOpen ? 'block' : 'hidden md:block'}`}>
               
-              {/* PRIMARY TIER: GST & INDIRECT TAX */}
-              <div>
-                <div className="text-[10px] font-bold text-slate-400 tracking-wider mb-2 px-2 uppercase">
-                  GST & Indirect Tax (Core)
+              {/* TIER 1: GST CALCULATION (doing) */}
+              <div role="group" aria-label="GST Calculation tools">
+                <div className={`text-[10px] font-bold tracking-wider mb-2 px-2 uppercase flex items-center justify-between ${isDark ? 'text-zinc-500' : 'text-zinc-500'}`}>
+                  <span>GST Calculation</span>
+                  <span className="font-mono font-bold">6</span>
                 </div>
                 <div className="space-y-1">
                   
                   {/* GST Intelligence */}
                   <button
                     onClick={() => { setActiveTab('overview'); setMobileMenuOpen(false); }}
-                    className={`w-full text-left px-3.5 py-2.5 rounded-xl font-semibold text-xs transition-all flex items-center justify-between ${
-                      activeTab === 'overview'
-                        ? 'bg-[#2f66ee] text-white shadow-sm'
-                        : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-                    }`}
+                    className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs transition-all flex items-center justify-between cursor-pointer ${getNavItemClass('overview')}`}
                   >
                     <div className="flex items-center gap-2.5">
-                      <Sparkles className={`h-4 w-4 ${activeTab === 'overview' ? 'text-white' : 'text-blue-400'}`} />
+                      <Sparkles className={`h-4 w-4 ${getNavIconClass('overview')}`} />
                       <span>GST Intelligence</span>
                     </div>
-                    <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-blue-900/60 text-blue-200 border border-blue-700/50 font-semibold">
-                      AI Hero
+                    <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-bold ${
+                      activeTab === 'overview'
+                        ? (isDark ? 'bg-black/10 text-black' : 'bg-white/20 text-white')
+                        : (isDark ? 'bg-white/10 text-zinc-300 border border-white/10' : 'bg-zinc-200 text-zinc-800')
+                    }`}>
+                      AI
                     </span>
                   </button>
 
                   {/* All-in-One Calculator */}
                   <button
                     onClick={() => { setActiveTab('calculator'); setMobileMenuOpen(false); }}
-                    className={`w-full text-left px-3.5 py-2.5 rounded-xl font-semibold text-xs transition-all flex items-center justify-between ${
-                      activeTab === 'calculator'
-                        ? 'bg-[#2f66ee] text-white shadow-sm'
-                        : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-                    }`}
+                    className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs transition-all flex items-center justify-between cursor-pointer ${getNavItemClass('calculator')}`}
                   >
                     <div className="flex items-center gap-2.5">
-                      <Calculator className={`h-4 w-4 ${activeTab === 'calculator' ? 'text-white' : 'text-orange-400'}`} />
+                      <Calculator className={`h-4 w-4 ${getNavIconClass('calculator')}`} />
                       <span>GST Calculator</span>
                     </div>
-                    <span className="text-[10px] text-slate-400 font-mono">Fwd/Rev</span>
+                    <span className="text-[10px] font-mono opacity-80">Fwd/Rev</span>
                   </button>
 
                   {/* Tax Invoice Builder */}
                   <button
                     onClick={() => { setActiveTab('invoice'); setMobileMenuOpen(false); }}
-                    className={`w-full text-left px-3.5 py-2.5 rounded-xl font-semibold text-xs transition-all flex items-center justify-between ${
-                      activeTab === 'invoice'
-                        ? 'bg-[#2f66ee] text-white shadow-sm'
-                        : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-                    }`}
+                    className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs transition-all flex items-center justify-between cursor-pointer ${getNavItemClass('invoice')}`}
                   >
                     <div className="flex items-center gap-2.5">
-                      <FileText className={`h-4 w-4 ${activeTab === 'invoice' ? 'text-white' : 'text-emerald-400'}`} />
+                      <ReceiptText className={`h-4 w-4 ${getNavIconClass('invoice')}`} />
                       <span>Tax Invoice Builder</span>
                     </div>
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 font-mono">
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-mono font-bold ${
+                      activeTab === 'invoice' 
+                        ? (isDark ? 'bg-black/10 text-black' : 'bg-white/20 text-white') 
+                        : (isDark ? 'bg-white/10 text-zinc-300' : 'bg-zinc-200 text-zinc-800')
+                    }`}>
                       {invoiceItems.length}
                     </span>
                   </button>
@@ -377,58 +509,73 @@ export default function App() {
                   {/* HSN/SAC Explorer */}
                   <button
                     onClick={() => { setActiveTab('explorer'); setMobileMenuOpen(false); }}
-                    className={`w-full text-left px-3.5 py-2.5 rounded-xl font-semibold text-xs transition-all flex items-center justify-between ${
-                      activeTab === 'explorer'
-                        ? 'bg-[#2f66ee] text-white shadow-sm'
-                        : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-                    }`}
+                    className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs transition-all flex items-center justify-between cursor-pointer ${getNavItemClass('explorer')}`}
                   >
                     <div className="flex items-center gap-2.5">
-                      <Search className={`h-4 w-4 ${activeTab === 'explorer' ? 'text-white' : 'text-purple-400'}`} />
+                      <Search className={`h-4 w-4 ${getNavIconClass('explorer')}`} />
                       <span>HSN / SAC Directory</span>
                     </div>
                   </button>
 
-                  {/* Council Updates */}
+                  {/* Business Counter */}
                   <button
-                    onClick={() => { setActiveTab('council'); setMobileMenuOpen(false); }}
-                    className={`w-full text-left px-3.5 py-2.5 rounded-xl font-semibold text-xs transition-all flex items-center justify-between ${
-                      activeTab === 'council'
-                        ? 'bg-[#2f66ee] text-white shadow-sm'
-                        : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-                    }`}
+                    onClick={() => { setActiveTab('business'); setMobileMenuOpen(false); }}
+                    className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs transition-all flex items-center justify-between cursor-pointer ${getNavItemClass('business')}`}
                   >
                     <div className="flex items-center gap-2.5">
-                      <BellRing className={`h-4 w-4 ${activeTab === 'council' ? 'text-white' : 'text-amber-400'}`} />
-                      <span>Council Bulletins</span>
+                      <Store className={`h-4 w-4 ${getNavIconClass('business')}`} />
+                      <span>Business Counter</span>
                     </div>
-                    <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-bold ${
+                      activeTab === 'business'
+                        ? (isDark ? 'bg-black/10 text-black' : 'bg-white/20 text-white')
+                        : (isDark ? 'bg-white/10 text-zinc-300 border border-white/10' : 'bg-zinc-200 text-zinc-800')
+                    }`}>
+                      Every Trade
+                    </span>
+                  </button>
+
+                  {/* Compliance Kit */}
+                  <button
+                    onClick={() => { setActiveTab('compliance'); setMobileMenuOpen(false); }}
+                    className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs transition-all flex items-center justify-between cursor-pointer ${getNavItemClass('compliance')}`}
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <ClipboardCheck className={`h-4 w-4 ${getNavIconClass('compliance')}`} />
+                      <span>Compliance Kit</span>
+                    </div>
+                    <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-bold ${
+                      activeTab === 'compliance'
+                        ? (isDark ? 'bg-black/10 text-black' : 'bg-white/20 text-white')
+                        : (isDark ? 'bg-white/10 text-zinc-300 border border-white/10' : 'bg-zinc-200 text-zinc-800')
+                    }`}>
+                      4-in-1
+                    </span>
                   </button>
 
                 </div>
               </div>
 
-              {/* SECONDARY TIER: FINANCIAL UTILITIES */}
-              <div className="pt-3 border-t border-slate-800/80">
-                <div className="text-[10px] font-bold text-slate-400 tracking-wider mb-2 px-2 uppercase">
-                  Financial Utilities
+              {/* TIER 2: TAX & SAVINGS (personal money) */}
+              <div role="group" aria-label="Tax and savings tools" className={`pt-3 border-t ${isDark ? 'border-white/10' : 'border-zinc-200/80'}`}>
+                <div className={`text-[10px] font-bold tracking-wider mb-2 px-2 uppercase flex items-center justify-between ${isDark ? 'text-zinc-500' : 'text-zinc-500'}`}>
+                  <span>Tax & Savings</span>
+                  <span className="font-mono font-bold">4</span>
                 </div>
                 <div className="space-y-1">
                   
                   {/* ITR Simulator */}
                   <button
                     onClick={() => { setActiveTab('itr'); setMobileMenuOpen(false); }}
-                    className={`w-full text-left px-3.5 py-2.5 rounded-xl font-semibold text-xs transition-all flex items-center justify-between ${
-                      activeTab === 'itr'
-                        ? 'bg-[#2f66ee] text-white shadow-sm'
-                        : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-                    }`}
+                    className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs transition-all flex items-center justify-between cursor-pointer ${getNavItemClass('itr')}`}
                   >
                     <div className="flex items-center gap-2.5">
-                      <Landmark className={`h-4 w-4 ${activeTab === 'itr' ? 'text-white' : 'text-emerald-400'}`} />
+                      <Landmark className={`h-4 w-4 ${getNavIconClass('itr')}`} />
                       <span>ITR Filing Simulator</span>
                     </div>
-                    <span className="text-[9px] px-1.5 py-0.5 rounded-md bg-slate-800 text-slate-400 font-mono">
+                    <span className={`text-[9px] px-1.5 py-0.5 rounded-md font-mono font-bold ${
+                      isDark ? 'bg-white/10 text-zinc-300' : 'bg-zinc-200 text-zinc-800'
+                    }`}>
                       FY 25-26
                     </span>
                   </button>
@@ -436,14 +583,10 @@ export default function App() {
                   {/* SIP & Wealth Calculator */}
                   <button
                     onClick={() => { setActiveTab('sip'); setMobileMenuOpen(false); }}
-                    className={`w-full text-left px-3.5 py-2.5 rounded-xl font-semibold text-xs transition-all flex items-center justify-between ${
-                      activeTab === 'sip'
-                        ? 'bg-[#2f66ee] text-white shadow-sm'
-                        : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-                    }`}
+                    className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs transition-all flex items-center justify-between cursor-pointer ${getNavItemClass('sip')}`}
                   >
                     <div className="flex items-center gap-2.5">
-                      <TrendingUp className={`h-4 w-4 ${activeTab === 'sip' ? 'text-white' : 'text-cyan-400'}`} />
+                      <TrendingUp className={`h-4 w-4 ${getNavIconClass('sip')}`} />
                       <span>SIP & Mutual Funds</span>
                     </div>
                   </button>
@@ -451,57 +594,62 @@ export default function App() {
                   {/* Loan EMI Calculator */}
                   <button
                     onClick={() => { setActiveTab('loan'); setMobileMenuOpen(false); }}
-                    className={`w-full text-left px-3.5 py-2.5 rounded-xl font-semibold text-xs transition-all flex items-center justify-between ${
-                      activeTab === 'loan'
-                        ? 'bg-[#2f66ee] text-white shadow-sm'
-                        : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-                    }`}
+                    className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs transition-all flex items-center justify-between cursor-pointer ${getNavItemClass('loan')}`}
                   >
                     <div className="flex items-center gap-2.5">
-                      <PiggyBank className={`h-4 w-4 ${activeTab === 'loan' ? 'text-white' : 'text-pink-400'}`} />
+                      <CreditCard className={`h-4 w-4 ${getNavIconClass('loan')}`} />
                       <span>Loan EMI & Interest</span>
                     </div>
+                  </button>
+
+                  {/* Savings & Tax Tools Hub */}
+                  <button
+                    onClick={() => { setActiveTab('wealth'); setMobileMenuOpen(false); }}
+                    className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs transition-all flex items-center justify-between cursor-pointer ${getNavItemClass('wealth')}`}
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Wallet className={`h-4 w-4 ${getNavIconClass('wealth')}`} />
+                      <span>Savings & Tax Tools</span>
+                    </div>
+                    <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-bold ${
+                      activeTab === 'wealth'
+                        ? (isDark ? 'bg-black/10 text-black' : 'bg-white/20 text-white')
+                        : (isDark ? 'bg-white/10 text-zinc-300 border border-white/10' : 'bg-zinc-200 text-zinc-800')
+                    }`}>
+                      5-in-1
+                    </span>
                   </button>
 
                 </div>
               </div>
 
-              {/* TERTIARY TIER: RECORDS & COMPLIANCE */}
-              <div className="pt-3 border-t border-slate-800/80">
-                <div className="text-[10px] font-bold text-slate-400 tracking-wider mb-2 px-2 uppercase">
-                  Records & Guidance
+              {/* TIER 3: LAW & UPDATES (reading & reference) */}
+              <div role="group" aria-label="Law and updates" className={`pt-3 border-t ${isDark ? 'border-white/10' : 'border-zinc-200/80'}`}>
+                <div className={`text-[10px] font-bold tracking-wider mb-2 px-2 uppercase flex items-center justify-between ${isDark ? 'text-zinc-500' : 'text-zinc-500'}`}>
+                  <span>Law & Updates</span>
+                  <span className="font-mono font-bold">4</span>
                 </div>
                 <div className="space-y-1">
-                  
-                  {/* Saved Audits */}
+
+                  {/* Council Updates */}
                   <button
-                    onClick={() => { setActiveTab('saved'); setMobileMenuOpen(false); }}
-                    className={`w-full text-left px-3.5 py-2 rounded-xl text-xs font-medium transition-all flex items-center justify-between ${
-                      activeTab === 'saved'
-                        ? 'bg-[#181d28] text-white font-semibold'
-                        : 'text-slate-400 hover:text-white hover:bg-slate-800/40'
-                    }`}
+                    onClick={() => { setActiveTab('council'); setMobileMenuOpen(false); }}
+                    className={`w-full text-left px-3.5 py-2 rounded-xl text-xs transition-all flex items-center justify-between cursor-pointer ${getNavItemClass('council')}`}
                   >
                     <div className="flex items-center gap-2">
-                      <BookmarkCheck className="h-3.5 w-3.5 text-blue-400" />
-                      <span>Saved Calculations</span>
+                      <BellRing className={`h-3.5 w-3.5 ${getNavIconClass('council')}`} />
+                      <span>Council Bulletins</span>
                     </div>
-                    <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-slate-800 text-slate-400">
-                      {savedAudits.length}
-                    </span>
+                    <span className={`h-2 w-2 rounded-full animate-pulse ${isDark ? 'bg-white' : 'bg-zinc-950'}`}></span>
                   </button>
 
                   {/* Rate History */}
                   <button
                     onClick={() => { setActiveTab('history'); setMobileMenuOpen(false); }}
-                    className={`w-full text-left px-3.5 py-2 rounded-xl text-xs font-medium transition-all flex items-center justify-between ${
-                      activeTab === 'history'
-                        ? 'bg-[#181d28] text-white font-semibold'
-                        : 'text-slate-400 hover:text-white hover:bg-slate-800/40'
-                    }`}
+                    className={`w-full text-left px-3.5 py-2 rounded-xl text-xs transition-all flex items-center justify-between cursor-pointer ${getNavItemClass('history')}`}
                   >
                     <div className="flex items-center gap-2">
-                      <History className="h-3.5 w-3.5 text-slate-400" />
+                      <History className={`h-3.5 w-3.5 ${getNavIconClass('history')}`} />
                       <span>Rate Gazette History</span>
                     </div>
                   </button>
@@ -509,16 +657,57 @@ export default function App() {
                   {/* Knowledge Guide */}
                   <button
                     onClick={() => { setActiveTab('knowledge'); setMobileMenuOpen(false); }}
-                    className={`w-full text-left px-3.5 py-2 rounded-xl text-xs font-medium transition-all flex items-center justify-between ${
-                      activeTab === 'knowledge'
-                        ? 'bg-[#181d28] text-white font-semibold'
-                        : 'text-slate-400 hover:text-white hover:bg-slate-800/40'
-                    }`}
+                    className={`w-full text-left px-3.5 py-2 rounded-xl text-xs transition-all flex items-center justify-between cursor-pointer ${getNavItemClass('knowledge')}`}
                   >
                     <div className="flex items-center gap-2">
-                      <BookOpen className="h-3.5 w-3.5 text-slate-400" />
+                      <BookOpen className={`h-3.5 w-3.5 ${getNavIconClass('knowledge')}`} />
                       <span>Compliance Handbook</span>
                     </div>
+                  </button>
+
+                  {/* GST Academy */}
+                  <button
+                    onClick={() => { setActiveTab('academy'); setMobileMenuOpen(false); }}
+                    className={`w-full text-left px-3.5 py-2 rounded-xl text-xs transition-all flex items-center justify-between cursor-pointer ${getNavItemClass('academy')}`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <GraduationCap className={`h-3.5 w-3.5 ${getNavIconClass('academy')}`} />
+                      <span>GST Academy</span>
+                    </div>
+                    <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-bold ${
+                      activeTab === 'academy'
+                        ? (isDark ? 'bg-black/10 text-black' : 'bg-white/20 text-white')
+                        : (isDark ? 'bg-white/10 text-zinc-300 border border-white/10' : 'bg-zinc-200 text-zinc-800')
+                    }`}>
+                      Free Course
+                    </span>
+                  </button>
+
+                </div>
+              </div>
+
+              {/* TIER 4: YOUR RECORDS (personal data) */}
+              <div role="group" aria-label="Your records" className={`pt-3 border-t ${isDark ? 'border-white/10' : 'border-zinc-200/80'}`}>
+                <div className={`text-[10px] font-bold tracking-wider mb-2 px-2 uppercase flex items-center justify-between ${isDark ? 'text-zinc-500' : 'text-zinc-500'}`}>
+                  <span>Your Records</span>
+                  <span className="font-mono font-bold">1</span>
+                </div>
+                <div className="space-y-1">
+                  
+                  {/* Saved Audits */}
+                  <button
+                    onClick={() => { setActiveTab('saved'); setMobileMenuOpen(false); }}
+                    className={`w-full text-left px-3.5 py-2 rounded-xl text-xs transition-all flex items-center justify-between cursor-pointer ${getNavItemClass('saved')}`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <BookmarkCheck className={`h-3.5 w-3.5 ${getNavIconClass('saved')}`} />
+                      <span>Saved Calculations</span>
+                    </div>
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-mono font-bold leading-relaxed ${
+                      isDark ? 'bg-white/10 text-zinc-300' : 'bg-zinc-200 text-zinc-800'
+                    }`}>
+                      {savedAudits.length}
+                    </span>
                   </button>
 
                 </div>
@@ -528,12 +717,14 @@ export default function App() {
           </div>
 
           {/* Footer Badge: Trust & Transparency */}
-          <div className="p-4 border-t border-slate-800/80 bg-[#0a0d13] text-[11px] text-slate-400 flex flex-col gap-1.5">
-            <div className="flex items-center gap-1.5 text-slate-300 font-semibold">
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
+          <div className={`p-4 border-t text-[11px] flex flex-col gap-1.5 ${
+            isDark ? 'border-white/10 bg-black/40 text-zinc-400' : 'border-zinc-200/80 bg-zinc-100/60 text-zinc-600'
+          }`}>
+            <div className={`flex items-center gap-1.5 font-bold ${isDark ? 'text-zinc-200' : 'text-zinc-900'}`}>
+              <ShieldCheck className={`h-3.5 w-3.5 ${isDark ? 'text-white' : 'text-zinc-950'}`} />
               <span>100% Free • No Login Required</span>
             </div>
-            <p className="text-[10px] text-slate-400 leading-tight">
+            <p className="text-[10px] leading-tight">
               Grounded in official CBIC GST schedules & Indian Income Tax Act.
             </p>
           </div>
@@ -543,29 +734,33 @@ export default function App() {
         {/* ========================================================= */}
         {/* MAIN APPLICATION CANVAS                                   */}
         {/* ========================================================= */}
-        <main className="flex-1 flex flex-col min-w-0 p-3 sm:p-6 lg:p-7 overflow-x-hidden bg-[#0f131d]/40 backdrop-blur-xl">
+        <main id="main-content" className={`flex-1 flex flex-col min-w-0 p-3 sm:p-6 lg:p-7 overflow-x-hidden ${isDark ? 'bg-black/20' : 'bg-white/20'}`}>
           
-          {/* TOP GLOBAL HEADER */}
-          <header className="flex flex-wrap items-center justify-between gap-3 pb-4 mb-5 border-b border-slate-800/80">
+          {/* TOP GLOBAL HEADER (Monochrome) */}
+          <header className={`flex flex-wrap items-center justify-between gap-3 pb-4 mb-6 border-b ${
+            isDark ? 'border-white/10' : 'border-zinc-200/80'
+          }`}>
             
             {/* Left: Active Route / Intra vs Inter State indicator */}
             <div className="flex items-center gap-2">
-              <div className="glass-pill px-3 py-1.5 rounded-xl text-xs flex items-center gap-2">
-                <span className="text-slate-400">Transaction Route:</span>
-                <span className={`font-semibold px-2 py-0.5 rounded-md text-[11px] ${
-                  isIntraState 
-                    ? 'bg-emerald-950/60 text-emerald-300 border border-emerald-800/50' 
-                    : 'bg-blue-950/60 text-blue-300 border border-blue-800/50'
+              <div className={`glass-pill px-3.5 py-1.5 rounded-full text-xs flex items-center gap-2 border ${
+                isDark ? 'border-white/15' : 'border-zinc-200/90'
+              }`}>
+                <span className={isDark ? 'text-zinc-400' : 'text-zinc-600 font-medium'}>Transaction Route:</span>
+                <span className={`font-bold px-2.5 py-0.5 rounded-full text-[11px] ${
+                  isDark ? 'text-white bg-white/10 border border-white/20' : 'text-zinc-950 bg-white border border-zinc-200 shadow-2xs'
                 }`}>
                   {isIntraState ? `Intra-State (${supplierState.code} CGST + SGST)` : `Inter-State (${supplierState.code} → ${customerState.code} IGST)`}
                 </span>
               </div>
             </div>
 
-            {/* Right: State Selectors & Quick Swap */}
-            <div className="flex items-center gap-2 flex-wrap">
-              <div className="glass-pill flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs">
-                <span className="text-slate-400 text-[11px]">From:</span>
+            {/* Right: State Selectors, Status & Theme Switcher */}
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <div className={`glass-pill flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs border ${
+                isDark ? 'border-white/15' : 'border-zinc-200/90'
+              }`}>
+                <span className={`text-[11px] ${isDark ? 'text-zinc-400' : 'text-zinc-600 font-medium'}`}>From:</span>
                 <select
                   aria-label="Supplier State"
                   value={supplierState.code}
@@ -573,10 +768,12 @@ export default function App() {
                     const found = INDIAN_STATES.find(s => s.code === e.target.value);
                     if (found) setSupplierState(found);
                   }}
-                  className="bg-transparent font-bold text-slate-200 focus:outline-none cursor-pointer pr-1"
+                  className={`bg-transparent font-bold focus:outline-none cursor-pointer pr-1 ${
+                    isDark ? 'text-white' : 'text-zinc-950'
+                  }`}
                 >
                   {INDIAN_STATES.map(s => (
-                    <option key={`sup-${s.code}`} value={s.code} className="bg-slate-900 text-white">
+                    <option key={`sup-${s.code}`} value={s.code} className={isDark ? 'bg-zinc-900 text-white' : 'bg-white text-zinc-950'}>
                       {s.name} ({s.tin})
                     </option>
                   ))}
@@ -585,12 +782,14 @@ export default function App() {
                 <button
                   onClick={handleSwapStates}
                   title="Swap Supplier and Customer State"
-                  className="p-1 hover:bg-slate-700/60 rounded-lg text-slate-400 hover:text-white transition-colors"
+                  className={`p-1 rounded-full transition-colors cursor-pointer ${
+                    isDark ? 'hover:bg-white/10 text-zinc-400 hover:text-white' : 'hover:bg-black/5 text-zinc-600 hover:text-zinc-950'
+                  }`}
                 >
                   <ArrowRightLeft className="h-3.5 w-3.5" />
                 </button>
 
-                <span className="text-slate-400 text-[11px]">To:</span>
+                <span className={`text-[11px] ${isDark ? 'text-zinc-400' : 'text-zinc-600 font-medium'}`}>To:</span>
                 <select
                   aria-label="Customer State"
                   value={customerState.code}
@@ -598,10 +797,12 @@ export default function App() {
                     const found = INDIAN_STATES.find(s => s.code === e.target.value);
                     if (found) setCustomerState(found);
                   }}
-                  className="bg-transparent font-bold text-slate-200 focus:outline-none cursor-pointer"
+                  className={`bg-transparent font-bold focus:outline-none cursor-pointer ${
+                    isDark ? 'text-white' : 'text-zinc-950'
+                  }`}
                 >
                   {INDIAN_STATES.map(s => (
-                    <option key={`cust-${s.code}`} value={s.code} className="bg-slate-900 text-white">
+                    <option key={`cust-${s.code}`} value={s.code} className={isDark ? 'bg-zinc-900 text-white' : 'bg-white text-zinc-950'}>
                       {s.name} ({s.tin})
                     </option>
                   ))}
@@ -609,29 +810,44 @@ export default function App() {
               </div>
 
               {/* Status indicator */}
-              <div className="glass-pill hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs text-slate-300">
-                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span className="text-[11px] font-medium text-slate-400">CBIC 2026 Ready</span>
+              <div className={`glass-pill hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs border ${
+                isDark ? 'border-white/15 text-zinc-300' : 'border-zinc-200/90 text-zinc-800'
+              }`}>
+                <span className={`h-2 w-2 rounded-full animate-pulse ${isDark ? 'bg-white' : 'bg-zinc-950'}`}></span>
+                <span className="text-[11px] font-semibold">CBIC 2026 Ready</span>
               </div>
 
-              {/* Frosted Glass Material Switcher (Artwork Inspired) */}
-              <button
-                onClick={toggleGlassTheme}
-                className="glass-pill px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-xs"
-                title="Toggle between Obsidian Blue Glass and Frosted Crystal Glass"
-              >
-                {glassTheme === 'obsidian' ? (
-                  <>
-                    <span className="h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(56,189,248,0.8)] animate-pulse"></span>
-                    <span className="text-[11px] text-slate-200">Obsidian Glass</span>
-                  </>
-                ) : (
-                  <>
-                    <span className="h-2 w-2 rounded-full bg-blue-600 shadow-[0_0_8px_rgba(37,99,235,0.6)]"></span>
-                    <span className="text-[11px] font-bold text-slate-800">Crystal Glass</span>
-                  </>
-                )}
-              </button>
+              {/* Theme Switcher (iOS Segmented Control: Crystal vs Obsidian) */}
+              <div className="flex items-center p-1 rounded-full ios-segment" role="group" aria-label="Appearance">
+                <button
+                  type="button"
+                  onClick={() => setTheme('crystal')}
+                  aria-pressed={!isDark}
+                  className={`px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5 cursor-pointer ${
+                    !isDark
+                      ? 'ios-segment-thumb text-white'
+                      : 'text-zinc-400 hover:text-white'
+                  }`}
+                  title="Switch to Crystal Frosted Studio mode"
+                >
+                  <Sun className="h-3.5 w-3.5" />
+                  <span className="hidden md:inline text-[11px]">Crystal</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTheme('obsidian')}
+                  aria-pressed={isDark}
+                  className={`px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5 cursor-pointer ${
+                    isDark
+                      ? 'ios-segment-thumb text-white'
+                      : 'text-zinc-600 hover:text-zinc-950'
+                  }`}
+                  title="Switch to Obsidian Night mode"
+                >
+                  <Moon className="h-3.5 w-3.5" />
+                  <span className="hidden md:inline text-[11px]">Obsidian</span>
+                </button>
+              </div>
             </div>
 
           </header>
@@ -658,13 +874,13 @@ export default function App() {
               {activeClassifiedResult && (
                 <div className="relative animate-in fade-in zoom-in-95 duration-200">
                   <div className="flex items-center justify-between mb-2 px-1">
-                    <div className="flex items-center gap-2 text-xs font-bold text-slate-200">
-                      <Sparkles className="h-4 w-4 text-[#2f66ee] animate-pulse" />
+                    <div className={`flex items-center gap-2 text-xs font-bold leading-relaxed ${isDark ? 'text-white' : 'text-zinc-950'}`}>
+                      <Sparkles className={`h-4 w-4 animate-pulse ${isDark ? 'text-white' : 'text-zinc-950'}`} />
                       <span>Statutory Classification & Tax Breakdown</span>
                     </div>
                     <button
                       onClick={() => setActiveClassifiedResult(null)}
-                      className="px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white text-xs font-medium transition-colors"
+                      className={`px-2.5 py-1 rounded-full text-xs font-medium transition-colors cursor-pointer border leading-relaxed ${isDark ? 'bg-white/10 hover:bg-white/20 text-zinc-300 hover:text-white border-white/10' : 'bg-zinc-950 hover:bg-zinc-800 text-white border-zinc-950'}`}
                     >
                       ✕ Close Result
                     </button>
@@ -679,57 +895,59 @@ export default function App() {
                 </div>
               )}
 
-              {/* CLEAN, FOCUSED FINANCIAL BENTO GRID */}
+              {/* CLEAN, FOCUSED FINANCIAL BENTO GRID (Monochrome) */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 pt-2">
                 
                 {/* BENTO CARD 1: Indian GST Rate Slabs */}
-                <div className="glass-card rounded-2xl p-5 flex flex-col justify-between hover:border-white/15 transition-all">
+                <div className="glass-card rounded-2xl p-5 flex flex-col justify-between transition-all">
                   <div>
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">
+                      <span className={`text-xs font-bold uppercase tracking-wider ${inkTitle}`}>
                         Statutory GST Slabs
                       </span>
-                      <span className="text-[10px] text-blue-400 font-semibold">
+                      <span className={`text-[10px] font-semibold border px-2 py-0.5 rounded-full ${surfBadge}`}>
                         CBIC Schedule
                       </span>
                     </div>
-                    <p className="text-xs text-slate-400 mb-4 leading-relaxed">
-                      Standard Indian Goods and Services Tax slabs with representative categories:
+                    <p className={`text-xs mb-4 leading-relaxed ${inkBody}`}>
+                      GST 2.0 slabs w.e.f. 22-09-2025 (12% & 28% merged into 5% / 18%, plus 40% demerit):
                     </p>
 
                     <div className="grid grid-cols-3 gap-2 text-center text-xs">
                       {[
                         { rate: '0%', label: 'Exempt / Grains', desc: 'Fresh milk, unbranded grains' },
-                        { rate: '3%', label: 'Precious Metals', desc: 'Gold, silver, diamonds' },
-                        { rate: '5%', label: 'Essentials', desc: 'Edible oil, tea, rail travel' },
-                        { rate: '12%', label: 'Processed', desc: 'Butter, cheese, business class' },
-                        { rate: '18%', label: 'Standard', desc: 'IT services, consumer electronics' },
-                        { rate: '28%', label: 'Luxury & Sin', desc: 'Motorcars, aerated drinks' },
+                        { rate: '0.25%', label: 'Special Goods', desc: 'Rough diamonds, precious stones' },
+                        { rate: '3%', label: 'Precious Metals', desc: 'Gold, silver, jewellery' },
+                        { rate: '5%', label: 'Essentials', desc: 'Edible oil, tea, butter, medicines' },
+                        { rate: '18%', label: 'Standard', desc: 'IT services, small cars, cement' },
+                        { rate: '40%', label: 'Sin & Luxury', desc: 'Tobacco, big cars, aerated drinks' },
                       ].map((slab) => (
-                        <div
+                        <button
                           key={slab.rate}
+                          type="button"
                           onClick={() => handleQuickSlabTest(parseFloat(slab.rate), slab.label)}
-                          className="p-2 rounded-xl bg-[#12141c] hover:bg-[#1a1f2b] border border-slate-800/80 cursor-pointer transition-all group text-left"
+                          aria-label={`Test ${slab.rate} GST slab for ${slab.label}`}
+                          className={`p-2.5 rounded-xl border cursor-pointer transition-all group text-left w-full ${surfTile}`}
                         >
-                          <div className="font-extrabold text-sm text-white group-hover:text-blue-400 transition-colors">
+                          <div className={`font-extrabold text-sm transition-colors ${inkHeading}`}>
                             {slab.rate}
                           </div>
-                          <div className="text-[10px] font-semibold text-slate-300 truncate">
+                          <div className={`text-[10px] font-semibold truncate ${isDark ? 'text-zinc-200' : 'text-zinc-800'}`}>
                             {slab.label}
                           </div>
-                          <div className="text-[9px] text-slate-400 truncate mt-0.5">
+                          <div className={`text-[9px] truncate mt-0.5 ${inkBody}`}>
                             {slab.desc}
                           </div>
-                        </div>
+                        </button>
                       ))}
                     </div>
                   </div>
 
-                  <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
-                    <span className="text-slate-400 text-[11px]">Forward & Reverse Supported</span>
+                  <div className={`mt-4 pt-3 border-t flex items-center justify-between text-xs ${lineDivide}`}>
+                    <span className={`text-[11px] ${inkBody}`}>Forward & Reverse Supported</span>
                     <button
                       onClick={() => setActiveTab('calculator')}
-                      className="text-blue-400 hover:text-blue-300 font-semibold text-[11px] flex items-center gap-1"
+                      className={`hover:underline font-semibold text-[11px] flex items-center gap-1 cursor-pointer ${inkHeading}`}
                     >
                       <span>Custom Calculator</span>
                       <ArrowRight className="h-3 w-3" />
@@ -738,141 +956,93 @@ export default function App() {
                 </div>
 
                 {/* BENTO CARD 2: Direct Tax & Financial Utilities Hub */}
-                <div className="rounded-2xl p-5 bg-[#171b24] border border-slate-800/90 shadow-sm flex flex-col justify-between">
+                <div className="glass-card rounded-2xl p-5 flex flex-col justify-between transition-all">
                   <div>
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">
+                      <span className={`text-xs font-bold uppercase tracking-wider ${inkTitle}`}>
                         Personal Tax & Wealth
                       </span>
-                      <span className="text-[10px] text-emerald-400 font-semibold">
+                      <span className={`text-[10px] font-semibold border px-2 py-0.5 rounded-full ${surfBadge}`}>
                         Free Utilities
                       </span>
                     </div>
-                    <p className="text-xs text-slate-400 mb-3 leading-relaxed">
+                    <p className={`text-xs mb-3 leading-relaxed ${inkBody}`}>
                       Instant simulators for salary income tax, mutual fund wealth creation, and loan borrowing:
                     </p>
 
                     <div className="space-y-2">
-                      {/* ITR link */}
-                      <div
-                        onClick={() => setActiveTab('itr')}
-                        className="p-2.5 rounded-xl bg-[#12141c] hover:bg-[#1a1f2b] border border-slate-800/80 cursor-pointer transition-all flex items-center justify-between group"
-                      >
-                        <div className="flex items-center gap-2.5">
-                          <div className="p-1.5 rounded-lg bg-emerald-950/60 text-emerald-400 border border-emerald-800/40">
-                            <Landmark className="h-4 w-4" />
-                          </div>
-                          <div>
-                            <div className="font-semibold text-xs text-slate-200 group-hover:text-white">
-                              ITR Filing Simulator
-                            </div>
-                            <div className="text-[10px] text-slate-400">
-                              New (₹75k deduction) vs Old Regime
-                            </div>
-                          </div>
-                        </div>
-                        <ArrowRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-white" />
-                      </div>
-
-                      {/* SIP link */}
-                      <div
-                        onClick={() => setActiveTab('sip')}
-                        className="p-2.5 rounded-xl bg-[#12141c] hover:bg-[#1a1f2b] border border-slate-800/80 cursor-pointer transition-all flex items-center justify-between group"
-                      >
-                        <div className="flex items-center gap-2.5">
-                          <div className="p-1.5 rounded-lg bg-cyan-950/60 text-cyan-400 border border-cyan-800/40">
-                            <TrendingUp className="h-4 w-4" />
-                          </div>
-                          <div>
-                            <div className="font-semibold text-xs text-slate-200 group-hover:text-white">
-                              SIP & Mutual Fund Calculator
-                            </div>
-                            <div className="text-[10px] text-slate-400">
-                              Compounding, Step-Up & Inflation
-                            </div>
-                          </div>
-                        </div>
-                        <ArrowRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-white" />
-                      </div>
-
-                      {/* Loan EMI link */}
-                      <div
-                        onClick={() => setActiveTab('loan')}
-                        className="p-2.5 rounded-xl bg-[#12141c] hover:bg-[#1a1f2b] border border-slate-800/80 cursor-pointer transition-all flex items-center justify-between group"
-                      >
-                        <div className="flex items-center gap-2.5">
-                          <div className="p-1.5 rounded-lg bg-pink-950/60 text-pink-400 border border-pink-800/40">
-                            <PiggyBank className="h-4 w-4" />
-                          </div>
-                          <div>
-                            <div className="font-semibold text-xs text-slate-200 group-hover:text-white">
-                              Loan EMI & Amortization
-                            </div>
-                            <div className="text-[10px] text-slate-400">
-                              Home, Car & Personal loan schedules
-                            </div>
-                          </div>
-                        </div>
-                        <ArrowRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-white" />
-                      </div>
+                      {[
+                        { tab: 'itr' as NavTab, Icon: Landmark, title: 'ITR Filing Simulator', sub: 'New (₹75k deduction) vs Old Regime' },
+                        { tab: 'sip' as NavTab, Icon: TrendingUp, title: 'SIP & Mutual Fund Calculator', sub: 'Compounding, Step-Up & Inflation' },
+                        { tab: 'loan' as NavTab, Icon: CreditCard, title: 'Loan EMI & Amortization', sub: 'Home, Car & Personal loan schedules' },
+                        { tab: 'wealth' as NavTab, Icon: Wallet, title: 'Savings & Tax Tools', sub: 'PPF, Gratuity, HRA, FD/RD, NPS' },
+                      ].map(({ tab, Icon, title, sub }) => (
+                        <button
+                          key={tab}
+                          type="button"
+                          onClick={() => setActiveTab(tab)}
+                          className={`w-full p-2.5 rounded-xl border cursor-pointer transition-all flex items-center justify-between group text-left ${surfTile}`}
+                        >
+                          <span className="flex items-center gap-2.5">
+                            <span className="icon-tile">
+                              <Icon className="h-4 w-4" />
+                            </span>
+                            <span>
+                              <span className={`block font-semibold text-xs ${inkHeading}`}>
+                                {title}
+                              </span>
+                              <span className={`block text-[10px] ${inkBody}`}>
+                                {sub}
+                              </span>
+                            </span>
+                          </span>
+                          <ArrowRight className={`h-3.5 w-3.5 ${arrowTone}`} />
+                        </button>
+                      ))}
                     </div>
                   </div>
 
-                  <div className="mt-4 pt-3 border-t border-slate-800/80 text-[11px] text-slate-400">
+                  <div className={`mt-4 pt-3 border-t text-[11px] ${lineDivide} ${inkBody}`}>
                     Calculated using standard RBI & Indian Income Tax rules.
                   </div>
                 </div>
 
                 {/* BENTO CARD 3: Statutory Thresholds & Filing Calendar */}
-                <div className="rounded-2xl p-5 bg-[#171b24] border border-slate-800/90 shadow-sm flex flex-col justify-between">
+                <div className="glass-card rounded-2xl p-5 flex flex-col justify-between transition-all">
                   <div>
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">
+                      <span className={`text-xs font-bold uppercase tracking-wider ${inkTitle}`}>
                         Key Statutory Thresholds
                       </span>
-                      <span className="text-[10px] text-amber-400 font-semibold">
+                      <span className={`text-[10px] font-semibold border px-2 py-0.5 rounded-full ${surfBadge}`}>
                         FY 2025-26
                       </span>
                     </div>
 
                     <div className="space-y-2.5 text-xs">
-                      <div className="p-2.5 rounded-xl bg-[#12141c] border border-slate-800/80">
-                        <div className="flex justify-between items-center mb-1">
-                          <span className="text-slate-400 text-[11px]">GST Registration Limit</span>
-                          <span className="font-bold text-white">₹40L / ₹20L</span>
+                      {[
+                        { label: 'GST Registration Limit', value: '₹40L / ₹20L', desc: '₹40 Lakhs for Goods (normal states); ₹20 Lakhs for Services & Special Category states.' },
+                        { label: 'Composition Scheme', value: '₹1.50 Crore', desc: '1% for manufacturers/traders, 5% for restaurants, 6% for service providers (₹50L cap).' },
+                        { label: 'Mandatory E-Invoicing', value: '₹5.00 Crore', desc: 'Required for any B2B supply whose aggregate turnover exceeded ₹5 Crore in any preceding year.' },
+                      ].map((row) => (
+                        <div key={row.label} className={`p-2.5 rounded-xl border ${isDark ? 'bg-white/5 border-white/10' : 'bg-zinc-950/[0.04] border-zinc-950/10'}`}>
+                          <div className="flex justify-between items-center mb-1">
+                            <span className={`text-[11px] ${inkBody}`}>{row.label}</span>
+                            <span className={`font-bold ${inkHeading}`}>{row.value}</span>
+                          </div>
+                          <p className={`text-[10px] ${inkBody}`}>
+                            {row.desc}
+                          </p>
                         </div>
-                        <p className="text-[10px] text-slate-400">
-                          ₹40 Lakhs for Goods (normal states); ₹20 Lakhs for Services & Special Category states.
-                        </p>
-                      </div>
-
-                      <div className="p-2.5 rounded-xl bg-[#12141c] border border-slate-800/80">
-                        <div className="flex justify-between items-center mb-1">
-                          <span className="text-slate-400 text-[11px]">Composition Scheme</span>
-                          <span className="font-bold text-white">₹1.50 Crore</span>
-                        </div>
-                        <p className="text-[10px] text-slate-400">
-                          1% for manufacturers/traders, 5% for restaurants, 6% for service providers (₹50L cap).
-                        </p>
-                      </div>
-
-                      <div className="p-2.5 rounded-xl bg-[#12141c] border border-slate-800/80">
-                        <div className="flex justify-between items-center mb-1">
-                          <span className="text-slate-400 text-[11px]">Mandatory E-Invoicing</span>
-                          <span className="font-bold text-white">₹5.00 Crore</span>
-                        </div>
-                        <p className="text-[10px] text-slate-400">
-                          Required for any B2B supply whose aggregate turnover exceeded ₹5 Crore in any preceding year.
-                        </p>
-                      </div>
+                      ))}
                     </div>
                   </div>
 
-                  <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
-                    <span className="text-slate-400 text-[11px]">Due dates: GSTR-1 (11th), 3B (20th)</span>
+                  <div className={`mt-4 pt-3 border-t flex items-center justify-between text-xs ${lineDivide}`}>
+                    <span className={`text-[11px] ${inkBody}`}>Due dates: GSTR-1 (11th), 3B (20th)</span>
                     <button
                       onClick={() => setActiveTab('council')}
-                      className="text-amber-400 hover:text-amber-300 font-semibold text-[11px] flex items-center gap-1"
+                      className={`hover:underline font-semibold text-[11px] flex items-center gap-1 cursor-pointer ${inkHeading}`}
                     >
                       <span>Council Circulars</span>
                       <ArrowRight className="h-3 w-3" />
@@ -884,17 +1054,17 @@ export default function App() {
 
               {/* SAVED AUDITS QUICK STRIP (If user has saved audits) */}
               {savedAudits.length > 0 && (
-                <div className="rounded-2xl p-4 sm:p-5 bg-[#171b24] border border-slate-800/90">
+                <div className="glass-card rounded-2xl p-4 sm:p-5">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
-                      <BookmarkCheck className="h-4 w-4 text-emerald-400" />
-                      <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider">
+                      <BookmarkCheck className={`h-4 w-4 ${inkHeading}`} />
+                      <h2 className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-zinc-200' : 'text-zinc-800'}`}>
                         Recent Saved Computations ({savedAudits.length})
-                      </h4>
+                      </h2>
                     </div>
                     <button
                       onClick={() => setActiveTab('saved')}
-                      className="text-xs text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-1"
+                      className={`text-xs hover:underline font-semibold flex items-center gap-1 cursor-pointer ${inkHeading}`}
                     >
                       <span>View All Records</span>
                       <ArrowRight className="h-3 w-3" />
@@ -905,17 +1075,17 @@ export default function App() {
                     {savedAudits.slice(0, 3).map((audit) => (
                       <div
                         key={audit.id}
-                        className="p-3 rounded-xl bg-[#12141c] border border-slate-800 text-xs flex flex-col justify-between"
+                        className={`p-3 rounded-xl border text-xs flex flex-col justify-between ${isDark ? 'bg-white/5 border-white/10' : 'bg-zinc-950/[0.04] border-zinc-950/10'}`}
                       >
                         <div>
-                          <div className="font-semibold text-slate-200 truncate">{audit.product || audit.query}</div>
-                          <div className="text-[10px] text-slate-400 mt-0.5">
+                          <div className={`font-semibold truncate ${inkHeading}`}>{audit.product || audit.query}</div>
+                          <div className={`text-[10px] mt-0.5 ${inkBody}`}>
                             HSN {audit.hsnSac} • {audit.rate}% GST • {audit.transactionType}
                           </div>
                         </div>
-                        <div className="mt-2 pt-2 border-t border-slate-800/60 flex items-center justify-between">
-                          <span className="text-[11px] text-slate-400">Total Bill:</span>
-                          <span className="font-bold text-white font-mono">
+                        <div className={`mt-2 pt-2 border-t flex items-center justify-between ${lineDivide}`}>
+                          <span className={`text-[11px] ${inkBody}`}>Total Bill:</span>
+                          <span className={`font-bold font-mono ${inkHeading}`}>
                             ₹{audit.finalAmount?.toLocaleString('en-IN') || 0}
                           </span>
                         </div>
@@ -929,6 +1099,7 @@ export default function App() {
           )}
 
           {/* 2. DEDICATED GST TAX CALCULATOR */}
+          <Suspense fallback={activeTab === 'overview' ? null : <ViewFallback />}>
           {activeTab === 'calculator' && (
             <div className="animate-in fade-in duration-150">
               <AllInOneCalculator
@@ -971,6 +1142,24 @@ export default function App() {
             </div>
           )}
 
+          {/* 4b. BUSINESS COUNTER (EVERY TRADE) */}
+          {activeTab === 'business' && (
+            <div className="animate-in fade-in duration-150">
+              <BusinessHub
+                isClassifying={isClassifying}
+                onTryExample={(q) => handleSmartSearch(q, transactionDate)}
+                onOpenCalculator={() => setActiveTab('calculator')}
+              />
+            </div>
+          )}
+
+          {/* 4c. COMPLIANCE KIT */}
+          {activeTab === 'compliance' && (
+            <div className="animate-in fade-in duration-150">
+              <ComplianceKit />
+            </div>
+          )}
+
           {/* 5. GST COUNCIL BULLETINS */}
           {activeTab === 'council' && (
             <div className="animate-in fade-in duration-150">
@@ -996,6 +1185,13 @@ export default function App() {
           {activeTab === 'loan' && (
             <div className="animate-in fade-in duration-150">
               <LoanEmiCalculator />
+            </div>
+          )}
+
+          {/* 8b. SAVINGS & TAX TOOLS HUB */}
+          {activeTab === 'wealth' && (
+            <div className="animate-in fade-in duration-150">
+              <WealthToolsHub />
             </div>
           )}
 
@@ -1030,6 +1226,14 @@ export default function App() {
               <KnowledgeGuideView />
             </div>
           )}
+
+          {/* 12. GST ACADEMY */}
+          {activeTab === 'academy' && (
+            <div className="animate-in fade-in duration-150">
+              <GstAcademy />
+            </div>
+          )}
+          </Suspense>
 
         </main>
 

@@ -2,35 +2,38 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: 'Google Sans Flex', 'Google Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Google Sans Flex', 'Google Sans', system-ui, 'Segoe UI', Roboto, sans-serif;
 }
 
 *, ::before, ::after {
-  font-family: 'Google Sans Flex', 'Google Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Google Sans Flex', 'Google Sans', system-ui, 'Segoe UI', Roboto, sans-serif;
 }
 
 code, kbd, samp, pre, .font-mono, [class*="font-mono"] {
-  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, Consolas, 'JetBrains Mono', monospace !important;
 }
 
 @layer base {
   :root {
-    color-scheme: dark;
-    --font-sans: 'Google Sans Flex', 'Google Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color-scheme: dark light;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Google Sans Flex', 'Google Sans', system-ui, 'Segoe UI', Roboto, sans-serif;
+    /* iOS spring curve for liquid-feeling motion */
+    --spring: cubic-bezier(0.32, 0.72, 0, 1);
   }
   
   html {
-    background-color: #07090e;
+    background-color: #060709;
     color: #f8fafc;
-    font-family: 'Google Sans Flex', 'Google Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Google Sans Flex', 'Google Sans', system-ui, 'Segoe UI', Roboto, sans-serif;
   }
 
   body {
-    background-color: #07090e;
+    background-color: #060709;
     color: #f8fafc;
-    font-family: 'Google Sans Flex', 'Google Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-weight: 450;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Google Sans Flex', 'Google Sans', system-ui, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 500;
     font-optical-sizing: auto;
+    font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -40,266 +43,973 @@ code, kbd, samp, pre, .font-mono, [class*="font-mono"] {
   button, input, select, textarea {
     font-family: inherit;
   }
+
+  ::selection {
+    background-color: #09090b;
+    color: #ffffff;
+  }
 }
 
-/* Custom dark scrollbars */
+/* Custom pure monochrome scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #090b0e;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #252a36;
+  background: #cbd5e1;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3b4254;
+  background: #94a3b8;
 }
 
-/* Dark Hatch pattern for calendar block */
-.bg-hatch {
-  background-image: repeating-linear-gradient(
-    45deg,
-    rgba(51, 65, 85, 0.5),
-    rgba(51, 65, 85, 0.5) 4px,
-    transparent 4px,
-    transparent 8px
-  );
-}
-
-.bg-dot-grid {
-  background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-  background-size: 16px 16px;
-}
-
-/* Diagonal Luminous Light Rays (Inspired by 3D Glass Artwork) */
-.bg-light-rays {
-  background-image: repeating-linear-gradient(
-    -55deg,
-    rgba(56, 189, 248, 0.08) 0px,
-    rgba(56, 189, 248, 0.08) 60px,
-    transparent 60px,
-    transparent 200px
-  );
-}
-
-/* Glassmorphism Styles Inspired by Frosted Acrylic & 3D Glass Artwork */
+/* Apple Liquid Glass Material System — translucent, saturated, specular.
+   Base (Crystal) tokens below; Obsidian overrides follow. Every surface uses
+   a top-down light gradient (sheen), saturate() refraction boost, a bright
+   top inner edge + soft lower edge, and a diffused floor shadow. */
 .glass-container {
-  background: rgba(10, 25, 64, 0.72);
-  backdrop-filter: blur(28px);
-  -webkit-backdrop-filter: blur(28px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 
-    inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.28),
-    inset 0 0 50px 0 rgba(56, 189, 248, 0.05),
-    0 24px 64px -12px rgba(2, 6, 23, 0.7);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 22%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.38) 55%, rgba(255, 255, 255, 0.6));
+  backdrop-filter: blur(36px) saturate(180%);
+  -webkit-backdrop-filter: blur(36px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.8),
+    inset 0 -0.5px 0 0 rgba(255, 255, 255, 0.35),
+    0 24px 60px -12px rgba(15, 23, 42, 0.12);
 }
 
 .glass-sidebar {
-  background: rgba(8, 19, 50, 0.8);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 20%),
+    linear-gradient(135deg, rgba(248, 250, 252, 0.75), rgba(248, 250, 252, 0.45));
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border-right: 1px solid rgba(255, 255, 255, 0.6);
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 
-    inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.32),
-    0 16px 40px -10px rgba(2, 8, 30, 0.45);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0) 24%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.5) 55%, rgba(255, 255, 255, 0.68));
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.75),
+    inset 0 -0.5px 0 0 rgba(255, 255, 255, 0.3),
+    0 12px 32px -6px rgba(15, 23, 42, 0.08),
+    0 1px 3px 0 rgba(15, 23, 42, 0.04);
+  color: #09090b;
 }
 
 .glass-card:hover {
-  border-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 
-    inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.4),
-    0 20px 45px -10px rgba(14, 165, 233, 0.2);
+  border-color: rgba(255, 255, 255, 0.9);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.85),
+    inset 0 -0.5px 0 0 rgba(255, 255, 255, 0.35),
+    0 18px 44px -8px rgba(15, 23, 42, 0.12);
 }
 
 .glass-pill {
-  background: rgba(255, 255, 255, 0.14);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.24);
-  box-shadow: inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.35);
-  color: #ffffff;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 30%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.45));
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.7),
+    0 2px 6px rgba(15, 23, 42, 0.05);
+  color: #09090b;
 }
 
 .glass-pill:hover {
-  background: rgba(255, 255, 255, 0.22);
-  border-color: rgba(255, 255, 255, 0.35);
-  box-shadow: 
-    inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.45),
-    0 0 16px rgba(56, 189, 248, 0.25);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0) 30%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.6));
+  border-color: rgba(255, 255, 255, 0.85);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.8),
+    0 4px 12px rgba(15, 23, 42, 0.08);
 }
 
-/* Decorative Frosted Glass Capsule (Artwork Reference) */
-.glass-capsule-bg {
-  border-radius: 9999px;
-  background: linear-gradient(135deg, rgba(56, 189, 248, 0.18) 0%, rgba(37, 99, 235, 0.08) 50%, rgba(147, 197, 253, 0.04) 100%);
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
-  border: 1.5px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 
-    inset 0 2px 4px 0 rgba(255, 255, 255, 0.25),
-    inset 0 -2px 6px 0 rgba(56, 189, 248, 0.15),
-    0 20px 50px rgba(14, 165, 233, 0.08);
-}
-
-/* Universal Dark Mode Overrides for Child Components */
-.dark .bg-white {
-  background-color: #171b23 !important;
-  border-color: #272d3b !important;
+/* Obsidian Dark Theme Overrides */
+html.theme-obsidian,
+body.theme-obsidian,
+.theme-obsidian {
+  background-color: #060709 !important;
   color: #f8fafc !important;
 }
-.dark .bg-slate-50, 
-.dark .bg-slate-50\/70, 
-.dark .bg-slate-100 {
-  background-color: #11141c !important;
-  border-color: #272d3b !important;
-  color: #e2e8f0 !important;
-}
-.dark .border-slate-200, 
-.dark .border-slate-100, 
-.dark .border-slate-300 {
-  border-color: #272d3b !important;
-}
-.dark .text-slate-900, 
-.dark .text-slate-950, 
-.dark .text-slate-800 {
-  color: #f8fafc !important;
-}
-.dark .text-slate-700, 
-.dark .text-slate-600 {
-  color: #e2e8f0 !important;
-}
-.dark .text-slate-500, 
-.dark .text-slate-400 {
-  color: #a3b3c9 !important;
-  font-weight: 460;
-}
-.dark input:not([type="checkbox"]):not([type="radio"]), 
-.dark select, 
-.dark textarea {
-  background-color: #121620 !important;
-  color: #ffffff !important;
-  border-color: #2e3648 !important;
-  font-weight: 500;
-}
-.dark input::placeholder {
-  color: #8392a8 !important;
-}
-.dark option {
-  background-color: #121620;
-  color: #f8fafc;
-}
 
-/* ========================================================================== */
-/* FROSTED CRYSTAL LIGHT THEME (Directly inspired by 2nd Uploaded Image)      */
-/* ========================================================================== */
+/* Crystal Light Theme Base (explicit so html/body match the light canvas) */
+html.theme-crystal,
+body.theme-crystal,
 .theme-crystal {
-  background-color: #edf1f7 !important;
-  color: #1e293b !important;
+  background-color: #eef2f7 !important;
+  color: #09090b !important;
 }
 
-.theme-crystal .glass-container {
-  background: rgba(255, 255, 255, 0.72) !important;
-  backdrop-filter: blur(28px) !important;
-  -webkit-backdrop-filter: blur(28px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.95) !important;
-  box-shadow: 
+.theme-obsidian ::selection {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+.theme-obsidian ::-webkit-scrollbar-track {
+  background: #060709;
+}
+.theme-obsidian ::-webkit-scrollbar-thumb {
+  background: #272a30;
+}
+.theme-obsidian ::-webkit-scrollbar-thumb:hover {
+  background: #40444f;
+}
+
+.theme-obsidian .glass-container {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0) 22%),
+    linear-gradient(135deg, rgba(30, 34, 46, 0.88), rgba(14, 16, 22, 0.82) 60%, rgba(24, 28, 40, 0.86)) !important;
+  backdrop-filter: blur(36px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(36px) saturate(160%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.22),
+    inset 0 -0.5px 0 0 rgba(255, 255, 255, 0.06),
+    0 24px 64px -12px rgba(0, 0, 0, 0.9) !important;
+}
+
+.theme-obsidian .glass-sidebar {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0) 20%),
+    rgba(10, 11, 15, 0.72) !important;
+  backdrop-filter: blur(28px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(160%) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.theme-obsidian .glass-card {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0) 26%),
+    linear-gradient(135deg, rgba(38, 42, 56, 0.72), rgba(22, 25, 34, 0.62) 60%, rgba(30, 34, 48, 0.68)) !important;
+  backdrop-filter: blur(24px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.13) !important;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.2),
+    inset 0 -0.5px 0 0 rgba(255, 255, 255, 0.05),
+    0 16px 36px -8px rgba(0, 0, 0, 0.6) !important;
+  color: #f8fafc !important;
+}
+
+.theme-obsidian .glass-card:hover {
+  border-color: rgba(255, 255, 255, 0.24) !important;
+}
+
+.theme-obsidian .glass-pill {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0) 32%),
+    rgba(255, 255, 255, 0.07) !important;
+  backdrop-filter: blur(16px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(160%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.18),
+    0 2px 8px rgba(0, 0, 0, 0.3) !important;
+  color: #ffffff !important;
+}
+
+/* ========================================================================== */
+/* FONT VISIBILITY & HIGH CONTRAST TYPOGRAPHY SYSTEM                          */
+/* Ensures crisp, readable text across all devices and display resolutions    */
+/* ========================================================================== */
+/* Obsidian Dark Mode Contrast Booster */
+.theme-obsidian .text-zinc-500,
+.dark .text-zinc-500 {
+  color: #e4e4e7 !important; /* High contrast zinc-200 */
+}
+
+.theme-obsidian .text-zinc-400,
+.dark .text-zinc-400 {
+  color: #f4f4f5 !important; /* High contrast zinc-100 */
+}
+
+.theme-obsidian .text-zinc-600,
+.dark .text-zinc-600 {
+  color: #d4d4d8 !important; /* High contrast zinc-300 */
+}
+
+.theme-obsidian .text-zinc-300,
+.dark .text-zinc-300 {
+  color: #ffffff !important; /* Pure crisp white */
+}
+
+/* Crystal Light Mode Contrast Booster */
+.theme-crystal .text-zinc-400,
+html:not(.theme-obsidian):not(.dark) .text-zinc-400 {
+  color: #52525b !important; /* Deep zinc-600 */
+}
+
+.theme-crystal .text-zinc-500,
+html:not(.theme-obsidian):not(.dark) .text-zinc-500 {
+  color: #3f3f46 !important; /* Deep zinc-700 */
+}
+
+.theme-crystal .text-zinc-600,
+html:not(.theme-obsidian):not(.dark) .text-zinc-600 {
+  color: #27272a !important; /* Deep zinc-800 */
+}
+
+/* Slider Track & Thumb High Visibility */
+.theme-obsidian input[type="range"] {
+  background-color: #3f3f46 !important;
+  accent-color: #ffffff !important;
+}
+
+html:not(.theme-obsidian):not(.dark) input[type="range"] {
+  background-color: #cbd5e1 !important;
+  accent-color: #09090b !important;
+}
+
+/* ========================================================================== */
+/* CRYSTAL LIGHT-MODE VISIBILITY SAFEGUARDS (dark-only utilities on light)    */
+/* Components like SmartInputHero / Overview bento reuse dark pills & white   */
+/* text inside .glass-card. In crystal mode the card is white, so remap them  */
+/* to dark ink — except inside explicit dark surfaces where white must stay.  */
+/* ========================================================================== */
+.theme-crystal .glass-card .text-white {
+  color: #09090b !important;
+}
+.theme-crystal .glass-card .text-zinc-100 {
+  color: #27272a !important;
+}
+.theme-crystal .glass-card .text-zinc-200 {
+  color: #27272a !important;
+}
+.theme-crystal .glass-card .text-zinc-300 {
+  color: #3f3f46 !important;
+}
+.theme-crystal main h2.text-white {
+  color: #09090b !important;
+}
+
+/* Light-mode surface swaps for dark-only pills / tiles on white cards */
+.theme-crystal .glass-card .bg-white\/5 {
+  background-color: rgba(9, 9, 11, 0.04) !important;
+}
+.theme-crystal .glass-card .bg-white\/10 {
+  background-color: rgba(9, 9, 11, 0.06) !important;
+}
+.theme-crystal .glass-card .border-white\/10 {
+  border-color: rgba(9, 9, 11, 0.1) !important;
+}
+.theme-crystal .glass-card .border-white\/15,
+.theme-crystal .glass-card .border-white\/20 {
+  border-color: rgba(9, 9, 11, 0.16) !important;
+}
+.theme-crystal .glass-card .border-white\/25 {
+  border-color: rgba(9, 9, 11, 0.24) !important;
+}
+
+/* Restore crisp white ink inside intentional dark sub-surfaces */
+.theme-crystal .glass-card .bg-zinc-900 .text-white,
+.theme-crystal .glass-card .bg-zinc-950 .text-white,
+.theme-crystal .glass-card .bg-zinc-800 .text-white,
+.theme-crystal .glass-card .bg-black .text-white,
+.theme-crystal .glass-card [class*="bg-[#0e1014]"] .text-white,
+.theme-crystal .glass-card [class*="bg-zinc-900"] .text-white,
+.theme-crystal .glass-card [class*="bg-zinc-950"] .text-white {
+  color: #ffffff !important;
+}
+.theme-crystal .glass-card .bg-zinc-900 .text-zinc-300,
+.theme-crystal .glass-card .bg-zinc-950 .text-zinc-300,
+.theme-crystal .glass-card .bg-zinc-800 .text-zinc-300,
+.theme-crystal .glass-card [class*="bg-[#0e1014]"] .text-zinc-300 {
+  color: #e4e4e7 !important;
+}
+.theme-crystal .glass-card .bg-zinc-900 .text-zinc-400,
+.theme-crystal .glass-card .bg-zinc-950 .text-zinc-400,
+.theme-crystal .glass-card .bg-zinc-800 .text-zinc-400,
+.theme-crystal .glass-card [class*="bg-[#0e1014]"] .text-zinc-400 {
+  color: #d4d4d8 !important;
+}
+
+/* Restore white ink ON dark controls themselves (self-combo): primary dark
+   buttons and badges carry text-white on the same element — e.g. the
+   "Calculate ₹X" / "Compute" / "Check now" actions and RECOMMENDED pills.
+   Without this, the glass-card remap above turns their labels dark-on-dark. */
+.theme-crystal .glass-card button.bg-zinc-950.text-white,
+.theme-crystal .glass-card button.bg-zinc-900.text-white,
+.theme-crystal .glass-card button.bg-black.text-white,
+.theme-crystal .glass-card span.bg-zinc-950.text-white,
+.theme-crystal .glass-card span.bg-zinc-900.text-white,
+.theme-crystal .glass-card .bg-zinc-950.text-white,
+.theme-crystal .glass-card .bg-zinc-900.text-white,
+.theme-crystal main button.bg-zinc-950.text-white,
+.theme-crystal main button.bg-zinc-900.text-white,
+.theme-crystal main span.bg-zinc-950.text-white,
+.theme-crystal main span.bg-zinc-900.text-white {
+  color: #ffffff !important;
+}
+
+/* ========================================================================== */
+/* FONT PADDING vs VISIBILITY — Google Sans Flex anti-clip system             */
+/* Flex has tall ascenders/descenders; tight leading + truncate + thin pills  */
+/* clips glyphs (g, y, p, ₹). Give text breathing room without layout shift.  */
+/* ========================================================================== */
+
+/* Headings need optical padding so caps/descenders never touch edges */
+h1, h2, h3, h4 {
+  line-height: 1.35 !important;
+  padding-block: 0.08em;
+  overflow-wrap: break-word;
+}
+
+/* Tight leading is unsafe for this font — lift to readable minimum */
+.leading-tight {
+  line-height: 1.45 !important;
+}
+
+/* Pills / badges / chips: minimum block padding + relaxed leading */
+[class*="rounded-full"] {
+  line-height: 1.55 !important;
+  padding-block: max(0.28rem, 0.35em) !important;
+}
+[class*="rounded-full"].px-2,
+[class*="rounded-full"].px-2\.5,
+[class*="rounded-full"].px-3 {
+  padding-inline: 0.7em !important;
+}
+
+/* Tiny labels (9–11px) go invisible when cramped — open them up */
+.text-\[9px\],
+.text-\[10px\],
+.text-\[11px\] {
+  line-height: 1.65 !important;
+  letter-spacing: 0.015em;
+}
+
+/* Truncated labels clip descenders — reserve descender space */
+.truncate {
+  padding-bottom: 0.16em !important;
+  margin-bottom: -0.16em;
+  line-height: 1.6 !important;
+}
+
+/* Buttons & interactive tiles: keep label clear of padding edge */
+button {
+  line-height: 1.5;
+}
+button .truncate,
+div[role="button"] .truncate {
+  padding-bottom: 0.16em !important;
+}
+
+/* Form controls inherit breathing room for legibility */
+input, select, textarea {
+  line-height: 1.55 !important;
+}
+input::placeholder, textarea::placeholder {
+  line-height: 1.55;
+  opacity: 1;
+}
+
+/* Glass cards: never let long words push text into padding edge */
+.glass-card {
+  overflow-wrap: break-word;
+}
+.glass-card p, .glass-card span, .glass-card div {
+  text-wrap: pretty;
+}
+
+/* ========================================================================== */
+/* ICON SYSTEM — SF-symbols-like refinement over lucide                      */
+/* Thinner optical stroke, consistent sizing rhythm, liquid squircle tiles    */
+/* for feature glyphs. Applies app-wide with zero markup changes.            */
+/* ========================================================================== */
+
+/* Refine every lucide glyph toward Apple's lighter stroke weight.
+   (CSS wins over lucide's inline stroke-width="2" presentation attribute.) */
+.lucide {
+  stroke-width: 1.75;
+}
+
+/* Crisp 1px hairlines on the tiniest indicators so they never wash out */
+.h-2\.5.w-2\.5.lucide,
+.h-3.w-3.lucide {
+  stroke-width: 2;
+}
+
+/* Liquid app-icon tile for feature glyphs (28px squircle, dark enamel,
+   specular top edge). Identical in both themes — like iOS app icons. */
+.icon-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  height: 1.75rem;
+  width: 1.75rem;
+  border-radius: 0.625rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0) 45%),
+    linear-gradient(135deg, #3a3a3c, #0c0c0e);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.35),
+    0 2px 8px rgba(0, 0, 0, 0.28);
+}
+
+.icon-tile-lg {
+  height: 2.5rem;
+  width: 2.5rem;
+  border-radius: 0.8rem;
+}
+
+/* ========================================================================== */
+/* MOTION SYSTEM — dependency-free enter transitions + skeleton shimmer       */
+/* (The codebase uses animate-in/fade-in/zoom-in-95 classes; these keyframes  */
+/* give them real motion. Respects prefers-reduced-motion. Print excluded.)   */
+/* ========================================================================== */
+@keyframes ui-fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ui-fade-zoom {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes ui-shimmer {
+  from {
+    background-position: -400px 0;
+  }
+  to {
+    background-position: 400px 0;
+  }
+}
+
+@media screen {
+  .animate-in.fade-in {
+    animation: ui-fade-rise 0.32s var(--spring) both;
+  }
+  .animate-in.fade-in.zoom-in-95 {
+    animation: ui-fade-zoom 0.3s var(--spring) both;
+  }
+  /* Lazy-route skeleton bars */
+  .skeleton-bar {
+    height: 0.85rem;
+    border-radius: 9999px;
+    background: linear-gradient(
+      90deg,
+      rgba(128, 128, 128, 0.16) 25%,
+      rgba(128, 128, 128, 0.32) 50%,
+      rgba(128, 128, 128, 0.16) 75%
+    );
+    background-size: 800px 100%;
+    animation: ui-shimmer 1.4s linear infinite;
+  }
+  /* Silky theme switching (screen only — never affects print) */
+  body {
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-in.fade-in,
+  .animate-in.fade-in.zoom-in-95,
+  .skeleton-bar {
+    animation: none;
+  }
+  body {
+    transition: none;
+  }
+}
+
+/* ========================================================================== */
+/* iOS INTERACTION PATTERNS — springy controls, press physics, segmented bars */
+/* ========================================================================== */
+
+/* Tactile press on all buttons (iOS-style), spring back on release */
+@media screen {
+  button:not(:disabled) {
+    transition: transform 0.18s var(--spring), background-color 0.2s ease, box-shadow 0.25s ease, border-color 0.2s ease;
+  }
+  button:not(:disabled):active {
+    transform: scale(0.96);
+  }
+}
+
+/* Segmented control track (iOS UISegmentedControl):sunken liquid well */
+.ios-segment {
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0) 40%),
+    rgba(120, 120, 128, 0.16);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow:
+    inset 0 1px 3px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+.theme-obsidian .ios-segment {
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0) 45%),
+    rgba(118, 118, 128, 0.24) !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+  box-shadow:
+    inset 0 1px 3px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Segmented thumb: the sliding liquid selector */
+.ios-segment-thumb {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0) 35%),
+    linear-gradient(135deg, #3a3a3c, #101012);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 3px 8px rgba(0, 0, 0, 0.35),
+    0 0.5px 1.5px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s var(--spring), background-color 0.2s ease;
+}
+.theme-crystal .ios-segment-thumb,
+html:not(.theme-obsidian):not(.dark) .ios-segment-thumb {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.4) 40%),
+    linear-gradient(135deg, #2c2c2e, #09090b);
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+/* ========================================================================== */
+/* UNIFIED DESIGN LANGUAGE — single radius / rhythm / palette scale           */
+/* Canonical scale: page header = rounded-3xl (24px), card = rounded-2xl      */
+/* (16px), inner tile = rounded-xl (12px), pill/badge = full. Legacy          */
+/* rounded-[32px] and slate/amber one-offs are normalized here so every view  */
+/* shares the same monochrome glass rhythm in both themes.                    */
+/* Invoice paper (#printable-tax-invoice) is explicitly excluded below.       */
+/* ========================================================================== */
+
+/* 1. Radius unification: oversized one-offs collapse to the 24px header token */
+.rounded-\[32px\],
+.rounded-\[36px\] {
+  border-radius: 1.5rem !important;
+}
+
+/* 2. Page rhythm: every top-level view stacks sections with the same gap.
+   (Views that still use mb-8 / py-8 keep working; this only guarantees the
+   baseline for the canonical max-w-6xl + space-y-6 pages.) */
+main > div[class*="max-w-"] {
+  animation: none;
+}
+
+/* 3. Legacy slate ink → theme-aware ink (excludes invoice paper) */
+.theme-crystal :not(#printable-tax-invoice):not(#printable-tax-invoice *) > .text-slate-900,
+.theme-crystal .text-slate-900:not(#printable-tax-invoice *),
+.theme-crystal .text-slate-800:not(#printable-tax-invoice *) {
+  color: #09090b !important;
+}
+.theme-crystal .text-slate-700:not(#printable-tax-invoice *),
+.theme-crystal .text-slate-600:not(#printable-tax-invoice *) {
+  color: #3f3f46 !important;
+}
+.theme-crystal .text-slate-500:not(#printable-tax-invoice *),
+.theme-crystal .text-slate-400:not(#printable-tax-invoice *) {
+  color: #52525b !important;
+}
+
+.theme-obsidian .text-slate-900:not(#printable-tax-invoice *),
+.theme-obsidian .text-slate-800:not(#printable-tax-invoice *) {
+  color: #f8fafc !important;
+}
+.theme-obsidian .text-slate-700:not(#printable-tax-invoice *),
+.theme-obsidian .text-slate-600:not(#printable-tax-invoice *) {
+  color: #e4e4e7 !important;
+}
+.theme-obsidian .text-slate-500:not(#printable-tax-invoice *),
+.theme-obsidian .text-slate-400:not(#printable-tax-invoice *) {
+  color: #d4d4d8 !important;
+}
+
+/* 4. Legacy light surfaces → glass tokens (excludes invoice paper).
+   Buttons are excluded so inverted pills (white pill + dark ink, e.g. active
+   nav item, primary actions) keep their deliberate high-contrast look. */
+.theme-obsidian .bg-white:not(button):not(#printable-tax-invoice):not(#printable-tax-invoice *) {
+  background-color: rgba(22, 25, 34, 0.75) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #f8fafc !important;
+}
+.theme-obsidian .bg-slate-50:not(#printable-tax-invoice *),
+.theme-obsidian .bg-slate-100:not(#printable-tax-invoice *),
+.theme-obsidian .bg-zinc-100:not(#printable-tax-invoice *) {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #e4e4e7 !important;
+}
+.theme-obsidian .border-slate-200:not(#printable-tax-invoice *),
+.theme-obsidian .border-slate-300:not(#printable-tax-invoice *),
+.theme-obsidian .border-slate-100:not(#printable-tax-invoice *) {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+.theme-obsidian .border-zinc-300:not(#printable-tax-invoice *),
+.theme-obsidian .border-zinc-400:not(#printable-tax-invoice *) {
+  border-color: rgba(255, 255, 255, 0.16) !important;
+}
+
+/* Crystal: legacy pure-white cards pick up the glass-card elevation so they
+   sit flush with the frosted system instead of looking flat */
+.theme-crystal .bg-white.rounded-2xl:not(#printable-tax-invoice):not(#printable-tax-invoice *) {
+  box-shadow:
     inset 0 1px 2px 0 rgba(255, 255, 255, 1),
-    0 24px 60px -15px rgba(0, 0, 0, 0.07) !important;
+    0 12px 32px -6px rgba(15, 23, 42, 0.04),
+    0 1px 3px 0 rgba(15, 23, 42, 0.02) !important;
 }
 
-.theme-crystal .glass-sidebar {
-  background: rgba(246, 248, 252, 0.85) !important;
-  backdrop-filter: blur(24px) !important;
-  -webkit-backdrop-filter: blur(24px) !important;
-  border-right: 1px solid rgba(226, 232, 240, 0.9) !important;
+/* 5. Legacy eyebrow badges (bg-zinc-100 / bg-slate-100 pills) → glass-pill */
+.theme-obsidian .bg-zinc-100.text-zinc-900,
+.theme-obsidian .bg-slate-100.text-slate-800 {
+  background-color: rgba(255, 255, 255, 0.07) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+}
+.theme-obsidian .text-zinc-700:not(#printable-tax-invoice *) {
+  color: #e4e4e7 !important;
 }
 
-.theme-crystal .glass-card {
-  background: rgba(255, 255, 255, 0.75) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.95) !important;
-  box-shadow: 
-    inset 0 1px 2px 0 rgba(255, 255, 255, 1),
-    0 16px 36px -8px rgba(0, 0, 0, 0.05),
-    0 1px 3px 0 rgba(0, 0, 0, 0.02) !important;
+/* 6. Monochrome discipline: amber accent one-off → neutral (HSN search focus) */
+.focus\:ring-amber-500:focus {
+  --tw-ring-color: #09090b !important;
+}
+.theme-obsidian .focus\:ring-amber-500:focus {
+  --tw-ring-color: #ffffff !important;
 }
 
-.theme-crystal .glass-pill {
-  background: rgba(255, 255, 255, 0.88) !important;
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.95) !important;
-  box-shadow: 
-    inset 0 1px 1px 0 rgba(255, 255, 255, 1),
-    0 4px 14px rgba(0, 0, 0, 0.03) !important;
-  color: #1e293b !important;
+/* ========================================================================== */
+/* OBSIDIAN INK COMPLETION — dark utilities used as ink on dark glass         */
+/* Values/amounts authored as text-zinc-900/800/700 or text-black vanish on   */
+/* obsidian surfaces. Lighten them, except inside the invoice paper and       */
+/* inside deliberately-white controls (buttons/pills keep dark ink).          */
+/* ========================================================================== */
+.theme-obsidian .text-zinc-700:not(#printable-tax-invoice *),
+.theme-obsidian .text-zinc-800:not(#printable-tax-invoice *),
+.theme-obsidian .text-zinc-900:not(#printable-tax-invoice *),
+.theme-obsidian .text-black:not(#printable-tax-invoice *) {
+  color: #f4f4f5 !important;
+}
+.theme-obsidian .text-slate-700:not(#printable-tax-invoice *),
+.theme-obsidian .text-slate-800:not(#printable-tax-invoice *),
+.theme-obsidian .text-slate-900:not(#printable-tax-invoice *) {
+  color: #f4f4f5 !important;
 }
 
-.theme-crystal .glass-pill:hover {
-  background: rgba(255, 255, 255, 0.98) !important;
-  box-shadow: 
-    inset 0 1px 2px 0 rgba(255, 255, 255, 1),
-    0 6px 18px rgba(0, 0, 0, 0.05) !important;
+/* Restore dark ink where the surface itself stays white in obsidian:
+   primary buttons, active nav pill, toggled segments, light badges.
+   (The :not() keeps specificity above the generic remap above.) */
+.theme-obsidian button.bg-white .text-black:not(#printable-tax-invoice *),
+.theme-obsidian .bg-white.text-black:not(#printable-tax-invoice *),
+.theme-obsidian button.bg-white.text-black:not(#printable-tax-invoice *),
+.theme-obsidian .bg-white .text-black:not(#printable-tax-invoice *),
+.theme-obsidian button.bg-white .text-zinc-900:not(#printable-tax-invoice *),
+.theme-obsidian .bg-white .text-zinc-900:not(#printable-tax-invoice *),
+.theme-obsidian .bg-white .text-zinc-800:not(#printable-tax-invoice *),
+.theme-obsidian .bg-white .text-slate-900:not(#printable-tax-invoice *),
+.theme-obsidian .bg-white .text-slate-800:not(#printable-tax-invoice *) {
+  color: #09090b !important;
 }
 
-.theme-crystal .text-white,
-.theme-crystal .text-slate-100 {
-  color: #0f172a !important;
+/* Focus rings authored for light backgrounds must glow in obsidian */
+.theme-obsidian .focus-within\:ring-zinc-950:focus-within,
+.theme-obsidian .focus\:ring-zinc-950:focus,
+.theme-obsidian .focus\:ring-zinc-900:focus {
+  --tw-ring-color: #ffffff !important;
 }
 
-.theme-crystal .text-slate-200,
-.theme-crystal .text-slate-300 {
+/* ========================================================================== */
+/* AMBIENT MESH BACKDROP — soft studio blobs behind the frosted shell          */
+/* Crystal: misty gray-blue + blush wash with a slate floor (reference).      */
+/* Obsidian: faint cool glows over near-black. Screen only, behind content.   */
+/* ========================================================================== */
+@media screen {
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+  html.theme-crystal body::before,
+  body.theme-crystal::before {
+    background:
+      radial-gradient(640px 420px at 12% -4%, rgba(148, 163, 184, 0.4), transparent 62%),
+      radial-gradient(720px 520px at 88% 6%, rgba(243, 212, 212, 0.55), transparent 62%),
+      radial-gradient(900px 620px at 50% 108%, rgba(51, 65, 85, 0.4), transparent 64%),
+      linear-gradient(180deg, #f1f3f7 0%, #e9ecf1 55%, #e2e6ec 100%);
+  }
+  html.theme-obsidian body::before,
+  body.theme-obsidian::before {
+    background:
+      radial-gradient(640px 420px at 12% -4%, rgba(148, 163, 184, 0.09), transparent 62%),
+      radial-gradient(720px 520px at 88% 6%, rgba(190, 170, 180, 0.07), transparent 62%),
+      radial-gradient(900px 620px at 50% 108%, rgba(51, 65, 85, 0.22), transparent 64%),
+      linear-gradient(180deg, #07080b 0%, #060709 60%, #05060a 100%);
+  }
+}
+
+/* Reference-style controls: outline pill (adapts via currentColor) + solid badge */
+.btn-outline-pill {
+  border: 1.5px solid currentColor;
+  border-radius: 9999px;
+  background: transparent;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.badge-solid {
+  background: #ffffff;
+  color: #09090b;
+  border-radius: 9999px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
+}
+
+/* Compute action: idle (empty input) stays legible instead of washing out.
+   Solid muted tones per theme — never a translucent fade. */
+.compute-btn:disabled {
+  transform: none;
+}
+html.theme-crystal .glass-card button.compute-btn:disabled,
+html:not(.theme-obsidian):not(.dark) .glass-card button.compute-btn:disabled {
+  background-color: #e4e4e7 !important;
+  color: #52525b !important;
+  border: 1px solid rgba(9, 9, 11, 0.08) !important;
+}
+html.theme-obsidian .glass-card button.compute-btn:disabled {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  color: #d4d4d8 !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+/* ========================================================================== */
+/* CRYSTAL STUDIO-PANEL INVERSION — always-dark calculator/result panels      */
+/* AllInOneCalculator, SmartResultCard and studio tiles author dark-only      */
+/* surfaces (bg-[#0e1014], zinc-900/800 fills). In Crystal they become light  */
+/* liquid glass; selected white controls and black badges are preserved.      */
+/* ========================================================================== */
+.theme-crystal [class*="bg-[#0e1014]"] {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0) 24%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.5) 55%, rgba(255, 255, 255, 0.68)) !important;
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-color: rgba(9, 9, 11, 0.1) !important;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.75),
+    0 12px 32px -6px rgba(15, 23, 42, 0.08) !important;
+  color: #09090b !important;
+}
+.theme-crystal [class*="bg-[#0e1014]"] .text-white {
+  color: #09090b !important;
+}
+.theme-crystal [class*="bg-[#0e1014]"] .text-zinc-300 {
+  color: #3f3f46 !important;
+}
+.theme-crystal [class*="bg-[#0e1014]"] .text-zinc-400 {
+  color: #52525b !important;
+}
+.theme-crystal [class*="bg-[#0e1014]"] .bg-zinc-900,
+.theme-crystal [class*="bg-[#0e1014]"] .bg-zinc-900\/60,
+.theme-crystal [class*="bg-[#0e1014]"] .bg-zinc-900\/80,
+.theme-crystal [class*="bg-[#0e1014]"] .bg-zinc-800,
+.theme-crystal [class*="bg-[#0e1014]"] .bg-zinc-950 {
+  background-color: rgba(9, 9, 11, 0.05) !important;
+  border-color: rgba(9, 9, 11, 0.1) !important;
+}
+.theme-crystal [class*="bg-[#0e1014]"] .bg-white\/10 {
+  background-color: rgba(9, 9, 11, 0.06) !important;
+  border-color: rgba(9, 9, 11, 0.12) !important;
+}
+.theme-crystal [class*="bg-[#0e1014]"] .border-zinc-800,
+.theme-crystal [class*="bg-[#0e1014]"] .border-zinc-700,
+.theme-crystal [class*="bg-[#0e1014]"] .border-white\/10,
+.theme-crystal [class*="bg-[#0e1014]"] .border-white\/15,
+.theme-crystal [class*="bg-[#0e1014]"] .border-white\/20 {
+  border-color: rgba(9, 9, 11, 0.12) !important;
+}
+.theme-crystal [class*="bg-[#0e1014]"] .border-white {
+  border-color: rgba(9, 9, 11, 0.55) !important;
+}
+.theme-crystal [class*="bg-[#0e1014]"] .divide-zinc-800 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgba(9, 9, 11, 0.1) !important;
+}
+.theme-crystal [class*="bg-[#0e1014]"] .focus\:border-white:focus {
+  border-color: #09090b !important;
+}
+.theme-crystal [class*="bg-[#0e1014]"] .hover\:text-white:hover {
+  color: #09090b !important;
+}
+.theme-crystal [class*="bg-[#0e1014]"] .hover\:bg-zinc-800:hover,
+.theme-crystal [class*="bg-[#0e1014]"] .hover\:bg-zinc-700:hover {
+  background-color: rgba(9, 9, 11, 0.09) !important;
+}
+/* Distribution bar: invert the gray ramp so segments read on light glass */
+.theme-crystal [class*="bg-[#0e1014]"] .dist-bar {
+  filter: invert(0.92);
+}
+/* Preserve deliberate dark-on-light controls inside inverted panels */
+.theme-crystal [class*="bg-[#0e1014]"] button.bg-white,
+.theme-crystal [class*="bg-[#0e1014]"] span.bg-white {
+  background-color: #ffffff !important;
+}
+.theme-crystal [class*="bg-[#0e1014]"] .bg-black {
+  background-color: #09090b !important;
+}
+.theme-crystal [class*="bg-[#0e1014]"] .bg-black.text-white {
+  color: #ffffff !important;
+}
+
+/* ========================================================================== */
+/* STATUTORY TAX INVOICE SHEET (Always Pristine, Crisp Paper Document)        */
+/* ========================================================================== */
+#printable-tax-invoice,
+#printable-tax-invoice.bg-white {
+  background-color: #ffffff !important;
+  color: #09090b !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+#printable-tax-invoice * {
+  color-scheme: light !important;
+}
+
+#printable-tax-invoice .bg-white {
+  background-color: #ffffff !important;
+  color: #09090b !important;
+}
+
+#printable-tax-invoice .bg-zinc-50,
+#printable-tax-invoice .bg-slate-50,
+#printable-tax-invoice [class*="bg-zinc-50"],
+#printable-tax-invoice [class*="bg-slate-50"] {
+  background-color: #f8fafc !important;
+  color: #09090b !important;
+}
+
+#printable-tax-invoice .bg-zinc-100,
+#printable-tax-invoice .bg-slate-100 {
+  background-color: #f1f5f9 !important;
+  color: #09090b !important;
+}
+
+#printable-tax-invoice .bg-zinc-900,
+#printable-tax-invoice .bg-slate-900 {
+  background-color: #09090b !important;
+  color: #ffffff !important;
+}
+
+#printable-tax-invoice .text-zinc-950,
+#printable-tax-invoice .text-zinc-900,
+#printable-tax-invoice .text-slate-950,
+#printable-tax-invoice .text-slate-900,
+#printable-tax-invoice .text-slate-800 {
+  color: #09090b !important;
+}
+
+#printable-tax-invoice .text-zinc-700,
+#printable-tax-invoice .text-zinc-800,
+#printable-tax-invoice .text-slate-700,
+#printable-tax-invoice .text-slate-600 {
   color: #334155 !important;
 }
 
-.theme-crystal .text-slate-400 {
+#printable-tax-invoice .text-zinc-500,
+#printable-tax-invoice .text-slate-500,
+#printable-tax-invoice .text-zinc-400,
+#printable-tax-invoice .text-slate-400 {
   color: #64748b !important;
 }
 
-.theme-crystal input:not([type="checkbox"]):not([type="radio"]), 
-.theme-crystal select, 
-.theme-crystal textarea {
-  background-color: rgba(255, 255, 255, 0.9) !important;
-  color: #0f172a !important;
-  border-color: rgba(226, 232, 240, 0.9) !important;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+#printable-tax-invoice .border-zinc-300,
+#printable-tax-invoice .border-slate-300 {
+  border-color: #cbd5e1 !important;
 }
 
-.theme-crystal input::placeholder {
-  color: #94a3b8 !important;
+#printable-tax-invoice .border-zinc-200,
+#printable-tax-invoice .border-slate-200 {
+  border-color: #e2e8f0 !important;
 }
 
-.theme-crystal option {
-  background-color: #ffffff;
-  color: #0f172a;
+#printable-tax-invoice input,
+#printable-tax-invoice textarea,
+#printable-tax-invoice select {
+  background-color: transparent !important;
+  color: #09090b !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+#printable-tax-invoice input:hover,
+#printable-tax-invoice textarea:hover,
+#printable-tax-invoice select:hover {
+  background-color: rgba(0, 0, 0, 0.03) !important;
+  border-color: #cbd5e1 !important;
+}
+
+#printable-tax-invoice input:focus,
+#printable-tax-invoice textarea:focus,
+#printable-tax-invoice select:focus {
+  background-color: #ffffff !important;
+  color: #09090b !important;
+  border-color: #09090b !important;
+  outline: none !important;
+  box-shadow: 0 0 0 1px #09090b !important;
+}
+
+#printable-tax-invoice select option {
+  background-color: #ffffff !important;
+  color: #09090b !important;
 }
 
 /* ========================================================================== */
-/* DEDICATED INVOICE PRINT STYLESHEET (Prints ONLY the Tax Invoice Sheet)     */
+/* DEDICATED INVOICE PRINT STYLESHEET (Statutory A4 Sheet Print Optimization) */
 /* ========================================================================== */
 @media print {
-  /* Set global white paper print canvas */
+  @page {
+    size: A4 portrait;
+    margin: 8mm 10mm;
+  }
+
+  *, *::before, *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
   html, body {
     background: #ffffff !important;
     color: #000000 !important;
     margin: 0 !important;
     padding: 0 !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
+    font-size: 11px !important;
+    line-height: 1.3 !important;
+    width: 100% !important;
   }
 
-  /* Completely hide all application UI elements */
+  /* Hide all dashboard chrome, navigation, background effects and buttons */
   aside,
   header,
   nav,
@@ -308,21 +1018,23 @@ code, kbd, samp, pre, .font-mono, [class*="font-mono"] {
   [aria-label="Site Navigation"],
   [aria-hidden="true"],
   .glass-sidebar,
-  .glass-capsule-bg,
   .print\:hidden,
+  [class*="print:hidden"],
   [class*="pointer-events-none"] {
     display: none !important;
     visibility: hidden !important;
     height: 0 !important;
     width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
     overflow: hidden !important;
   }
 
-  /* Remove constraints from layout parents */
   div[class*="min-h-screen"],
   .glass-container,
   main,
-  div[class*="max-w-5xl"] {
+  div[class*="max-w-5xl"],
+  div[class*="max-w-7xl"] {
     display: block !important;
     position: static !important;
     background: #ffffff !important;
@@ -335,23 +1047,22 @@ code, kbd, samp, pre, .font-mono, [class*="font-mono"] {
     overflow: visible !important;
   }
 
-  /* Force display of ONLY the Invoice Paper Sheet */
   #printable-tax-invoice {
     display: block !important;
     visibility: visible !important;
     position: relative !important;
-    left: 0 !important;
-    top: 0 !important;
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 auto !important;
     padding: 0 !important;
     background: #ffffff !important;
     color: #000000 !important;
-    border: 1px solid #94a3b8 !important;
+    border: 1.5px solid #000000 !important;
+    border-radius: 0 !important;
     box-shadow: none !important;
     page-break-after: avoid !important;
     page-break-inside: avoid !important;
+    break-inside: avoid !important;
   }
 
   #printable-tax-invoice * {
@@ -359,35 +1070,78 @@ code, kbd, samp, pre, .font-mono, [class*="font-mono"] {
     color: #000000 !important;
     text-shadow: none !important;
     box-shadow: none !important;
-    border-color: #cbd5e1 !important;
+    border-color: #94a3b8 !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
+  #printable-tax-invoice div[class*="p-6"] {
+    padding: 12px 16px !important;
+  }
+
+  #printable-tax-invoice div[class*="p-5"] {
+    padding: 10px 14px !important;
+  }
+
+  #printable-tax-invoice div[class*="p-4"] {
+    padding: 8px 12px !important;
+  }
+
+  #printable-tax-invoice table {
+    width: 100% !important;
+    font-size: 9.5px !important;
+    border-collapse: collapse !important;
+  }
+
+  #printable-tax-invoice th,
+  #printable-tax-invoice td {
+    padding: 4px 6px !important;
+    border-color: #cbd5e1 !important;
+  }
+
+  #printable-tax-invoice tr {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  #printable-tax-invoice input,
+  #printable-tax-invoice textarea,
+  #printable-tax-invoice select {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    font-size: inherit !important;
+    color: #000000 !important;
+    font-weight: inherit !important;
+  }
+
+  #printable-tax-invoice .bg-zinc-900,
   #printable-tax-invoice .bg-slate-900 {
-    background-color: #0f172a !important;
+    background-color: #09090b !important;
     color: #ffffff !important;
   }
 
+  #printable-tax-invoice .bg-zinc-100,
   #printable-tax-invoice .bg-slate-100,
+  #printable-tax-invoice .bg-zinc-50,
   #printable-tax-invoice .bg-slate-50 {
     background-color: #f8fafc !important;
   }
 
+  #printable-tax-invoice .text-zinc-950,
+  #printable-tax-invoice .text-zinc-900,
+  #printable-tax-invoice .text-slate-950,
   #printable-tax-invoice .text-slate-900,
-  #printable-tax-invoice .text-slate-800,
-  #printable-tax-invoice .text-slate-700 {
-    color: #0f172a !important;
+  #printable-tax-invoice .text-slate-800 {
+    color: #000000 !important;
+    font-weight: 700 !important;
   }
 
+  #printable-tax-invoice .text-zinc-500,
+  #printable-tax-invoice .text-zinc-600,
   #printable-tax-invoice .text-slate-500,
   #printable-tax-invoice .text-slate-600 {
-    color: #475569 !important;
-  }
-
-  @page {
-    size: A4 portrait;
-    margin: 8mm;
+    color: #334155 !important;
   }
 }
-

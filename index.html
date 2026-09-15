@@ -1,19 +1,61 @@
 <!doctype html>
-<html lang="en" class="dark" style="background-color: #0c0e12; color-scheme: dark;">
+<html lang="en" class="theme-obsidian">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Smart TAX India - GST, CGST, SGST & Financial Utility</title>
-    <meta name="description" content="Smart TAX India — A utility designed for GST, CGST, and SGST calculations based on CBIC schedules. Features invoice builder with HSN/SAC classification, detailed tax slabs, compliance handbooks, ITR simulator, SIP/mutual funds, loan EMI calculator, and FY 2025–26 statutory thresholds." />
-    <meta property="og:title" content="Smart TAX India - GST, CGST, SGST & Financial Utility" />
-    <meta property="og:description" content="Smart TAX India — A utility designed for GST, CGST, and SGST calculations based on CBIC schedules. Free, fast, and no-login." />
+    <title>PaisaCalc - Free GST Calculator, Tax Tools & Financial Utility India</title>
+    <meta name="description" content="PaisaCalc — every rupee, calculated free. GST, CGST & SGST calculator per CBIC schedules, invoice builder, HSN/SAC explorer, ITR, SIP, PPF & loan tools. Free, fast, no login." />
+    <meta property="og:title" content="PaisaCalc - Free GST Calculator & Money Tools India" />
+    <meta property="og:description" content="PaisaCalc — every rupee, calculated free. GST tools, invoices, ITR, SIP & savings calculators. Free, fast, and no-login." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#060709" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="PaisaCalc" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" type="image/svg+xml" href="./icons/icon.svg" />
+    <link rel="apple-touch-icon" href="./icons/icon.svg" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "PaisaCalc",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
+      "description": "Free GST, CGST & SGST calculator, tax invoice builder, HSN/SAC explorer, ITR/SIP/loan tools and GST academy. No login."
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What are the GST slabs in India after GST 2.0?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Since 22 September 2025, goods mostly fall in 5% and 18% slabs with a 40% demerit rate for sin and luxury goods. Gold jewellery is 3%." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between CGST, SGST and IGST?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Intra-state supplies split into CGST (Centre) plus SGST (State); inter-state supplies use a single IGST collected by the Centre." }
+        },
+        {
+          "@type": "Question",
+          "name": "Who must register for GST in India?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Goods sellers above ₹40 lakh turnover (₹20 lakh in special states) and service providers above ₹20 lakh, plus inter-state suppliers and e-commerce sellers at any turnover." }
+        }
+      ]
+    }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,100..1000&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   </head>
-  <body>
+  <body style="background-color:#060709">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

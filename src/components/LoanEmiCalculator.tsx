@@ -86,53 +86,53 @@ export const LoanEmiCalculator: React.FC = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto space-y-6 text-white animate-in fade-in">
-      {/* Header */}
-      <div className="p-6 rounded-3xl bg-[#171b24] border border-slate-800 shadow-md">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1e2330] text-blue-400 text-xs font-semibold mb-2 border border-slate-700">
-          <CreditCard className="h-3.5 w-3.5 text-blue-400" />
+    <div className="max-w-6xl mx-auto space-y-6 animate-in fade-in">
+      {/* Header Card */}
+      <div className="p-6 sm:p-7 rounded-[32px] glass-card shadow-sm">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-pill text-xs font-semibold mb-3">
+          <CreditCard className="h-3.5 w-3.5" />
           <span>India Banking & RBI Formula Engine</span>
         </div>
-        <h2 className="text-2xl font-extrabold tracking-tight text-white">
+        <h2 className="text-2xl sm:text-3xl font-black tracking-tight">
           Loan EMI, Principal & Interest Calculator
         </h2>
-        <p className="text-xs text-slate-400 mt-1 max-w-2xl">
+        <p className="text-xs sm:text-sm text-zinc-500 mt-1.5 max-w-2xl leading-relaxed">
           Compute accurate monthly EMIs for Home, Car, and Personal Loans in India. Inspect full amortization schedules and find out how much interest you pay to the bank.
         </p>
 
         {/* Quick Presets */}
-        <div className="flex flex-wrap items-center gap-2 mt-4 pt-3 border-t border-slate-800/80">
-          <span className="text-xs text-slate-400">Quick Presets:</span>
+        <div className="flex flex-wrap items-center gap-2 mt-5 pt-4 border-t border-zinc-200/80">
+          <span className="text-xs text-zinc-500 font-medium">Quick Presets:</span>
           <button
             type="button"
             onClick={() => handlePreset('home')}
-            className="px-3 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold flex items-center gap-1.5 transition-colors"
+            className="px-3.5 py-1.5 rounded-full glass-pill text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
           >
-            <Home className="h-3 w-3 text-blue-400" />
+            <Home className="h-3.5 w-3.5" />
             <span>Home Loan (50L, 8.5%, 20Y)</span>
           </button>
           <button
             type="button"
             onClick={() => handlePreset('car')}
-            className="px-3 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold flex items-center gap-1.5 transition-colors"
+            className="px-3.5 py-1.5 rounded-full glass-pill text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
           >
-            <Car className="h-3 w-3 text-emerald-400" />
+            <Car className="h-3.5 w-3.5" />
             <span>Car Loan (10L, 9.2%, 5Y)</span>
           </button>
           <button
             type="button"
             onClick={() => handlePreset('personal')}
-            className="px-3 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold flex items-center gap-1.5 transition-colors"
+            className="px-3.5 py-1.5 rounded-full glass-pill text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
           >
-            <User className="h-3 w-3 text-amber-400" />
+            <User className="h-3.5 w-3.5" />
             <span>Personal Loan (5L, 12.5%, 3Y)</span>
           </button>
           <button
             type="button"
             onClick={() => handlePreset('edu')}
-            className="px-3 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold flex items-center gap-1.5 transition-colors"
+            className="px-3.5 py-1.5 rounded-full glass-pill text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
           >
-            <GraduationCap className="h-3 w-3 text-purple-400" />
+            <GraduationCap className="h-3.5 w-3.5" />
             <span>Education (15L, 10%, 7Y)</span>
           </button>
         </div>
@@ -141,12 +141,12 @@ export const LoanEmiCalculator: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Controls Column (7 Cols) */}
         <div className="lg:col-span-7 space-y-5">
-          <div className="p-6 rounded-3xl bg-[#171b24] border border-slate-800 shadow-sm space-y-5">
+          <div className="p-6 sm:p-7 rounded-[32px] glass-card shadow-sm space-y-6">
             {/* Loan Amount */}
             <div>
               <div className="flex items-center justify-between mb-2 text-xs">
-                <span className="font-semibold text-slate-300">Loan Amount (Principal)</span>
-                <div className="flex items-center gap-1.5 px-3 py-1 bg-[#12141c] border border-slate-700 rounded-xl font-mono text-white font-bold text-sm">
+                <span className="font-bold text-sm">Loan Amount (Principal)</span>
+                <div className="flex items-center gap-1.5 px-3.5 py-1.5 glass-pill rounded-full font-mono font-bold text-sm">
                   <span>₹</span>
                   <span>{loanAmount.toLocaleString('en-IN')}</span>
                 </div>
@@ -158,9 +158,9 @@ export const LoanEmiCalculator: React.FC = () => {
                 step="50000"
                 value={loanAmount}
                 onChange={(e) => setLoanAmount(Number(e.target.value))}
-                className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-[#2f66ee]"
+                className="w-full h-2.5 bg-zinc-200 rounded-full appearance-none cursor-pointer accent-zinc-950"
               />
-              <div className="flex justify-between text-[10px] text-slate-500 mt-1">
+              <div className="flex justify-between text-[11px] text-zinc-500 font-medium mt-1.5">
                 <span>₹50,000</span>
                 <span>₹50 Lakhs</span>
                 <span>₹1 Crore</span>
@@ -171,8 +171,8 @@ export const LoanEmiCalculator: React.FC = () => {
             {/* Interest Rate */}
             <div>
               <div className="flex items-center justify-between mb-2 text-xs">
-                <span className="font-semibold text-slate-300">Annual Interest Rate (% p.a.)</span>
-                <div className="flex items-center gap-1 px-3 py-1 bg-[#12141c] border border-slate-700 rounded-xl font-mono text-blue-400 font-bold text-sm">
+                <span className="font-bold text-sm">Annual Interest Rate (% p.a.)</span>
+                <div className="flex items-center gap-1 px-3.5 py-1.5 glass-pill rounded-full font-mono font-bold text-sm">
                   <span>{interestRate}%</span>
                 </div>
               </div>
@@ -183,9 +183,9 @@ export const LoanEmiCalculator: React.FC = () => {
                 step="0.1"
                 value={interestRate}
                 onChange={(e) => setInterestRate(Number(e.target.value))}
-                className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-[#2f66ee]"
+                className="w-full h-2.5 bg-zinc-200 rounded-full appearance-none cursor-pointer accent-zinc-950"
               />
-              <div className="flex justify-between text-[10px] text-slate-500 mt-1">
+              <div className="flex justify-between text-[11px] text-zinc-500 font-medium mt-1.5">
                 <span>7.5% (SBI Home)</span>
                 <span>9.0% (Auto Loan)</span>
                 <span>12.5% (Personal)</span>
@@ -196,9 +196,9 @@ export const LoanEmiCalculator: React.FC = () => {
             {/* Tenure Years */}
             <div>
               <div className="flex items-center justify-between mb-2 text-xs">
-                <span className="font-semibold text-slate-300">Loan Tenure</span>
-                <div className="flex items-center gap-1 px-3 py-1 bg-[#12141c] border border-slate-700 rounded-xl font-mono text-amber-400 font-bold text-sm">
-                  <span>{tenureYears} Years ({totalMonths} Months)</span>
+                <span className="font-bold text-sm">Loan Tenure</span>
+                <div className="flex items-center gap-1 px-3.5 py-1.5 glass-pill rounded-full font-mono font-bold text-sm">
+                  <span>{tenureYears} Years ({totalMonths} Mos)</span>
                 </div>
               </div>
               <input 
@@ -208,9 +208,9 @@ export const LoanEmiCalculator: React.FC = () => {
                 step="1"
                 value={tenureYears}
                 onChange={(e) => setTenureYears(Number(e.target.value))}
-                className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-[#2f66ee]"
+                className="w-full h-2.5 bg-zinc-200 rounded-full appearance-none cursor-pointer accent-zinc-950"
               />
-              <div className="flex justify-between text-[10px] text-slate-500 mt-1">
+              <div className="flex justify-between text-[11px] text-zinc-500 font-medium mt-1.5">
                 <span>1 Year</span>
                 <span>10 Years</span>
                 <span>20 Years</span>
@@ -222,70 +222,72 @@ export const LoanEmiCalculator: React.FC = () => {
 
         {/* Output Column (5 Cols) */}
         <div className="lg:col-span-5 space-y-5">
-          <div className="p-6 rounded-3xl bg-[#171b24] border border-slate-800 shadow-sm space-y-5">
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-              EMI & Interest Summary
-            </h3>
-
-            {/* Big Monthly EMI */}
+          <div className="p-6 sm:p-7 rounded-[32px] glass-card shadow-sm space-y-6 flex flex-col justify-between">
             <div>
-              <div className="text-xs text-slate-400">Monthly Loan EMI</div>
-              <div className="text-3xl sm:text-4xl font-extrabold text-[#2f66ee] font-mono tracking-tight mt-1">
-                {formatIndianCurrency(Math.round(emi))}
-              </div>
-              <div className="text-xs text-slate-400 mt-1">
-                Per month for {totalMonths} instalments
-              </div>
-            </div>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-3">
+                EMI & Interest Summary
+              </h3>
 
-            {/* Visual Ratio Bar: Principal vs Interest */}
-            <div className="space-y-1.5">
-              <div className="h-4 w-full rounded-full bg-slate-800 overflow-hidden flex">
-                <div 
-                  style={{ width: `${principalPercent}%` }} 
-                  className="bg-emerald-500 transition-all duration-500" 
-                  title={`Principal: ${principalPercent.toFixed(1)}%`}
-                />
-                <div 
-                  style={{ width: `${interestPercent}%` }} 
-                  className="bg-[#ff5b35] transition-all duration-500" 
-                  title={`Interest: ${interestPercent.toFixed(1)}%`}
-                />
+              {/* Monthly EMI */}
+              <div className="mb-5">
+                <div className="text-xs font-medium text-zinc-500">Monthly Loan EMI</div>
+                <div className="text-4xl sm:text-5xl font-black font-mono tracking-tight mt-1">
+                  {formatIndianCurrency(Math.round(emi))}
+                </div>
+                <div className="text-xs text-zinc-500 mt-1 font-medium">
+                  Per month for {totalMonths} instalments
+                </div>
               </div>
-              <div className="flex justify-between text-[11px]">
-                <span className="flex items-center gap-1.5 text-emerald-400 font-medium">
-                  <span className="h-2 w-2 rounded-full bg-emerald-500"></span>
-                  Principal ({principalPercent.toFixed(1)}%)
-                </span>
-                <span className="flex items-center gap-1.5 text-[#ff5b35] font-medium">
-                  <span className="h-2 w-2 rounded-full bg-[#ff5b35]"></span>
-                  Interest ({interestPercent.toFixed(1)}%)
-                </span>
-              </div>
-            </div>
 
-            {/* Metrics Breakdown */}
-            <div className="p-4 rounded-2xl bg-[#12141c] border border-slate-800 space-y-2.5 text-xs">
-              <div className="flex justify-between text-slate-400">
-                <span>Principal Amount:</span>
-                <span className="font-mono text-white font-bold">{formatIndianCurrency(principal)}</span>
+              {/* Visual Ratio Bar: Principal vs Interest */}
+              <div className="space-y-2 mb-6">
+                <div className="h-3.5 w-full rounded-full bg-zinc-200 overflow-hidden flex border border-zinc-300/80">
+                  <div 
+                    style={{ width: `${principalPercent}%` }} 
+                    className="bg-zinc-950 transition-all duration-500" 
+                    title={`Principal: ${principalPercent.toFixed(1)}%`}
+                  />
+                  <div 
+                    style={{ width: `${interestPercent}%` }} 
+                    className="bg-zinc-400 transition-all duration-500" 
+                    title={`Interest: ${interestPercent.toFixed(1)}%`}
+                  />
+                </div>
+                <div className="flex justify-between text-xs font-medium">
+                  <span className="flex items-center gap-1.5">
+                    <span className="h-2.5 w-2.5 rounded-full bg-zinc-950"></span>
+                    Principal ({principalPercent.toFixed(1)}%)
+                  </span>
+                  <span className="flex items-center gap-1.5 text-zinc-500">
+                    <span className="h-2.5 w-2.5 rounded-full bg-zinc-400"></span>
+                    Interest ({interestPercent.toFixed(1)}%)
+                  </span>
+                </div>
               </div>
-              <div className="flex justify-between text-slate-400">
-                <span>Total Interest Payable:</span>
-                <span className="font-mono text-[#ff5b35] font-bold">+{formatIndianCurrency(Math.round(totalInterest))}</span>
-              </div>
-              <div className="flex justify-between text-slate-400 pt-2 border-t border-slate-800/80">
-                <span className="font-bold text-slate-200">Total Payment:</span>
-                <span className="font-mono text-white font-bold text-sm">{formatIndianCurrency(Math.round(totalPayment))}</span>
+
+              {/* Metrics Breakdown */}
+              <div className="p-4 rounded-2xl glass-pill space-y-2.5 text-xs">
+                <div className="flex justify-between">
+                  <span className="text-zinc-500 font-medium">Principal Amount:</span>
+                  <span className="font-mono font-bold">{formatIndianCurrency(principal)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-zinc-500 font-medium">Total Interest Payable:</span>
+                  <span className="font-mono font-bold">+{formatIndianCurrency(Math.round(totalInterest))}</span>
+                </div>
+                <div className="flex justify-between pt-2 border-t border-zinc-200 font-bold">
+                  <span>Total Payment:</span>
+                  <span className="font-mono font-black text-sm">{formatIndianCurrency(Math.round(totalPayment))}</span>
+                </div>
               </div>
             </div>
 
             <button
               type="button"
               onClick={() => setShowAmortization(!showAmortization)}
-              className="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors border border-slate-700"
+              className="w-full py-3.5 rounded-full bg-zinc-950 hover:bg-black text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer"
             >
-              <Layers className="h-3.5 w-3.5" />
+              <Layers className="h-4 w-4" />
               <span>{showAmortization ? 'Hide Amortization Table' : 'View Year-by-Year Schedule'}</span>
             </button>
           </div>
@@ -295,31 +297,31 @@ export const LoanEmiCalculator: React.FC = () => {
 
       {/* Amortization Table (Expandable) */}
       {showAmortization && (
-        <div className="p-6 rounded-3xl bg-[#171b24] border border-slate-800 shadow-sm animate-in fade-in">
-          <h3 className="font-bold text-sm text-white mb-4 flex items-center gap-2">
+        <div className="p-6 sm:p-7 rounded-[32px] glass-card shadow-sm animate-in fade-in">
+          <h3 className="font-bold text-base mb-4 flex items-center gap-2">
             <span>Yearly Loan Repayment Schedule</span>
-            <span className="text-xs text-slate-400 font-normal">({tenureYears} Years Amortization)</span>
+            <span className="text-xs text-zinc-500 font-normal">({tenureYears} Years Amortization)</span>
           </h3>
 
           <div className="overflow-x-auto">
             <table className="w-full text-xs text-left">
               <thead>
-                <tr className="border-b border-slate-800 text-slate-400 text-[11px] uppercase tracking-wider">
-                  <th className="pb-2.5 font-semibold">Year</th>
-                  <th className="pb-2.5 font-semibold">Principal Paid</th>
-                  <th className="pb-2.5 font-semibold">Interest Paid</th>
-                  <th className="pb-2.5 font-semibold">Total Paid</th>
-                  <th className="pb-2.5 font-semibold text-right">Balance Outstanding</th>
+                <tr className="border-b border-zinc-200 text-zinc-500 text-[11px] uppercase tracking-wider">
+                  <th className="pb-3 font-semibold">Year</th>
+                  <th className="pb-3 font-semibold">Principal Paid</th>
+                  <th className="pb-3 font-semibold">Interest Paid</th>
+                  <th className="pb-3 font-semibold">Total Paid</th>
+                  <th className="pb-3 font-semibold text-right">Balance Outstanding</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60 font-mono">
+              <tbody className="divide-y divide-zinc-200 font-mono">
                 {amortizationSchedule.map((row) => (
-                  <tr key={row.year} className="hover:bg-slate-800/30 transition-colors">
-                    <td className="py-2.5 text-slate-300 font-sans font-medium">Year {row.year}</td>
-                    <td className="py-2.5 text-emerald-400">{formatIndianCurrency(row.principalPaid)}</td>
-                    <td className="py-2.5 text-[#ff5b35]">{formatIndianCurrency(row.interestPaid)}</td>
-                    <td className="py-2.5 text-slate-200">{formatIndianCurrency(row.totalYearlyPayment)}</td>
-                    <td className="py-2.5 text-right text-slate-300 font-bold">{formatIndianCurrency(row.closingBalance)}</td>
+                  <tr key={row.year} className="hover:bg-zinc-100/60 transition-colors">
+                    <td className="py-3 font-sans font-medium">Year {row.year}</td>
+                    <td className="py-3 font-semibold">{formatIndianCurrency(row.principalPaid)}</td>
+                    <td className="py-3 text-zinc-600">{formatIndianCurrency(row.interestPaid)}</td>
+                    <td className="py-3">{formatIndianCurrency(row.totalYearlyPayment)}</td>
+                    <td className="py-3 text-right font-black">{formatIndianCurrency(row.closingBalance)}</td>
                   </tr>
                 ))}
               </tbody>

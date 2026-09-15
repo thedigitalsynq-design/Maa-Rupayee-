@@ -19,5 +19,18 @@ export default defineConfig(() => {
       // Disable file watching when DISABLE_HMR is true to save CPU during agent edits.
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
     },
+    build: {
+      chunkSizeWarningLimit: 600,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            // React core stays in its own long-cacheable chunk.
+            'vendor-react': ['react', 'react-dom'],
+            // PDF export libs load only with the invoice studio route.
+            'vendor-pdf': ['jspdf', 'html2canvas'],
+          },
+        },
+      },
+    },
   };
 });
