@@ -245,14 +245,14 @@ export default function App() {
               className="flex items-center gap-3 cursor-pointer group mb-6 px-1"
             >
               <div className="h-10 w-10 rounded-2xl bg-gradient-to-tr from-[#ff5b35] to-[#2f66ee] text-white flex items-center justify-center font-black text-xl shadow-md transition-transform group-hover:scale-105 active:scale-95">
-                ₹
+                📊
               </div>
               <div>
                 <div className="font-extrabold text-sm sm:text-base tracking-tight text-white flex items-center gap-1.5">
-                  <span>Smart GST India</span>
+                  <span>Smart TAX India</span>
                 </div>
-                <div className="text-[11px] text-slate-400 font-medium">
-                  Direct & Indirect Tax Utility
+                <div className="text-[10px] text-slate-400 font-medium leading-tight max-w-[170px]">
+                  GST, CGST & SGST based on CBIC schedules
                 </div>
               </div>
             </div>
