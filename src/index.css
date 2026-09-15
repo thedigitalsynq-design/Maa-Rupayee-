@@ -71,6 +71,56 @@ code, kbd, samp, pre, .font-mono, [class*="font-mono"] {
   background-size: 16px 16px;
 }
 
+/* Glassmorphism Styles Inspired by Frosted Acrylic / Glass Capsules */
+.glass-container {
+  background: rgba(14, 18, 28, 0.78);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 0 40px 0 rgba(56, 189, 248, 0.02),
+    0 24px 64px -12px rgba(0, 0, 0, 0.6);
+}
+
+.glass-sidebar {
+  background: rgba(11, 14, 22, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.glass-card {
+  background: rgba(18, 23, 35, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.1),
+    0 12px 30px -10px rgba(0, 0, 0, 0.45);
+}
+
+.glass-pill {
+  background: rgba(22, 29, 44, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Decorative Frosted Glass Capsule (Artwork Reference) */
+.glass-capsule-bg {
+  border-radius: 9999px;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.18) 0%, rgba(37, 99, 235, 0.08) 50%, rgba(147, 197, 253, 0.04) 100%);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 
+    inset 0 2px 4px 0 rgba(255, 255, 255, 0.25),
+    inset 0 -2px 6px 0 rgba(56, 189, 248, 0.15),
+    0 20px 50px rgba(14, 165, 233, 0.08);
+}
+
 /* Universal Dark Mode Overrides for Child Components */
 .dark .bg-white {
   background-color: #171b23 !important;
@@ -116,3 +166,90 @@ code, kbd, samp, pre, .font-mono, [class*="font-mono"] {
   background-color: #12151d;
   color: #f8fafc;
 }
+
+/* ========================================================================== */
+/* FROSTED CRYSTAL LIGHT THEME (Directly inspired by 2nd Uploaded Image)      */
+/* ========================================================================== */
+.theme-crystal {
+  background-color: #edf1f7 !important;
+  color: #1e293b !important;
+}
+
+.theme-crystal .glass-container {
+  background: rgba(255, 255, 255, 0.72) !important;
+  backdrop-filter: blur(28px) !important;
+  -webkit-backdrop-filter: blur(28px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 
+    inset 0 1px 2px 0 rgba(255, 255, 255, 1),
+    0 24px 60px -15px rgba(0, 0, 0, 0.07) !important;
+}
+
+.theme-crystal .glass-sidebar {
+  background: rgba(246, 248, 252, 0.85) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border-right: 1px solid rgba(226, 232, 240, 0.9) !important;
+}
+
+.theme-crystal .glass-card {
+  background: rgba(255, 255, 255, 0.75) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 
+    inset 0 1px 2px 0 rgba(255, 255, 255, 1),
+    0 16px 36px -8px rgba(0, 0, 0, 0.05),
+    0 1px 3px 0 rgba(0, 0, 0, 0.02) !important;
+}
+
+.theme-crystal .glass-pill {
+  background: rgba(255, 255, 255, 0.88) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 1),
+    0 4px 14px rgba(0, 0, 0, 0.03) !important;
+  color: #1e293b !important;
+}
+
+.theme-crystal .glass-pill:hover {
+  background: rgba(255, 255, 255, 0.98) !important;
+  box-shadow: 
+    inset 0 1px 2px 0 rgba(255, 255, 255, 1),
+    0 6px 18px rgba(0, 0, 0, 0.05) !important;
+}
+
+.theme-crystal .text-white,
+.theme-crystal .text-slate-100 {
+  color: #0f172a !important;
+}
+
+.theme-crystal .text-slate-200,
+.theme-crystal .text-slate-300 {
+  color: #334155 !important;
+}
+
+.theme-crystal .text-slate-400 {
+  color: #64748b !important;
+}
+
+.theme-crystal input:not([type="checkbox"]):not([type="radio"]), 
+.theme-crystal select, 
+.theme-crystal textarea {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  color: #0f172a !important;
+  border-color: rgba(226, 232, 240, 0.9) !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+}
+
+.theme-crystal input::placeholder {
+  color: #94a3b8 !important;
+}
+
+.theme-crystal option {
+  background-color: #ffffff;
+  color: #0f172a;
+}
+

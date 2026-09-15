@@ -63,6 +63,23 @@ export default function App() {
   const [customerState, setCustomerState] = useState<IndianState>(DEFAULT_CUSTOMER_STATE);
   const [topSearchTerm, setTopSearchTerm] = useState('');
 
+  // Frosted Glass Material Theme (Obsidian Glass vs Frosted Crystal Glass)
+  const [glassTheme, setGlassTheme] = useState<'obsidian' | 'crystal'>(() => {
+    try {
+      return (localStorage.getItem('smart_tax_glass_theme') as 'obsidian' | 'crystal') || 'obsidian';
+    } catch {
+      return 'obsidian';
+    }
+  });
+
+  const toggleGlassTheme = () => {
+    const next = glassTheme === 'obsidian' ? 'crystal' : 'obsidian';
+    setGlassTheme(next);
+    try {
+      localStorage.setItem('smart_tax_glass_theme', next);
+    } catch {}
+  };
+
   // Real-time AI GST Classification state
   const [activeClassifiedResult, setActiveClassifiedResult] = useState<ClassifiedResult | null>(null);
   const [isClassifying, setIsClassifying] = useState(false);
@@ -228,15 +245,31 @@ export default function App() {
   const isIntraState = supplierState.code === customerState.code;
 
   return (
-    <div className="min-h-screen py-3 sm:py-6 px-2 sm:px-5 lg:px-8 bg-[#090b0e] text-slate-100 font-sans selection:bg-[#2f66ee] selection:text-white">
+    <div className={`min-h-screen relative py-3 sm:py-6 px-2 sm:px-5 lg:px-8 font-sans selection:bg-[#2f66ee] selection:text-white overflow-x-hidden transition-colors duration-300 ${
+      glassTheme === 'crystal' ? 'theme-crystal bg-[#edf1f7] text-slate-800' : 'bg-[#090b0e] text-slate-100'
+    }`}>
       
-      {/* Master Rounded Container */}
-      <div className="max-w-[1440px] mx-auto rounded-[24px] sm:rounded-[32px] overflow-hidden border border-slate-800/90 shadow-[0_20px_60px_rgba(0,0,0,0.7)] flex flex-col md:flex-row bg-[#11141c]">
+      {/* Background Ambient Frosted Glass Capsule Layers (Inspired by Artwork) */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
+        {/* Top-Right Frosted Glass Capsule */}
+        <div className={`absolute -top-32 -right-24 w-[320px] sm:w-[460px] h-[700px] glass-capsule-bg rotate-[-38deg] ${
+          glassTheme === 'crystal' ? 'opacity-35' : 'opacity-60'
+        }`} />
+        {/* Center-Left Overlapping Frosted Glass Capsule */}
+        <div className={`absolute top-1/3 -left-36 w-[280px] sm:w-[420px] h-[620px] glass-capsule-bg rotate-[36deg] ${
+          glassTheme === 'crystal' ? 'opacity-25' : 'opacity-40'
+        }`} />
+        {/* Bottom Radial Blue Caustic Glow */}
+        <div className="absolute -bottom-36 right-1/4 w-[450px] h-[450px] rounded-full bg-cyan-500/10 blur-3xl" />
+      </div>
+
+      {/* Master Glass Container */}
+      <div className="glass-container relative z-10 max-w-[1440px] mx-auto rounded-[26px] sm:rounded-[34px] overflow-hidden flex flex-col md:flex-row">
         
         {/* ========================================================= */}
         {/* SIDEBAR NAVIGATION (Focused, Clean, Structured)           */}
         {/* ========================================================= */}
-        <aside aria-label="Site Navigation" className="w-full md:w-64 lg:w-72 border-b md:border-b-0 md:border-r border-slate-800/90 bg-[#0e1118] flex flex-col justify-between shrink-0">
+        <aside aria-label="Site Navigation" className="glass-sidebar w-full md:w-64 lg:w-72 border-b md:border-b-0 flex flex-col justify-between shrink-0">
           
           <div className="p-4 sm:p-5">
             {/* Brand Logo & Tagline */}
@@ -501,14 +534,14 @@ export default function App() {
         {/* ========================================================= */}
         {/* MAIN APPLICATION CANVAS                                   */}
         {/* ========================================================= */}
-        <main className="flex-1 flex flex-col min-w-0 p-3 sm:p-6 lg:p-7 overflow-x-hidden bg-[#11141c]">
+        <main className="flex-1 flex flex-col min-w-0 p-3 sm:p-6 lg:p-7 overflow-x-hidden bg-[#0f131d]/40 backdrop-blur-xl">
           
           {/* TOP GLOBAL HEADER */}
           <header className="flex flex-wrap items-center justify-between gap-3 pb-4 mb-5 border-b border-slate-800/80">
             
             {/* Left: Active Route / Intra vs Inter State indicator */}
             <div className="flex items-center gap-2">
-              <div className="px-3 py-1.5 rounded-xl bg-[#171b24] border border-slate-800 text-xs flex items-center gap-2">
+              <div className="glass-pill px-3 py-1.5 rounded-xl text-xs flex items-center gap-2">
                 <span className="text-slate-400">Transaction Route:</span>
                 <span className={`font-semibold px-2 py-0.5 rounded-md text-[11px] ${
                   isIntraState 
@@ -522,7 +555,7 @@ export default function App() {
 
             {/* Right: State Selectors & Quick Swap */}
             <div className="flex items-center gap-2 flex-wrap">
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#171b24] border border-slate-800 text-xs">
+              <div className="glass-pill flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs">
                 <span className="text-slate-400 text-[11px]">From:</span>
                 <select
                   aria-label="Supplier State"
@@ -567,10 +600,29 @@ export default function App() {
               </div>
 
               {/* Status indicator */}
-              <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#171b24] border border-slate-800 text-xs text-slate-300">
+              <div className="glass-pill hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs text-slate-300">
                 <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
                 <span className="text-[11px] font-medium text-slate-400">CBIC 2026 Ready</span>
               </div>
+
+              {/* Frosted Glass Material Switcher (Artwork Inspired) */}
+              <button
+                onClick={toggleGlassTheme}
+                className="glass-pill px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-xs"
+                title="Toggle between Obsidian Blue Glass and Frosted Crystal Glass"
+              >
+                {glassTheme === 'obsidian' ? (
+                  <>
+                    <span className="h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(56,189,248,0.8)] animate-pulse"></span>
+                    <span className="text-[11px] text-slate-200">Obsidian Glass</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="h-2 w-2 rounded-full bg-blue-600 shadow-[0_0_8px_rgba(37,99,235,0.6)]"></span>
+                    <span className="text-[11px] font-bold text-slate-800">Crystal Glass</span>
+                  </>
+                )}
+              </button>
             </div>
 
           </header>
@@ -622,7 +674,7 @@ export default function App() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 pt-2">
                 
                 {/* BENTO CARD 1: Indian GST Rate Slabs */}
-                <div className="rounded-2xl p-5 bg-[#171b24] border border-slate-800/90 shadow-sm flex flex-col justify-between">
+                <div className="glass-card rounded-2xl p-5 flex flex-col justify-between hover:border-white/15 transition-all">
                   <div>
                     <div className="flex items-center justify-between mb-3">
                       <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">
