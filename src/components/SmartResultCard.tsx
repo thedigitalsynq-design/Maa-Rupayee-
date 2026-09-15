@@ -10,7 +10,12 @@ import {
   Info, 
   Sliders,
   ArrowRightLeft,
-  AlertTriangle
+  AlertTriangle,
+  ThumbsUp,
+  ThumbsDown,
+  MessageSquare,
+  Send,
+  AlertCircle
 } from 'lucide-react';
 import { ClassifiedResult, AmbiguityOption } from '../types';
 import { INDIAN_STATES } from '../data/indianStates';
@@ -34,6 +39,9 @@ export const SmartResultCard: React.FC<SmartResultCardProps> = ({
 }) => {
   const [copied, setCopied] = useState(false);
   const [showSimulatorControls, setShowSimulatorControls] = useState(true);
+  const [feedbackStatus, setFeedbackStatus] = useState<'idle' | 'helpful' | 'reporting' | 'submitted'>('idle');
+  const [feedbackType, setFeedbackType] = useState('Wrong GST Rate');
+  const [feedbackNotes, setFeedbackNotes] = useState('');
 
   const breakdown = result.breakdown!;
   const isIntraState = breakdown.transactionType.startsWith('Intra-State');
@@ -416,11 +424,125 @@ Source: ${result.sourceCitation}`;
         </div>
 
         {/* Clean Citation Footer */}
-        <div className="mt-4 pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between text-[11px] text-slate-400 gap-2">
+        <div className="mt-4 pt-3 border-t border-slate-700/60 flex flex-wrap items-center justify-between text-[11px] text-slate-400 gap-2">
           <span>
-            <strong>Basis:</strong> {result.sourceCitation}
+            <strong>Statutory Basis:</strong> {result.sourceCitation}
           </span>
           <span>Verified against CBIC Tariff: {result.lastVerified}</span>
+        </div>
+
+        {/* Feedback / Report Error Section */}
+        <div className="mt-4 pt-3 border-t border-slate-800">
+          {feedbackStatus === 'idle' && (
+            <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
+              <span className="text-slate-400 font-medium">Was this tax classification accurate & clear?</span>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setFeedbackStatus('helpful')}
+                  className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-emerald-950/60 text-slate-300 hover:text-emerald-400 border border-slate-700/80 flex items-center gap-1.5 transition-all text-xs active:scale-95"
+                >
+                  <ThumbsUp className="h-3.5 w-3.5 text-emerald-400" />
+                  <span>Accurate</span>
+                </button>
+                <button
+                  onClick={() => setFeedbackStatus('reporting')}
+                  className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-rose-950/60 text-slate-300 hover:text-rose-400 border border-slate-700/80 flex items-center gap-1.5 transition-all text-xs active:scale-95"
+                >
+                  <ThumbsDown className="h-3.5 w-3.5 text-rose-400" />
+                  <span>Report Discrepancy</span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {feedbackStatus === 'helpful' && (
+            <div className="p-3 rounded-xl bg-emerald-950/40 border border-emerald-800/60 text-emerald-300 text-xs flex items-center justify-between">
+              <span className="flex items-center gap-2">
+                <Check className="h-4 w-4 text-emerald-400" />
+                Thank you! Your verification helps keep our Indian GST database precise and compliant.
+              </span>
+              <button 
+                onClick={() => setFeedbackStatus('idle')}
+                className="text-[10px] text-slate-400 hover:text-white"
+              >
+                Reset
+              </button>
+            </div>
+          )}
+
+          {feedbackStatus === 'reporting' && (
+            <div className="p-4 rounded-2xl bg-[#12151d] border border-slate-700/80 text-xs space-y-3 animate-in fade-in">
+              <div className="flex items-center justify-between">
+                <div className="font-bold text-slate-200 flex items-center gap-1.5">
+                  <AlertCircle className="h-4 w-4 text-amber-400" />
+                  <span>Report GST Classification or HSN/SAC Issue</span>
+                </div>
+                <button 
+                  onClick={() => setFeedbackStatus('idle')}
+                  className="text-slate-400 hover:text-white text-xs"
+                >
+                  Cancel
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {[
+                  'Wrong GST Rate (e.g. 5% instead of 12%)',
+                  'Incorrect HSN / SAC Code',
+                  'Missing Condition (e.g. stitched vs unstitched)',
+                  'Outdated Gazette Notification',
+                ].map((type) => (
+                  <button
+                    key={type}
+                    type="button"
+                    onClick={() => setFeedbackType(type)}
+                    className={`p-2 rounded-xl text-left border text-[11px] transition-all ${
+                      feedbackType === type
+                        ? 'bg-blue-950/60 border-blue-500 text-blue-300 font-semibold'
+                        : 'bg-slate-800/60 border-slate-700 text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    {type}
+                  </button>
+                ))}
+              </div>
+
+              <div>
+                <input
+                  type="text"
+                  value={feedbackNotes}
+                  onChange={(e) => setFeedbackNotes(e.target.value)}
+                  placeholder="Optional details or official CBIC notification reference..."
+                  className="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFeedbackStatus('submitted');
+                  }}
+                  className="px-4 py-2 rounded-xl bg-[#2f66ee] hover:bg-blue-600 text-white font-semibold text-xs flex items-center gap-1.5 shadow-xs"
+                >
+                  <Send className="h-3 w-3" />
+                  <span>Submit Error Report</span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {feedbackStatus === 'submitted' && (
+            <div className="p-3 rounded-xl bg-blue-950/40 border border-blue-800/60 text-blue-300 text-xs flex items-center justify-between">
+              <span>Report submitted! Our legal & tax research team will review this entry against the latest CBIC Gazette.</span>
+              <button 
+                onClick={() => setFeedbackStatus('idle')}
+                className="text-[10px] text-slate-400 hover:text-white"
+              >
+                Close
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

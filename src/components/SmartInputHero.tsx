@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Calendar, ArrowRight } from 'lucide-react';
+import { Search, Calendar, ArrowRight, Sparkles, ShieldCheck } from 'lucide-react';
 import { IndianState } from '../types';
 
 interface SmartInputHeroProps {
@@ -25,12 +25,11 @@ export const SmartInputHero: React.FC<SmartInputHeroProps> = ({
     'Samsung TV 55 inch ₹65,000',
     'Cotton Saree ₹2,400',
     'Camera rent for shooting ₹15,000',
-    'iPhone 17 256GB ₹89,900',
+    'Pre-packaged Rice 25kg ₹1,800',
     'Restaurant bill ₹2,500',
     'SaaS cloud software ₹1,20,000',
-    'Footwear 20 pairs ₹18,000',
-    'Pre-packaged Rice 25kg ₹1,800',
     '₹11,800 including GST',
+    'Freight transport GTA ₹45,000'
   ];
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -48,85 +47,88 @@ export const SmartInputHero: React.FC<SmartInputHeroProps> = ({
   const isHistorical = transactionDate && transactionDate < '2025-01-01';
 
   return (
-    <div className="apple-card-glass rounded-2xl p-6 sm:p-8 mb-6 border border-white/80 shadow-sm">
-      <div className="max-w-2xl mx-auto text-center">
-        {/* Apple Display Headline */}
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/5 text-slate-700 text-xs font-medium mb-3 border border-black/[0.06]">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span>Apple Intelligence & CBIC Tax Engine</span>
+    <div className="rounded-[28px] p-6 sm:p-8 bg-[#171b24] border border-slate-800/90 shadow-[0_10px_35px_rgba(0,0,0,0.35)] text-white">
+      <div className="max-w-3xl mx-auto text-center">
+        {/* Badge */}
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#1e2330] text-blue-400 text-xs font-semibold mb-3 border border-slate-700/80 shadow-2xs">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Free • No Login • Real-Time CBIC India GST Intelligence</span>
         </div>
-        <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-900 mb-2">
-          Real-Time GST Classification
+
+        <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white mb-2">
+          Instant GST, HSN/SAC & Tax Classification
         </h2>
-        <p className="text-xs sm:text-sm text-slate-500 max-w-lg mx-auto mb-6">
-          Enter any product, service, or bill amount. The engine verifies HSN/SAC codes, statutory tax brackets, and computes exact splits.
+        <p className="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto mb-6">
+          Describe any product, service, or bill. The engine automatically classifies HSN/SAC, identifies statutory rates, verifies Gazette notifications, and computes forward & reverse splits.
         </p>
 
-        {/* Apple Inset Search Input Form */}
-        <form onSubmit={handleSubmit} className="relative max-w-xl mx-auto">
-          <div className="relative flex items-center rounded-2xl overflow-hidden bg-black/[0.035] hover:bg-black/[0.05] focus-within:bg-white focus-within:border-black/30 border border-black/[0.08] transition-all shadow-inner">
+        {/* Inset Search Input Form */}
+        <form onSubmit={handleSubmit} className="relative max-w-2xl mx-auto">
+          <div className="relative flex items-center rounded-2xl overflow-hidden bg-[#12141c] hover:bg-[#131620] focus-within:bg-[#0f1118] focus-within:border-blue-500 border border-slate-700/80 transition-all shadow-inner">
             <div className="pl-4 text-slate-400">
-              <Search className="h-4 w-4 text-slate-600" />
+              <Search className="h-4 w-4 text-slate-400" />
             </div>
             
             <input
               type="text"
               value={inputVal}
               onChange={(e) => setInputVal(e.target.value)}
-              placeholder="e.g. Samsung TV 55 inch ₹65,000, Cotton Saree, SaaS License..."
-              className="w-full py-3.5 pl-3 pr-28 bg-transparent text-slate-900 placeholder-slate-400 text-sm focus:outline-none font-medium"
+              placeholder="e.g. Samsung TV 55 inch ₹65,000, Cotton Saree, Freight transport..."
+              className="w-full py-3.5 pl-3 pr-32 bg-transparent text-white placeholder-slate-500 text-sm focus:outline-none font-medium"
               disabled={isLoading}
             />
 
             <button
               type="submit"
               disabled={isLoading || !inputVal.trim()}
-              className="absolute right-1.5 px-4 py-2 bg-[#1d1d1f] hover:bg-[#2c2c2e] disabled:opacity-40 text-white font-medium rounded-xl text-xs flex items-center gap-1.5 shadow-sm transition-all active:scale-95"
+              className="absolute right-1.5 px-4 py-2 bg-[#2f66ee] hover:bg-[#2052db] disabled:opacity-40 text-white font-semibold rounded-xl text-xs flex items-center gap-1.5 shadow-sm transition-all active:scale-95"
             >
               {isLoading ? (
                 <span>Classifying...</span>
               ) : (
                 <>
                   <span>Compute</span>
-                  <ArrowRight className="h-3 w-3" />
+                  <ArrowRight className="h-3.5 w-3.5" />
                 </>
               )}
             </button>
           </div>
 
           {/* Transaction Controls */}
-          <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500 px-1">
-            <div className="flex items-center gap-1.5 bg-black/[0.03] px-2.5 py-1 rounded-lg border border-black/[0.04]">
-              <Calendar className="h-3 w-3 text-slate-600" />
-              <span>Transaction Date:</span>
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400 px-1">
+            <div className="flex items-center gap-1.5 bg-[#12141c] px-3 py-1 rounded-xl border border-slate-800">
+              <Calendar className="h-3 w-3 text-slate-400" />
+              <span>Filing Date:</span>
               <input
                 type="date"
                 value={transactionDate}
                 onChange={(e) => setTransactionDate(e.target.value)}
-                className="bg-white/80 border border-black/10 text-slate-800 rounded px-1.5 py-0.5 text-[11px] focus:outline-none focus:ring-1 focus:ring-slate-400 font-mono"
+                className="bg-transparent text-slate-200 rounded px-1 text-[11px] focus:outline-none font-mono cursor-pointer"
               />
               {isHistorical && (
-                <span className="text-amber-600 font-medium">
-                  (Historical)
+                <span className="text-amber-400 font-semibold ml-1">
+                  (Historical Rates)
                 </span>
               )}
             </div>
 
-            <div className="bg-black/[0.03] px-2.5 py-1 rounded-lg border border-black/[0.04]">
-              Route: <span className="text-slate-800 font-semibold">{supplierState.name}</span> &rarr; <span className="text-slate-800 font-semibold">{customerState.name}</span>
+            <div className="bg-[#12141c] px-3 py-1 rounded-xl border border-slate-800 text-[11px] text-slate-400">
+              Route: <span className="text-slate-200 font-semibold">{supplierState.code === customerState.code ? `Intra-State (${supplierState.code} CGST+SGST)` : `Inter-State (${supplierState.code}→${customerState.code} IGST)`}</span>
             </div>
           </div>
         </form>
 
-        {/* Apple Prompt Chips */}
-        <div className="mt-5 flex flex-wrap items-center justify-center gap-1.5 max-w-xl mx-auto">
-          {quickPrompts.map((p, idx) => (
+        {/* Quick Example Chips */}
+        <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
+          <span className="text-[11px] text-slate-400 font-medium">Try asking:</span>
+          {quickPrompts.map((prompt, idx) => (
             <button
               key={idx}
-              onClick={() => handleChipClick(p)}
-              className="px-3 py-1 bg-white/70 hover:bg-white text-slate-600 hover:text-slate-900 border border-black/[0.06] rounded-full text-[11px] font-medium shadow-xs transition-all active:scale-95"
+              type="button"
+              onClick={() => handleChipClick(prompt)}
+              className="text-[11px] px-3 py-1 rounded-full bg-[#12141d] hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700 transition-all active:scale-95 shadow-2xs"
             >
-              {p}
+              {prompt}
             </button>
           ))}
         </div>

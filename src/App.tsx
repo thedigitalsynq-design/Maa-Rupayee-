@@ -34,7 +34,7 @@ import {
   HelpCircle
 } from 'lucide-react';
 
-import { IndianState, SavedCalculation, InvoiceLineItem, GSTItem } from './types';
+import { IndianState, SavedCalculation, InvoiceLineItem, GSTItem, ClassifiedResult } from './types';
 import { INDIAN_STATES, DEFAULT_SUPPLIER_STATE, DEFAULT_CUSTOMER_STATE } from './data/indianStates';
 import { AllInOneCalculator } from './components/AllInOneCalculator';
 import { InvoiceBuilder } from './components/InvoiceBuilder';
@@ -44,6 +44,8 @@ import { HistoricalLookupView } from './components/HistoricalLookupView';
 import { SavedCalculationsView } from './components/SavedCalculationsView';
 import { KnowledgeGuideView } from './components/KnowledgeGuideView';
 import { SmartInputHero } from './components/SmartInputHero';
+import { SmartResultCard } from './components/SmartResultCard';
+import { classifyProductOrService } from './services/classificationService';
 
 export default function App() {
   // Navigation
@@ -63,6 +65,23 @@ export default function App() {
   const [selectedProject, setSelectedProject] = useState('Garnaco Project');
   const [showProjectDropdown, setShowProjectDropdown] = useState(false);
   const [selectedClientDetail, setSelectedClientDetail] = useState<any | null>(null);
+  
+  // Real-time AI GST Classification state
+  const [activeClassifiedResult, setActiveClassifiedResult] = useState<ClassifiedResult | null>(null);
+  const [isClassifying, setIsClassifying] = useState(false);
+  const [transactionDate, setTransactionDate] = useState(new Date().toISOString().split('T')[0]);
+
+  const handleSmartSearch = async (query: string, date: string) => {
+    setIsClassifying(true);
+    try {
+      const res = await classifyProductOrService(query, supplierState, customerState, date);
+      setActiveClassifiedResult(res);
+    } catch (e) {
+      console.error('Classification error:', e);
+    } finally {
+      setIsClassifying(false);
+    }
+  };
   
   // Invoice items state
   const [invoiceItems, setInvoiceItems] = useState<InvoiceLineItem[]>([
@@ -756,7 +775,43 @@ export default function App() {
           {/* ========================================================= */}
 
           {activeTab === 'overview' && (
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 mt-2">
+            <div className="space-y-6 mt-2">
+              {/* Free, No-Login, India-First GST Intelligence Search */}
+              <SmartInputHero
+                onSearch={handleSmartSearch}
+                isLoading={isClassifying}
+                supplierState={supplierState}
+                customerState={customerState}
+                transactionDate={transactionDate}
+                setTransactionDate={setTransactionDate}
+              />
+
+              {/* Active Result Card with Forward/Reverse Breakdown, Warnings & Feedback */}
+              {activeClassifiedResult && (
+                <div className="relative animate-in fade-in zoom-in-95 duration-200">
+                  <div className="flex items-center justify-between mb-2 px-1">
+                    <div className="flex items-center gap-2 text-xs font-bold text-slate-200">
+                      <Sparkles className="h-4 w-4 text-[#2f66ee] animate-pulse" />
+                      <span>Instant Statutory Classification & Tax Split</span>
+                    </div>
+                    <button
+                      onClick={() => setActiveClassifiedResult(null)}
+                      className="px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white text-xs font-medium transition-colors"
+                    >
+                      ✕ Clear Result
+                    </button>
+                  </div>
+
+                  <SmartResultCard
+                    result={activeClassifiedResult}
+                    onUpdateResult={setActiveClassifiedResult}
+                    onSave={handleSaveAudit}
+                    onAddToInvoice={handleAddToInvoice}
+                  />
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
               
               {/* ------------------------------------------------------- */}
               {/* COLUMN LEFT & CENTER (8 Cols): Bento Widgets            */}
@@ -1216,6 +1271,7 @@ export default function App() {
                 </div>
               </div>
 
+              </div>
             </div>
           )}
 
